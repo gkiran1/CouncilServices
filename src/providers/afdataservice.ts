@@ -26,32 +26,32 @@ export class AfDataService {
         return new Promise(null);
   }
 
-  assignmentTrigger() {
-     this.rootRef.child('assignments').endAt().limitToLast(1).on('child_added',function(snapshot){
-        return snapshot.getKey();
-      });
-  }
+//   assignmentTrigger() {
+//      this.rootRef.child('assignments').endAt().limitToLast(1).on('child_added',function(snapshot){
+//         return snapshot.getKey();
+//       });
+//   }
 
-  councilsDiscussionTrigger() {
-this.rootRef.child('councilsdiscussions').endAt().limitToLast(1).on('child_added',function(snapshot){
-        return snapshot.getKey();
-      });
-  }
+//   councilsDiscussionTrigger() {
+// this.rootRef.child('councilsdiscussions').endAt().limitToLast(1).on('child_added',function(snapshot){
+//         return snapshot.getKey();
+//       });
+//   }
 
-  privateDiscussionTrigger() {
-this.rootRef.child('privatediscussions').endAt().limitToLast(1).on('child_added',function(snapshot){
-        return snapshot.getKey();
-      });
-  }
+//   privateDiscussionTrigger() {
+// this.rootRef.child('privatediscussions').endAt().limitToLast(1).on('child_added',function(snapshot){
+//         return snapshot.getKey();
+//       });
+//   }
 
-  sendNotification(emails:string[]) {
+//   sendNotification(emails:string[]) {
       
       
-  }
+//   }
 
-  getAgendaEmails(agendaId:string) {
+//   getAgendaEmails(agendaId:string) {
 
-  }
+//   }
 
   getUserEmails(key:string, entity: string) {
       
@@ -69,17 +69,17 @@ this.rootRef.child('privatediscussions').endAt().limitToLast(1).on('child_added'
 
   
 
-  createUser() {
-      firebase.database().ref().child('user').push(
-                    {
-                        name: "test1",
-                        username: "username1"
-                    })
-                    .then(() => {
-                        return "User is successfully invited..."
-                    })
-                    .catch(err => { throw err });
-  }
+  // createUser() {
+  //     firebase.database().ref().child('user').push(
+  //                   {
+  //                       name: "test1",
+  //                       username: "username1"
+  //                   })
+  //                   .then(() => {
+  //                       return "User is successfully invited..."
+  //                   })
+  //                   .catch(err => { throw err });
+  // }
 
   getUserByKey(key: any){
       

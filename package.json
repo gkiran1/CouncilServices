@@ -5,6 +5,7 @@
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
+    "prestart": "npm install",
     "start": "ng serve",
     "test": "ng test",
     "lint": "ng lint",
