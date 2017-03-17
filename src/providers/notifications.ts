@@ -4,7 +4,7 @@ import { Observable, Subject } from "rxjs/Rx";
 var https = require('https');
 var email = require('emailjs/email');
 
-
+@Injectable()
 export class Notifications {
     sendPush(emails: string[]) {
          var credentials = {
