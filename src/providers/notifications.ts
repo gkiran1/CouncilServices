@@ -7,13 +7,16 @@ var email = require('emailjs/email');
 @Injectable()
 export class Notifications {
     sendPush(emails: string[]) {
+
+        alert('first sec')
+
         var credentials = {
             IonicApplicationID: "15fb1041",
             IonicApplicationAPItoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMmZkODU1NS02NzkyLTRhN2MtYTVkZS0yYjYxNjM3OTIxOTMifQ.1tvI00lNMfm1VZUjH9t2gzd5fAIefRjasuHOlgBntuk"
         };
         var notification = {
             "emails": emails,
-            "profile": "ionpush",
+            "profile": "councilsapppush",
             "notification": {
                 "title": "Hi",
                 "message": "Hello world!",
@@ -62,7 +65,7 @@ export class Notifications {
             host: "smtp.gmail.com",// "email-smtp.us-west-2.amazonaws.com", 
             ssl: true,
             port: 465,
-            //tls:     true,
+            tls: true,
             timeout: 60000
         });
         var headers = {
@@ -70,7 +73,6 @@ export class Notifications {
             from: "pkcouncils@gmail.com",
             to: to,
             subject: subject
-
         };
         var message = email.message.create(headers);
         server.send(message);

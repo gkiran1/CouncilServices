@@ -16,9 +16,9 @@ export class AppComponent {
   }
 
   registerPushTriggers() {
-    this.af.entityTrigger('agendas');
-    this.af.entityTrigger('assignments');
-    this.af.entityTrigger('discussions');
+    this.af.agendasTrigger();
+    this.af.assignmentsTrigger();
+    this.af.discussionsTrigger();
   }
 
   registerEmailTriggers() {

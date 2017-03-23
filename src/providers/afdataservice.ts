@@ -21,35 +21,31 @@ export class AfDataService {
     this.rootRef = firebase.database().ref();
   }
 
-  entityTrigger(entity: string) {
-    var msg = '';
-    if (entity === 'agendas') {
-      msg = ' has created new agenda.'
-    }
-    else if (entity === 'assignments') {
-      msg = ' has created new assignment.'
-    }
-    else if (entity === 'discussions') {
-      msg = ' has started new discussion.'
-    }
-
+  agendasTrigger() {
     var em: string[] = [];
-    var createdUser: string = '';
+    var agendaName = '';
+    var notificationObj;
 
-    this.rootRef.child(entity).endAt().limitToLast(1).on('child_added', function (snapshot) {
-      createdUser = snapshot.val()['createdby']; // 'createdby' in agendas and assignments.
-      if (createdUser === undefined) {
-        createdUser = snapshot.val()['createdBy']; // 'createdBy' in discussions.
+    this.rootRef.child('agendas').endAt().limitToLast(1).on('child_added', function (snapshot) {
+
+      agendaName = snapshot.val()['agendacouncil'];
+
+      notificationObj = {
+        'notificationId': snapshot.getKey(),
+        'notificationType': 'Agenda',
+        'notificationItem': agendaName,
+        'councilId': snapshot.val()['councilid'],
+        'createdDate': new Date().toDateString(),
+        'createdTime': new Date().toTimeString(),
+        'createdBy': snapshot.val()['createdby']
       }
+
       var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
       councilUsersRef.once('value').then(function (usrsSnapshot) {
         usrsSnapshot.forEach(usrObj => {
           var usrRef = firebase.database().ref().child('users/' + usrObj.val()['userid']);
           usrRef.once('value').then(function (usrSnapshot) {
             if (usrSnapshot.val()['isactive'] === true) {
-              if (usrSnapshot.key === createdUser) {
-                msg = usrSnapshot.val()['firstname'] + ' ' + usrSnapshot.val()['lastname'] + ' ' + msg;
-              }
               em.push(usrSnapshot.val()['email']);
             }
           });
@@ -66,14 +62,14 @@ export class AfDataService {
               "profile": "councilsapppush",
               "notification": {
                 "title": "LDS Councils",
-                "message": msg,
+                "message": 'New Agenda - ' + agendaName,
                 "android": {
                   "title": "LDS Councils",
-                  "message": msg
+                  "message": 'New Agenda - ' + agendaName
                 },
                 "ios": {
                   "title": "LDS Councils",
-                  "message": msg
+                  "message": 'New Agenda - ' + agendaName
                 }
               }
             };
@@ -99,6 +95,108 @@ export class AfDataService {
             });
             req.write(JSON.stringify(notification));
             req.end();
+
+            firebase.database().ref().child('notifications').push({
+              notificationid: notificationObj.notificationId,
+              notificationtype: notificationObj.notificationType,
+              notificationitem: notificationObj.notificationItem,
+              councilid: notificationObj.councilId,
+              createddate: notificationObj.createdDate,
+              createdtime: notificationObj.createdTime,
+              createdby: notificationObj.createdBy
+            }).catch(err => { throw err });
+
+          }
+        });
+      });
+    });
+  }
+
+  assignmentsTrigger() {
+    var em: string[] = [];
+    var assignmentName;
+    var notificationObj;
+
+    this.rootRef.child('assignments').endAt().limitToLast(1).on('child_added', function (snapshot) {
+
+      assignmentName = snapshot.val()['councilname'];
+
+      notificationObj = {
+        'notificationId': snapshot.getKey(),
+        'notificationType': 'Assignment',
+        'notificationItem': assignmentName,
+        'councilId': snapshot.val()['councilid'],
+        'createdDate': new Date().toDateString(),
+        'createdTime': new Date().toTimeString(),
+        'createdBy': snapshot.val()['createdby']
+      }
+
+      var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
+      councilUsersRef.once('value').then(function (usrsSnapshot) {
+        usrsSnapshot.forEach(usrObj => {
+          var usrRef = firebase.database().ref().child('users/' + usrObj.val()['userid']);
+          usrRef.once('value').then(function (usrSnapshot) {
+            if (usrSnapshot.val()['isactive'] === true) {
+              em.push(usrSnapshot.val()['email']);
+            }
+          });
+        });
+
+        Promise.resolve(em).then(res => {
+          if (res.length > 0) {
+            var credentials = {
+              IonicApplicationID: "15fb1041",
+              IonicApplicationAPItoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMmZkODU1NS02NzkyLTRhN2MtYTVkZS0yYjYxNjM3OTIxOTMifQ.1tvI00lNMfm1VZUjH9t2gzd5fAIefRjasuHOlgBntuk"
+            };
+            var notification = {
+              "emails": res,
+              "profile": "councilsapppush",
+              "notification": {
+                "title": "LDS Councils",
+                "message": 'New Assignment - ' + assignmentName,
+                "android": {
+                  "title": "LDS Councils",
+                  "message": 'New Assignment - ' + assignmentName
+                },
+                "ios": {
+                  "title": "LDS Councils",
+                  "message": 'New Assignment - ' + assignmentName
+                }
+              }
+            };
+            var options = {
+              hostname: 'api.ionic.io',
+              path: '/push/notifications',
+              method: 'POST',
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + credentials.IonicApplicationAPItoken
+              }
+            };
+            var req = https.request(options, function (res) {
+              console.log('STATUS: ' + res.statusCode);
+              console.log('HEADERS: ' + JSON.stringify(res.headers));
+              res.setEncoding('utf8');
+              res.on('data', function (chunk) {
+                console.log('BODY: ' + chunk);
+              });
+            });
+            req.on('error', function (e) {
+              console.log('problem with request: ' + e.message);
+            });
+            req.write(JSON.stringify(notification));
+            req.end();
+
+            firebase.database().ref().child('notifications').push({
+              notificationid: notificationObj.notificationId,
+              notificationtype: notificationObj.notificationType,
+              notificationitem: notificationObj.notificationItem,
+              councilid: notificationObj.councilId,
+              createddate: notificationObj.createdDate,
+              createdtime: notificationObj.createdTime,
+              createdby: notificationObj.createdBy
+            }).catch(err => { throw err });
+
           }
         });
 
@@ -106,9 +204,192 @@ export class AfDataService {
     });
   }
 
-  pushToEmails(em) {
+  discussionsTrigger() {
+    var em: string[] = [];
+    var discussionName;
+    var notificationObj;
 
+    this.rootRef.child('discussions').endAt().limitToLast(1).on('child_added', function (snapshot) {
+
+      discussionName = snapshot.val()['councilname'];
+
+      notificationObj = {
+        'notificationId': snapshot.getKey(),
+        'notificationType': 'Assignment',
+        'notificationItem': discussionName,
+        'councilId': snapshot.val()['councilid'],
+        'createdDate': new Date().toDateString(),
+        'createdTime': new Date().toTimeString(),
+        'createdBy': snapshot.val()['createdBy']
+      }
+
+      var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
+      councilUsersRef.once('value').then(function (usrsSnapshot) {
+        usrsSnapshot.forEach(usrObj => {
+          var usrRef = firebase.database().ref().child('users/' + usrObj.val()['userid']);
+          usrRef.once('value').then(function (usrSnapshot) {
+            if (usrSnapshot.val()['isactive'] === true) {
+              em.push(usrSnapshot.val()['email']);
+            }
+          });
+        });
+
+        Promise.resolve(em).then(res => {
+          if (res.length > 0) {
+            var credentials = {
+              IonicApplicationID: "15fb1041",
+              IonicApplicationAPItoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMmZkODU1NS02NzkyLTRhN2MtYTVkZS0yYjYxNjM3OTIxOTMifQ.1tvI00lNMfm1VZUjH9t2gzd5fAIefRjasuHOlgBntuk"
+            };
+            var notification = {
+              "emails": res,
+              "profile": "councilsapppush",
+              "notification": {
+                "title": "LDS Councils",
+                "message": 'New Discussion - ' + discussionName,
+                "android": {
+                  "title": "LDS Councils",
+                  "message": 'New Discussion - ' + discussionName
+                },
+                "ios": {
+                  "title": "LDS Councils",
+                  "message": 'New Discussion - ' + discussionName
+                }
+              }
+            };
+            var options = {
+              hostname: 'api.ionic.io',
+              path: '/push/notifications',
+              method: 'POST',
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + credentials.IonicApplicationAPItoken
+              }
+            };
+            var req = https.request(options, function (res) {
+              console.log('STATUS: ' + res.statusCode);
+              console.log('HEADERS: ' + JSON.stringify(res.headers));
+              res.setEncoding('utf8');
+              res.on('data', function (chunk) {
+                console.log('BODY: ' + chunk);
+              });
+            });
+            req.on('error', function (e) {
+              console.log('problem with request: ' + e.message);
+            });
+            req.write(JSON.stringify(notification));
+            req.end();
+
+            firebase.database().ref().child('notifications').push({
+              notificationid: notificationObj.notificationId,
+              notificationtype: notificationObj.notificationType,
+              notificationitem: notificationObj.notificationItem,
+              councilid: notificationObj.councilId,
+              createddate: notificationObj.createdDate,
+              createdtime: notificationObj.createdTime,
+              createdby: notificationObj.createdBy
+            }).catch(err => { throw err });
+
+          }
+        });
+
+      });
+    });
   }
+
+
+  assignmentsUpdateTrigger() {
+    var em: string[] = [];
+    var assignmentName;
+    var notificationObj;
+
+    this.rootRef.child('assignments').on('child_changed', function (snapshot) {
+
+      assignmentName = snapshot.val()['councilname'];
+      alert(assignmentName);
+
+      notificationObj = {
+        'notificationId': snapshot.getKey(),
+        'notificationType': 'Assignment',
+        'notificationItem': assignmentName,
+        'councilId': snapshot.val()['councilid'],
+        'createdDate': new Date().toDateString(),
+        'createdTime': new Date().toTimeString(),
+        'createdBy': snapshot.val()['createdBy']
+      }
+
+      var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
+      councilUsersRef.once('value').then(function (usrsSnapshot) {
+        usrsSnapshot.forEach(usrObj => {
+          var usrRef = firebase.database().ref().child('users/' + usrObj.val()['userid']);
+          usrRef.once('value').then(function (usrSnapshot) {
+            if (usrSnapshot.val()['isactive'] === true) {
+              em.push(usrSnapshot.val()['email']);
+            }
+          });
+        });
+
+        Promise.resolve(em).then(res => {
+          if (res.length > 0) {
+            var credentials = {
+              IonicApplicationID: "15fb1041",
+              IonicApplicationAPItoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMmZkODU1NS02NzkyLTRhN2MtYTVkZS0yYjYxNjM3OTIxOTMifQ.1tvI00lNMfm1VZUjH9t2gzd5fAIefRjasuHOlgBntuk"
+            };
+            var notification = {
+              "emails": res,
+              "profile": "councilsapppush",
+              "notification": {
+                "title": "LDS Councils",
+                "message": 'Assignment Completed - ' + assignmentName,
+                "android": {
+                  "title": "LDS Councils",
+                  "message": 'Assignment Completed - ' + assignmentName
+                },
+                "ios": {
+                  "title": "LDS Councils",
+                  "message": 'Assignment Completed - ' + assignmentName
+                }
+              }
+            };
+            var options = {
+              hostname: 'api.ionic.io',
+              path: '/push/notifications',
+              method: 'POST',
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + credentials.IonicApplicationAPItoken
+              }
+            };
+            var req = https.request(options, function (res) {
+              console.log('STATUS: ' + res.statusCode);
+              console.log('HEADERS: ' + JSON.stringify(res.headers));
+              res.setEncoding('utf8');
+              res.on('data', function (chunk) {
+                console.log('BODY: ' + chunk);
+              });
+            });
+            req.on('error', function (e) {
+              console.log('problem with request: ' + e.message);
+            });
+            req.write(JSON.stringify(notification));
+            req.end();
+
+            firebase.database().ref().child('notifications').push({
+              notificationid: notificationObj.notificationId,
+              notificationtype: notificationObj.notificationType,
+              notificationitem: notificationObj.notificationItem,
+              councilid: notificationObj.councilId,
+              createddate: notificationObj.createdDate,
+              createdtime: notificationObj.createdTime,
+              createdby: notificationObj.createdBy
+            }).catch(err => { throw err });
+
+          }
+        });
+
+      });
+    });
+  }
+
 
   // var myArr = [];
   // function show_fb() {
