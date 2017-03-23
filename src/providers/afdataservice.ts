@@ -33,8 +33,9 @@ export class AfDataService {
       notificationObj = {
         'notificationId': snapshot.getKey(),
         'notificationType': 'Agenda',
-        'notificationItem': agendaName,
+        'councilName': snapshot.val()['agendacouncil'],
         'councilId': snapshot.val()['councilid'],
+        'description': '',
         'createdDate': new Date().toDateString(),
         'createdTime': new Date().toTimeString(),
         'createdBy': snapshot.val()['createdby']
@@ -99,8 +100,9 @@ export class AfDataService {
             firebase.database().ref().child('notifications').push({
               notificationid: notificationObj.notificationId,
               notificationtype: notificationObj.notificationType,
-              notificationitem: notificationObj.notificationItem,
+              councilname: notificationObj.councilName,
               councilid: notificationObj.councilId,
+              description: notificationObj.description,
               createddate: notificationObj.createdDate,
               createdtime: notificationObj.createdTime,
               createdby: notificationObj.createdBy
@@ -119,13 +121,14 @@ export class AfDataService {
 
     this.rootRef.child('assignments').endAt().limitToLast(1).on('child_added', function (snapshot) {
 
-      assignmentName = snapshot.val()['councilname'];
+      assignmentName = snapshot.val()['description'];
 
       notificationObj = {
         'notificationId': snapshot.getKey(),
         'notificationType': 'Assignment',
-        'notificationItem': assignmentName,
+        'councilName': snapshot.val()['councilname'],
         'councilId': snapshot.val()['councilid'],
+        'description': snapshot.val()['description'],
         'createdDate': new Date().toDateString(),
         'createdTime': new Date().toTimeString(),
         'createdBy': snapshot.val()['createdby']
@@ -190,8 +193,9 @@ export class AfDataService {
             firebase.database().ref().child('notifications').push({
               notificationid: notificationObj.notificationId,
               notificationtype: notificationObj.notificationType,
-              notificationitem: notificationObj.notificationItem,
+              councilname: notificationObj.councilName,
               councilid: notificationObj.councilId,
+              description: notificationObj.description,
               createddate: notificationObj.createdDate,
               createdtime: notificationObj.createdTime,
               createdby: notificationObj.createdBy
@@ -211,13 +215,14 @@ export class AfDataService {
 
     this.rootRef.child('discussions').endAt().limitToLast(1).on('child_added', function (snapshot) {
 
-      discussionName = snapshot.val()['councilname'];
+      discussionName = snapshot.val()['topic'];
 
       notificationObj = {
         'notificationId': snapshot.getKey(),
         'notificationType': 'Assignment',
-        'notificationItem': discussionName,
+        'councilName': snapshot.val()['councilname'],
         'councilId': snapshot.val()['councilid'],
+        'description': discussionName,
         'createdDate': new Date().toDateString(),
         'createdTime': new Date().toTimeString(),
         'createdBy': snapshot.val()['createdBy']
@@ -282,8 +287,9 @@ export class AfDataService {
             firebase.database().ref().child('notifications').push({
               notificationid: notificationObj.notificationId,
               notificationtype: notificationObj.notificationType,
-              notificationitem: notificationObj.notificationItem,
+              councilname: notificationObj.councilName,
               councilid: notificationObj.councilId,
+              description: notificationObj.description,
               createddate: notificationObj.createdDate,
               createdtime: notificationObj.createdTime,
               createdby: notificationObj.createdBy
