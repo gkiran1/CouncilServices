@@ -21,25 +21,17 @@ export class AfDataService {
     this.rootRef = firebase.database().ref();
   }
 
+  // Agendas Trigger ------------------------
   agendasTrigger() {
     var em: string[] = [];
-    var agendaName = '';
-    var notificationObj;
+    var agendaId;
+    var description;
+    var createdBy;
 
     this.rootRef.child('agendas').endAt().limitToLast(1).on('child_added', function (snapshot) {
-
-      agendaName = snapshot.val()['agendacouncil'];
-
-      notificationObj = {
-        'notificationId': snapshot.getKey(),
-        'notificationType': 'Agenda',
-        'councilName': snapshot.val()['agendacouncil'],
-        'councilId': snapshot.val()['councilid'],
-        'description': '',
-        'createdDate': new Date().toDateString(),
-        'createdTime': new Date().toTimeString(),
-        'createdBy': snapshot.val()['createdby']
-      }
+      agendaId = snapshot.getKey();
+      description = snapshot.val()['agendacouncil'];
+      createdBy = snapshot.val()['createdby'];
 
       var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
       councilUsersRef.once('value').then(function (usrsSnapshot) {
@@ -48,6 +40,20 @@ export class AfDataService {
           usrRef.once('value').then(function (usrSnapshot) {
             if (usrSnapshot.val()['isactive'] === true) {
               em.push(usrSnapshot.val()['email']);
+
+              firebase.database().ref().child('notifications').push({
+                userid: usrObj.val()['userid'],
+                nodeid: agendaId,
+                nodename: 'agendas',
+                description: description,
+                action: 'create',
+                text: 'New Agenda on ' + '\"' + description + '\"' + ' is posted',
+                createddate: new Date().toDateString(),
+                createdtime: new Date().toTimeString(),
+                createdby: createdBy,
+                isread: false
+              }).catch(err => { throw err });
+
             }
           });
         });
@@ -60,17 +66,17 @@ export class AfDataService {
             };
             var notification = {
               "emails": res,
-              "profile": "councilsapppush",
+              "profile": "ldspro",
               "notification": {
                 "title": "LDS Councils",
-                "message": 'New Agenda - ' + agendaName,
+                "message": 'New Agenda - ' + description,
                 "android": {
                   "title": "LDS Councils",
-                  "message": 'New Agenda - ' + agendaName
+                  "message": 'New Agenda - ' + description
                 },
                 "ios": {
                   "title": "LDS Councils",
-                  "message": 'New Agenda - ' + agendaName
+                  "message": 'New Agenda - ' + description
                 }
               }
             };
@@ -96,43 +102,24 @@ export class AfDataService {
             });
             req.write(JSON.stringify(notification));
             req.end();
-
-            firebase.database().ref().child('notifications').push({
-              notificationid: notificationObj.notificationId,
-              notificationtype: notificationObj.notificationType,
-              councilname: notificationObj.councilName,
-              councilid: notificationObj.councilId,
-              description: notificationObj.description,
-              createddate: notificationObj.createdDate,
-              createdtime: notificationObj.createdTime,
-              createdby: notificationObj.createdBy
-            }).catch(err => { throw err });
-
           }
         });
+
       });
     });
   }
 
+  // Assignments Trigger ------------------------
   assignmentsTrigger() {
     var em: string[] = [];
-    var assignmentName;
-    var notificationObj;
+    var assignmentId;
+    var description;
+    var createdBy;
 
     this.rootRef.child('assignments').endAt().limitToLast(1).on('child_added', function (snapshot) {
-
-      assignmentName = snapshot.val()['description'];
-
-      notificationObj = {
-        'notificationId': snapshot.getKey(),
-        'notificationType': 'Assignment',
-        'councilName': snapshot.val()['councilname'],
-        'councilId': snapshot.val()['councilid'],
-        'description': snapshot.val()['description'],
-        'createdDate': new Date().toDateString(),
-        'createdTime': new Date().toTimeString(),
-        'createdBy': snapshot.val()['createdby']
-      }
+      assignmentId = snapshot.getKey();
+      description = snapshot.val()['description'];
+      createdBy = snapshot.val()['createdby'];
 
       var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
       councilUsersRef.once('value').then(function (usrsSnapshot) {
@@ -141,6 +128,20 @@ export class AfDataService {
           usrRef.once('value').then(function (usrSnapshot) {
             if (usrSnapshot.val()['isactive'] === true) {
               em.push(usrSnapshot.val()['email']);
+
+              firebase.database().ref().child('notifications').push({
+                userid: usrObj.val()['userid'],
+                nodeid: assignmentId,
+                nodename: 'assignments',
+                description: description,
+                action: 'create',
+                text: 'New Assignment ' + '\"' + description + '\"' + ' is posted',
+                createddate: new Date().toDateString(),
+                createdtime: new Date().toTimeString(),
+                createdby: createdBy,
+                isread: false
+              }).catch(err => { throw err });
+
             }
           });
         });
@@ -153,17 +154,17 @@ export class AfDataService {
             };
             var notification = {
               "emails": res,
-              "profile": "councilsapppush",
+              "profile": "ldspro",
               "notification": {
                 "title": "LDS Councils",
-                "message": 'New Assignment - ' + assignmentName,
+                "message": 'New Assignment - ' + description,
                 "android": {
                   "title": "LDS Councils",
-                  "message": 'New Assignment - ' + assignmentName
+                  "message": 'New Assignment - ' + description
                 },
                 "ios": {
                   "title": "LDS Councils",
-                  "message": 'New Assignment - ' + assignmentName
+                  "message": 'New Assignment - ' + description
                 }
               }
             };
@@ -189,18 +190,6 @@ export class AfDataService {
             });
             req.write(JSON.stringify(notification));
             req.end();
-
-            firebase.database().ref().child('notifications').push({
-              notificationid: notificationObj.notificationId,
-              notificationtype: notificationObj.notificationType,
-              councilname: notificationObj.councilName,
-              councilid: notificationObj.councilId,
-              description: notificationObj.description,
-              createddate: notificationObj.createdDate,
-              createdtime: notificationObj.createdTime,
-              createdby: notificationObj.createdBy
-            }).catch(err => { throw err });
-
           }
         });
 
@@ -208,25 +197,17 @@ export class AfDataService {
     });
   }
 
+  // Discussions Trigger ------------------------
   discussionsTrigger() {
     var em: string[] = [];
-    var discussionName;
-    var notificationObj;
+    var discussionId;
+    var description;
+    var createdBy;
 
     this.rootRef.child('discussions').endAt().limitToLast(1).on('child_added', function (snapshot) {
-
-      discussionName = snapshot.val()['topic'];
-
-      notificationObj = {
-        'notificationId': snapshot.getKey(),
-        'notificationType': 'Assignment',
-        'councilName': snapshot.val()['councilname'],
-        'councilId': snapshot.val()['councilid'],
-        'description': discussionName,
-        'createdDate': new Date().toDateString(),
-        'createdTime': new Date().toTimeString(),
-        'createdBy': snapshot.val()['createdBy']
-      }
+      discussionId = snapshot.getKey();
+      description = snapshot.val()['topic'];
+      createdBy = snapshot.val()['createdBy'];
 
       var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
       councilUsersRef.once('value').then(function (usrsSnapshot) {
@@ -235,6 +216,20 @@ export class AfDataService {
           usrRef.once('value').then(function (usrSnapshot) {
             if (usrSnapshot.val()['isactive'] === true) {
               em.push(usrSnapshot.val()['email']);
+
+              firebase.database().ref().child('notifications').push({
+                userid: usrObj.val()['userid'],
+                nodeid: discussionId,
+                nodename: 'discussions',
+                description: description,
+                action: 'create',
+                text: 'New Council Discussion ' + '\"' + description + '\"' + ' is started',
+                createddate: new Date().toDateString(),
+                createdtime: new Date().toTimeString(),
+                createdby: createdBy,
+                isread: false
+              }).catch(err => { throw err });
+
             }
           });
         });
@@ -247,17 +242,17 @@ export class AfDataService {
             };
             var notification = {
               "emails": res,
-              "profile": "councilsapppush",
+              "profile": "ldspro",
               "notification": {
                 "title": "LDS Councils",
-                "message": 'New Discussion - ' + discussionName,
+                "message": 'New Discussion - ' + description,
                 "android": {
                   "title": "LDS Councils",
-                  "message": 'New Discussion - ' + discussionName
+                  "message": 'New Discussion - ' + description
                 },
                 "ios": {
                   "title": "LDS Councils",
-                  "message": 'New Discussion - ' + discussionName
+                  "message": 'New Discussion - ' + description
                 }
               }
             };
@@ -283,18 +278,6 @@ export class AfDataService {
             });
             req.write(JSON.stringify(notification));
             req.end();
-
-            firebase.database().ref().child('notifications').push({
-              notificationid: notificationObj.notificationId,
-              notificationtype: notificationObj.notificationType,
-              councilname: notificationObj.councilName,
-              councilid: notificationObj.councilId,
-              description: notificationObj.description,
-              createddate: notificationObj.createdDate,
-              createdtime: notificationObj.createdTime,
-              createdby: notificationObj.createdBy
-            }).catch(err => { throw err });
-
           }
         });
 
@@ -342,7 +325,7 @@ export class AfDataService {
             };
             var notification = {
               "emails": res,
-              "profile": "councilsapppush",
+              "profile": "ldspro",
               "notification": {
                 "title": "LDS Councils",
                 "message": 'Assignment Completed - ' + assignmentName,
