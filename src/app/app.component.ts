@@ -19,6 +19,7 @@ export class AppComponent {
     this.af.agendasTrigger();
     this.af.assignmentsTrigger();
     this.af.discussionsTrigger();
+    this.af.privateDiscussionsTrigger();
   }
 
   registerEmailTriggers() {
