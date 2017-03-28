@@ -27,84 +27,85 @@ export class AfDataService {
     var agendaId;
     var description;
     var createdBy;
-
     this.rootRef.child('agendas').endAt().limitToLast(1).on('child_added', function (snapshot) {
       agendaId = snapshot.getKey();
       description = snapshot.val()['agendacouncil'];
       createdBy = snapshot.val()['createdby'];
-
-      var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
-      councilUsersRef.once('value').then(function (usrsSnapshot) {
-        usrsSnapshot.forEach(usrObj => {
-          var usrRef = firebase.database().ref().child('users/' + usrObj.val()['userid']);
-          usrRef.once('value').then(function (usrSnapshot) {
-            if (usrSnapshot.val()['isactive'] === true) {
-              em.push(usrSnapshot.val()['email']);
-
-              firebase.database().ref().child('notifications').push({
-                userid: usrObj.val()['userid'],
-                nodeid: agendaId,
-                nodename: 'agendas',
-                description: description,
-                action: 'create',
-                text: 'New Agenda on ' + '\"' + description + '\"' + ' is posted',
-                createddate: new Date().toDateString(),
-                createdtime: new Date().toTimeString(),
-                createdby: createdBy,
-                isread: false
-              }).catch(err => { throw err });
-
-            }
-          });
-        });
-
-        Promise.resolve(em).then(res => {
-          if (res.length > 0) {
-            var credentials = {
-              IonicApplicationID: "15fb1041",
-              IonicApplicationAPItoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMmZkODU1NS02NzkyLTRhN2MtYTVkZS0yYjYxNjM3OTIxOTMifQ.1tvI00lNMfm1VZUjH9t2gzd5fAIefRjasuHOlgBntuk"
-            };
-            var notification = {
-              "emails": res,
-              "profile": "ldspro",
-              "notification": {
-                "title": "LDS Councils",
-                "message": 'New Agenda - ' + description,
-                "android": {
-                  "title": "LDS Councils",
-                  "message": 'New Agenda - ' + description
-                },
-                "ios": {
-                  "title": "LDS Councils",
-                  "message": 'New Agenda - ' + description
+      var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(agendaId);
+      notificationRef.once("value", function (snap) {
+        if (!snap.exists()) {
+          var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
+          councilUsersRef.once('value').then(function (usrsSnapshot) {
+            usrsSnapshot.forEach(usrObj => {
+              var usrRef = firebase.database().ref().child('users/' + usrObj.val()['userid']);
+              usrRef.once('value').then(function (usrSnapshot) {
+                if (usrSnapshot.val()['isactive'] === true) {
+                  em.push(usrSnapshot.val()['email']);
+                  firebase.database().ref().child('notifications').push({
+                    userid: usrObj.val()['userid'],
+                    nodeid: agendaId,
+                    nodename: 'agendas',
+                    description: description,
+                    action: 'create',
+                    text: 'New Agenda on ' + '\"' + description + '\"' + ' is posted',
+                    createddate: new Date().toDateString(),
+                    createdtime: new Date().toTimeString(),
+                    createdby: createdBy,
+                    isread: false
+                  }).catch(err => { throw err });
                 }
-              }
-            };
-            var options = {
-              hostname: 'api.ionic.io',
-              path: '/push/notifications',
-              method: 'POST',
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + credentials.IonicApplicationAPItoken
-              }
-            };
-            var req = https.request(options, function (res) {
-              console.log('STATUS: ' + res.statusCode);
-              console.log('HEADERS: ' + JSON.stringify(res.headers));
-              res.setEncoding('utf8');
-              res.on('data', function (chunk) {
-                console.log('BODY: ' + chunk);
               });
             });
-            req.on('error', function (e) {
-              console.log('problem with request: ' + e.message);
-            });
-            req.write(JSON.stringify(notification));
-            req.end();
-          }
-        });
 
+            Promise.resolve(em).then(res => {
+              if (res.length > 0) {
+                var credentials = {
+                  IonicApplicationID: "15fb1041",
+                  IonicApplicationAPItoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMmZkODU1NS02NzkyLTRhN2MtYTVkZS0yYjYxNjM3OTIxOTMifQ.1tvI00lNMfm1VZUjH9t2gzd5fAIefRjasuHOlgBntuk"
+                };
+                var notification = {
+                  "emails": res,
+                  "profile": "ldspro",
+                  "notification": {
+                    "title": "LDS Councils",
+                    "message": 'New Agenda - ' + description,
+                    "android": {
+                      "title": "LDS Councils",
+                      "message": 'New Agenda - ' + description
+                    },
+                    "ios": {
+                      "title": "LDS Councils",
+                      "message": 'New Agenda - ' + description
+                    }
+                  }
+                };
+                var options = {
+                  hostname: 'api.ionic.io',
+                  path: '/push/notifications',
+                  method: 'POST',
+                  headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + credentials.IonicApplicationAPItoken
+                  }
+                };
+                var req = https.request(options, function (res) {
+                  console.log('STATUS: ' + res.statusCode);
+                  console.log('HEADERS: ' + JSON.stringify(res.headers));
+                  res.setEncoding('utf8');
+                  res.on('data', function (chunk) {
+                    console.log('BODY: ' + chunk);
+                  });
+                });
+                req.on('error', function (e) {
+                  console.log('problem with request: ' + e.message);
+                });
+                req.write(JSON.stringify(notification));
+                req.end();
+              }
+            });
+
+          });
+        }
       });
     });
   }
@@ -120,79 +121,81 @@ export class AfDataService {
       assignmentId = snapshot.getKey();
       description = snapshot.val()['description'];
       createdBy = snapshot.val()['createdby'];
-
-      var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
-      councilUsersRef.once('value').then(function (usrsSnapshot) {
-        usrsSnapshot.forEach(usrObj => {
-          var usrRef = firebase.database().ref().child('users/' + usrObj.val()['userid']);
-          usrRef.once('value').then(function (usrSnapshot) {
-            if (usrSnapshot.val()['isactive'] === true) {
-              em.push(usrSnapshot.val()['email']);
-
-              firebase.database().ref().child('notifications').push({
-                userid: usrObj.val()['userid'],
-                nodeid: assignmentId,
-                nodename: 'assignments',
-                description: description,
-                action: 'create',
-                text: 'New Assignment ' + '\"' + description + '\"' + ' is posted',
-                createddate: new Date().toDateString(),
-                createdtime: new Date().toTimeString(),
-                createdby: createdBy,
-                isread: false
-              }).catch(err => { throw err });
-
-            }
-          });
-        });
-
-        Promise.resolve(em).then(res => {
-          if (res.length > 0) {
-            var credentials = {
-              IonicApplicationID: "15fb1041",
-              IonicApplicationAPItoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMmZkODU1NS02NzkyLTRhN2MtYTVkZS0yYjYxNjM3OTIxOTMifQ.1tvI00lNMfm1VZUjH9t2gzd5fAIefRjasuHOlgBntuk"
-            };
-            var notification = {
-              "emails": res,
-              "profile": "ldspro",
-              "notification": {
-                "title": "LDS Councils",
-                "message": 'New Assignment - ' + description,
-                "android": {
-                  "title": "LDS Councils",
-                  "message": 'New Assignment - ' + description
-                },
-                "ios": {
-                  "title": "LDS Councils",
-                  "message": 'New Assignment - ' + description
+      var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(assignmentId);
+      notificationRef.once("value", function (snap) {
+        if (!snap.exists()) {
+          var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
+          councilUsersRef.once('value').then(function (usrsSnapshot) {
+            usrsSnapshot.forEach(usrObj => {
+              var usrRef = firebase.database().ref().child('users/' + usrObj.val()['userid']);
+              usrRef.once('value').then(function (usrSnapshot) {
+                if (usrSnapshot.val()['isactive'] === true) {
+                  em.push(usrSnapshot.val()['email']);
+                  firebase.database().ref().child('notifications').push({
+                    userid: usrObj.val()['userid'],
+                    nodeid: assignmentId,
+                    nodename: 'assignments',
+                    description: description,
+                    action: 'create',
+                    text: 'New Assignment ' + '\"' + description + '\"' + ' is posted',
+                    createddate: new Date().toDateString(),
+                    createdtime: new Date().toTimeString(),
+                    createdby: createdBy,
+                    isread: false
+                  }).catch(err => { throw err });
                 }
-              }
-            };
-            var options = {
-              hostname: 'api.ionic.io',
-              path: '/push/notifications',
-              method: 'POST',
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + credentials.IonicApplicationAPItoken
-              }
-            };
-            var req = https.request(options, function (res) {
-              console.log('STATUS: ' + res.statusCode);
-              console.log('HEADERS: ' + JSON.stringify(res.headers));
-              res.setEncoding('utf8');
-              res.on('data', function (chunk) {
-                console.log('BODY: ' + chunk);
               });
             });
-            req.on('error', function (e) {
-              console.log('problem with request: ' + e.message);
-            });
-            req.write(JSON.stringify(notification));
-            req.end();
-          }
-        });
 
+            Promise.resolve(em).then(res => {
+              if (res.length > 0) {
+                var credentials = {
+                  IonicApplicationID: "15fb1041",
+                  IonicApplicationAPItoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMmZkODU1NS02NzkyLTRhN2MtYTVkZS0yYjYxNjM3OTIxOTMifQ.1tvI00lNMfm1VZUjH9t2gzd5fAIefRjasuHOlgBntuk"
+                };
+                var notification = {
+                  "emails": res,
+                  "profile": "ldspro",
+                  "notification": {
+                    "title": "LDS Councils",
+                    "message": 'New Assignment - ' + description,
+                    "android": {
+                      "title": "LDS Councils",
+                      "message": 'New Assignment - ' + description
+                    },
+                    "ios": {
+                      "title": "LDS Councils",
+                      "message": 'New Assignment - ' + description
+                    }
+                  }
+                };
+                var options = {
+                  hostname: 'api.ionic.io',
+                  path: '/push/notifications',
+                  method: 'POST',
+                  headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + credentials.IonicApplicationAPItoken
+                  }
+                };
+                var req = https.request(options, function (res) {
+                  console.log('STATUS: ' + res.statusCode);
+                  console.log('HEADERS: ' + JSON.stringify(res.headers));
+                  res.setEncoding('utf8');
+                  res.on('data', function (chunk) {
+                    console.log('BODY: ' + chunk);
+                  });
+                });
+                req.on('error', function (e) {
+                  console.log('problem with request: ' + e.message);
+                });
+                req.write(JSON.stringify(notification));
+                req.end();
+              }
+            });
+
+          });
+        }
       });
     });
   }
@@ -203,84 +206,85 @@ export class AfDataService {
     var discussionId;
     var description;
     var createdBy;
-
     this.rootRef.child('discussions').endAt().limitToLast(1).on('child_added', function (snapshot) {
       discussionId = snapshot.getKey();
       description = snapshot.val()['topic'];
       createdBy = snapshot.val()['createdBy'];
-
-      var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
-      councilUsersRef.once('value').then(function (usrsSnapshot) {
-        usrsSnapshot.forEach(usrObj => {
-          var usrRef = firebase.database().ref().child('users/' + usrObj.val()['userid']);
-          usrRef.once('value').then(function (usrSnapshot) {
-            if (usrSnapshot.val()['isactive'] === true) {
-              em.push(usrSnapshot.val()['email']);
-
-              firebase.database().ref().child('notifications').push({
-                userid: usrObj.val()['userid'],
-                nodeid: discussionId,
-                nodename: 'discussions',
-                description: description,
-                action: 'create',
-                text: 'New Council Discussion ' + '\"' + description + '\"' + ' is started',
-                createddate: new Date().toDateString(),
-                createdtime: new Date().toTimeString(),
-                createdby: createdBy,
-                isread: false
-              }).catch(err => { throw err });
-
-            }
-          });
-        });
-
-        Promise.resolve(em).then(res => {
-          if (res.length > 0) {
-            var credentials = {
-              IonicApplicationID: "15fb1041",
-              IonicApplicationAPItoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMmZkODU1NS02NzkyLTRhN2MtYTVkZS0yYjYxNjM3OTIxOTMifQ.1tvI00lNMfm1VZUjH9t2gzd5fAIefRjasuHOlgBntuk"
-            };
-            var notification = {
-              "emails": res,
-              "profile": "ldspro",
-              "notification": {
-                "title": "LDS Councils",
-                "message": 'New Discussion - ' + description,
-                "android": {
-                  "title": "LDS Councils",
-                  "message": 'New Discussion - ' + description
-                },
-                "ios": {
-                  "title": "LDS Councils",
-                  "message": 'New Discussion - ' + description
+      var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(discussionId);
+      notificationRef.once("value", function (snap) {
+        if (!snap.exists()) {
+          var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
+          councilUsersRef.once('value').then(function (usrsSnapshot) {
+            usrsSnapshot.forEach(usrObj => {
+              var usrRef = firebase.database().ref().child('users/' + usrObj.val()['userid']);
+              usrRef.once('value').then(function (usrSnapshot) {
+                if (usrSnapshot.val()['isactive'] === true) {
+                  em.push(usrSnapshot.val()['email']);
+                  firebase.database().ref().child('notifications').push({
+                    userid: usrObj.val()['userid'],
+                    nodeid: discussionId,
+                    nodename: 'discussions',
+                    description: description,
+                    action: 'create',
+                    text: 'New Council Discussion ' + '\"' + description + '\"' + ' is started',
+                    createddate: new Date().toDateString(),
+                    createdtime: new Date().toTimeString(),
+                    createdby: createdBy,
+                    isread: false
+                  }).catch(err => { throw err });
                 }
-              }
-            };
-            var options = {
-              hostname: 'api.ionic.io',
-              path: '/push/notifications',
-              method: 'POST',
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + credentials.IonicApplicationAPItoken
-              }
-            };
-            var req = https.request(options, function (res) {
-              console.log('STATUS: ' + res.statusCode);
-              console.log('HEADERS: ' + JSON.stringify(res.headers));
-              res.setEncoding('utf8');
-              res.on('data', function (chunk) {
-                console.log('BODY: ' + chunk);
               });
             });
-            req.on('error', function (e) {
-              console.log('problem with request: ' + e.message);
-            });
-            req.write(JSON.stringify(notification));
-            req.end();
-          }
-        });
 
+            Promise.resolve(em).then(res => {
+              if (res.length > 0) {
+                var credentials = {
+                  IonicApplicationID: "15fb1041",
+                  IonicApplicationAPItoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMmZkODU1NS02NzkyLTRhN2MtYTVkZS0yYjYxNjM3OTIxOTMifQ.1tvI00lNMfm1VZUjH9t2gzd5fAIefRjasuHOlgBntuk"
+                };
+                var notification = {
+                  "emails": res,
+                  "profile": "ldspro",
+                  "notification": {
+                    "title": "LDS Councils",
+                    "message": 'New Discussion - ' + description,
+                    "android": {
+                      "title": "LDS Councils",
+                      "message": 'New Discussion - ' + description
+                    },
+                    "ios": {
+                      "title": "LDS Councils",
+                      "message": 'New Discussion - ' + description
+                    }
+                  }
+                };
+                var options = {
+                  hostname: 'api.ionic.io',
+                  path: '/push/notifications',
+                  method: 'POST',
+                  headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + credentials.IonicApplicationAPItoken
+                  }
+                };
+                var req = https.request(options, function (res) {
+                  console.log('STATUS: ' + res.statusCode);
+                  console.log('HEADERS: ' + JSON.stringify(res.headers));
+                  res.setEncoding('utf8');
+                  res.on('data', function (chunk) {
+                    console.log('BODY: ' + chunk);
+                  });
+                });
+                req.on('error', function (e) {
+                  console.log('problem with request: ' + e.message);
+                });
+                req.write(JSON.stringify(notification));
+                req.end();
+              }
+            });
+
+          });
+        }
       });
     });
   }
@@ -456,7 +460,6 @@ export class AfDataService {
       });
     });
   }
-
 
   // var myArr = [];
   // function show_fb() {
