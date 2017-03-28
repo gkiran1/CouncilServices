@@ -296,75 +296,77 @@ export class AfDataService {
     var description;
     var createdBy;
     var userId;
-
     this.rootRef.child('privatediscussions').endAt().limitToLast(1).on('child_added', function (snapshot) {
       privateDiscussionId = snapshot.getKey();
       description = snapshot.val()['createdUserName'];
       createdBy = snapshot.val()['createdUserId'];
       userId = snapshot.val()['otherUserId'];
+      var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(privateDiscussionId);
+      notificationRef.once("value", function (snap) {
+        if (!snap.exists()) {
+          em.push(snapshot.val()['otherUserEmail']);
+          firebase.database().ref().child('notifications').push({
+            userid: userId,
+            nodeid: privateDiscussionId,
+            nodename: 'privatediscussions',
+            description: description,
+            action: 'create',
+            text: description + ' created private discussion with you',
+            createddate: new Date().toDateString(),
+            createdtime: new Date().toTimeString(),
+            createdby: createdBy,
+            isread: false
+          }).catch(err => { throw err });
 
-      em.push(snapshot.val()['otherUserEmail']);
-
-      firebase.database().ref().child('notifications').push({
-        userid: userId,
-        nodeid: privateDiscussionId,
-        nodename: 'privatediscussions',
-        description: description,
-        action: 'create',
-        text: description + ' created private discussion with you',
-        createddate: new Date().toDateString(),
-        createdtime: new Date().toTimeString(),
-        createdby: createdBy,
-        isread: false
-      }).catch(err => { throw err });
-
-      Promise.resolve(em).then(res => {
-        if (res.length > 0) {
-          var credentials = {
-            IonicApplicationID: "15fb1041",
-            IonicApplicationAPItoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMmZkODU1NS02NzkyLTRhN2MtYTVkZS0yYjYxNjM3OTIxOTMifQ.1tvI00lNMfm1VZUjH9t2gzd5fAIefRjasuHOlgBntuk"
-          };
-          var notification = {
-            "emails": res,
-            "profile": "ldspro",
-            "notification": {
-              "title": "LDS Councils",
-              "message": 'New Private Discussion - ' + description + ' created private discussion with you',
-              "android": {
-                "title": "LDS Councils",
-                "message": 'New Private Discussion - ' + description + ' created private discussion with you'
-              },
-              "ios": {
-                "title": "LDS Councils",
-                "message": 'New Private Discussion - ' + description + ' created private discussion with you'
-              }
+          Promise.resolve(em).then(res => {
+            if (res.length > 0) {
+              var credentials = {
+                IonicApplicationID: "15fb1041",
+                IonicApplicationAPItoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMmZkODU1NS02NzkyLTRhN2MtYTVkZS0yYjYxNjM3OTIxOTMifQ.1tvI00lNMfm1VZUjH9t2gzd5fAIefRjasuHOlgBntuk"
+              };
+              var notification = {
+                "emails": res,
+                "profile": "ldspro",
+                "notification": {
+                  "title": "LDS Councils",
+                  "message": 'New Private Discussion - ' + description + ' created private discussion with you',
+                  "android": {
+                    "title": "LDS Councils",
+                    "message": 'New Private Discussion - ' + description + ' created private discussion with you'
+                  },
+                  "ios": {
+                    "title": "LDS Councils",
+                    "message": 'New Private Discussion - ' + description + ' created private discussion with you'
+                  }
+                }
+              };
+              var options = {
+                hostname: 'api.ionic.io',
+                path: '/push/notifications',
+                method: 'POST',
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": "Bearer " + credentials.IonicApplicationAPItoken
+                }
+              };
+              var req = https.request(options, function (res) {
+                console.log('STATUS: ' + res.statusCode);
+                console.log('HEADERS: ' + JSON.stringify(res.headers));
+                res.setEncoding('utf8');
+                res.on('data', function (chunk) {
+                  console.log('BODY: ' + chunk);
+                });
+              });
+              req.on('error', function (e) {
+                console.log('problem with request: ' + e.message);
+              });
+              req.write(JSON.stringify(notification));
+              req.end();
             }
-          };
-          var options = {
-            hostname: 'api.ionic.io',
-            path: '/push/notifications',
-            method: 'POST',
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer " + credentials.IonicApplicationAPItoken
-            }
-          };
-          var req = https.request(options, function (res) {
-            console.log('STATUS: ' + res.statusCode);
-            console.log('HEADERS: ' + JSON.stringify(res.headers));
-            res.setEncoding('utf8');
-            res.on('data', function (chunk) {
-              console.log('BODY: ' + chunk);
-            });
           });
-          req.on('error', function (e) {
-            console.log('problem with request: ' + e.message);
-          });
-          req.write(JSON.stringify(notification));
-          req.end();
+
         }
       });
-
     });
   }
 
