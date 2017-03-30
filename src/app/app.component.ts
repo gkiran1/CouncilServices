@@ -20,8 +20,9 @@ export class AppComponent {
     this.af.assignmentsTrigger();
     this.af.discussionsTrigger();
     this.af.privateDiscussionsTrigger();
-   // this.af.privateDiscussionsUpdateTrigger();
+    // this.af.privateDiscussionsUpdateTrigger();
     this.af.assignmentsUpdateTrigger();
+    this.af.assignmentsDeleteTrigger();
   }
 
   registerEmailTriggers() {
