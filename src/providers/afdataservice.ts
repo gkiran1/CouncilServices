@@ -550,6 +550,52 @@ export class AfDataService {
     });
   }
 
+  // User Update Trigger ------------------------
+  userUpdateTrigger() {
+    this.rootRef.child('users').on('child_changed', function (snapshot) {
+      if (snapshot.val()['isnotificationreq'] === true) {
+        var isactive = snapshot.val()['isactive'];
+        var description = '';
+        var email = snapshot.val()['email'];
+        if (isactive === false) {
+          description = 'Your account is deactivated'
+        }
+        else if (isactive === true) {
+          description = 'Your account is activated'
+        }
+        var notification = {
+          "emails": email,
+          "profile": "ldspro",
+          "notification": {
+            "title": "LDS Councils",
+            "message": description,
+            "android": {
+              "title": "LDS Councils",
+              "message": description,
+            },
+            "ios": {
+              "title": "LDS Councils",
+              "message": description,
+            }
+          }
+        };
+        var req = https.request(options, function (res) {
+          console.log('STATUS: ' + res.statusCode);
+          console.log('HEADERS: ' + JSON.stringify(res.headers));
+          res.setEncoding('utf8');
+          res.on('data', function (chunk) {
+            console.log('BODY: ' + chunk);
+          });
+        });
+        req.on('error', function (e) {
+          console.log('problem with request: ' + e.message);
+        });
+        req.write(JSON.stringify(notification));
+        req.end();
+      }
+    });
+  }
+
   getUserEmails(key: string, entity: string) {
 
   }
