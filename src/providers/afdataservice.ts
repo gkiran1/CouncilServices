@@ -180,146 +180,6 @@ export class AfDataService {
     });
   }
 
-  // Discussions Trigger ------------------------
-  discussionsTrigger() {
-    this.rootRef.child('discussions').endAt().limitToLast(1).on('child_added', function (snapshot) {
-      var discussionId = snapshot.getKey();
-      var description = snapshot.val()['topic'];
-      var createdBy = snapshot.val()['createdBy'];
-      var userKeys = [];
-      var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(discussionId);
-      notificationRef.once("value", function (snap) {
-        if (!snap.exists()) {
-          var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
-          councilUsersRef.once('value').then(function (usrsSnapshot) {
-            usrsSnapshot.forEach(usrObj => {
-              var id = usrObj.val()['userid'];
-              userKeys.push(id);
-              if (userKeys.indexOf(id) === userKeys.lastIndexOf(id)) {
-                var usrRef = firebase.database().ref().child('users/' + id);
-                usrRef.once('value').then(function (usrSnapshot) {
-                  if (usrSnapshot.val()['isactive'] === true) {
-                    var email = usrSnapshot.val()['email'];
-
-                    firebase.database().ref().child('notifications').push({
-                      userid: id,
-                      nodeid: discussionId,
-                      nodename: 'discussions',
-                      description: description,
-                      action: 'create',
-                      text: 'New Council Discussion ' + '\"' + description + '\"' + ' is started',
-                      createddate: new Date().toDateString(),
-                      createdtime: new Date().toTimeString(),
-                      createdby: createdBy,
-                      isread: false
-                    }).catch(err => { throw err });
-
-                    var notification = {
-                      "emails": email,
-                      "profile": "ldspro",
-                      "notification": {
-                        "title": "LDS Councils",
-                        "message": 'New Council Discussion - ' + description,
-                        "android": {
-                          "title": "LDS Councils",
-                          "message": 'New Council Discussion - ' + description
-                        },
-                        "ios": {
-                          "title": "LDS Councils",
-                          "message": 'New Council Discussion - ' + description
-                        }
-                      }
-                    };
-                    var req = https.request(options, function (res) {
-                      console.log('STATUS: ' + res.statusCode);
-                      console.log('HEADERS: ' + JSON.stringify(res.headers));
-                      res.setEncoding('utf8');
-                      res.on('data', function (chunk) {
-                        console.log('BODY: ' + chunk);
-                      });
-                    });
-                    req.on('error', function (e) {
-                      console.log('problem with request: ' + e.message);
-                    });
-                    req.write(JSON.stringify(notification));
-                    req.end();
-                  }
-                });
-              }
-            });
-          });
-        }
-      });
-    });
-  }
-
-  // Private Discussions Trigger ------------------------
-  privateDiscussionsTrigger() {
-    this.rootRef.child('privatediscussions').endAt().limitToLast(1).on('child_added', function (snapshot) {
-      var privateDiscussionId = snapshot.getKey();
-      var description = snapshot.val()['createdUserName'];
-      var createdBy = snapshot.val()['createdUserId'];
-      var userId = snapshot.val()['otherUserId'];
-      var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(privateDiscussionId);
-      notificationRef.once("value", function (snap) {
-        if (!snap.exists()) {
-          var email = snapshot.val()['otherUserEmail'];
-
-          firebase.database().ref().child('notifications').push({
-            userid: userId,
-            nodeid: privateDiscussionId,
-            nodename: 'privatediscussions',
-            description: description,
-            action: 'create',
-            text: description + ' created private discussion with you',
-            createddate: new Date().toDateString(),
-            createdtime: new Date().toTimeString(),
-            createdby: createdBy,
-            isread: false
-          }).catch(err => { throw err });
-
-          var notification = {
-            "emails": email,
-            "profile": "ldspro",
-            "notification": {
-              "title": "LDS Councils",
-              "message": 'New Private Discussion - ' + description + ' created private discussion with you',
-              "android": {
-                "title": "LDS Councils",
-                "message": 'New Private Discussion - ' + description + ' created private discussion with you'
-              },
-              "ios": {
-                "title": "LDS Councils",
-                "message": 'New Private Discussion - ' + description + ' created private discussion with you'
-              }
-            }
-          };
-          var req = https.request(options, function (res) {
-            console.log('STATUS: ' + res.statusCode);
-            console.log('HEADERS: ' + JSON.stringify(res.headers));
-            res.setEncoding('utf8');
-            res.on('data', function (chunk) {
-              console.log('BODY: ' + chunk);
-            });
-          });
-          req.on('error', function (e) {
-            console.log('problem with request: ' + e.message);
-          });
-          req.write(JSON.stringify(notification));
-          req.end();
-        }
-      });
-    });
-  }
-
-  // Private Discussions Update Trigger ------------------------
-  privateDiscussionsUpdateTrigger() {
-    this.rootRef.child('privatediscussions').on('child_changed', function (snapshot) {
-      var privateDiscussionId = snapshot.getKey();
-      console.log('snapp', snapshot.val());
-    });
-  }
-
   // Assignments Update Trigger ------------------------
   assignmentsUpdateTrigger() {
     this.rootRef.child('assignments').on('child_changed', function (snapshot) {
@@ -454,53 +314,241 @@ export class AfDataService {
     });
   }
 
-  // var myArr = [];
-  // function show_fb() {
-  //     var firebase = new Firebase('https://scorching-fire-6816.firebaseio.com/');
-  //     firebase.on('child_added', on_post_added);
-  // };
-  // function on_post_added(snapshot) {
-  //     var newPost = snapshot.val();
-  //     myArr.push(newPost.user);
-  //     console.log(myArr);
-  //     // do whatever else you need to do for a new post
-  // }
+  //Council Discussions Trigger ------------------------
+  discussionsTrigger() {
+    this.rootRef.child('discussions').endAt().limitToLast(1).on('child_added', function (snapshot) {
+      var discussionId = snapshot.getKey();
+      var description = snapshot.val()['topic'];
+      var createdBy = snapshot.val()['createdBy'];
+      var userKeys = [];
+      var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(discussionId);
+      notificationRef.once("value", function (snap) {
+        if (!snap.exists()) {
+          var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
+          councilUsersRef.once('value').then(function (usrsSnapshot) {
+            usrsSnapshot.forEach(usrObj => {
+              var id = usrObj.val()['userid'];
+              userKeys.push(id);
+              if (userKeys.indexOf(id) === userKeys.lastIndexOf(id)) {
+                var usrRef = firebase.database().ref().child('users/' + id);
+                usrRef.once('value').then(function (usrSnapshot) {
+                  if (usrSnapshot.val()['isactive'] === true) {
+                    var email = usrSnapshot.val()['email'];
 
-  getLastAssignment() {
+                    firebase.database().ref().child('notifications').push({
+                      userid: id,
+                      nodeid: discussionId,
+                      nodename: 'discussions',
+                      description: description,
+                      action: 'create',
+                      text: 'New Council Discussion ' + '\"' + description + '\"' + ' is started',
+                      createddate: new Date().toDateString(),
+                      createdtime: new Date().toTimeString(),
+                      createdby: createdBy,
+                      isread: false
+                    }).catch(err => { throw err });
 
+                    var notification = {
+                      "emails": email,
+                      "profile": "ldspro",
+                      "notification": {
+                        "title": "LDS Councils",
+                        "message": 'New Council Discussion - ' + description,
+                        "android": {
+                          "title": "LDS Councils",
+                          "message": 'New Council Discussion - ' + description
+                        },
+                        "ios": {
+                          "title": "LDS Councils",
+                          "message": 'New Council Discussion - ' + description
+                        }
+                      }
+                    };
+                    var req = https.request(options, function (res) {
+                      console.log('STATUS: ' + res.statusCode);
+                      console.log('HEADERS: ' + JSON.stringify(res.headers));
+                      res.setEncoding('utf8');
+                      res.on('data', function (chunk) {
+                        console.log('BODY: ' + chunk);
+                      });
+                    });
+                    req.on('error', function (e) {
+                      console.log('problem with request: ' + e.message);
+                    });
+                    req.write(JSON.stringify(notification));
+                    req.end();
+                  }
+                });
+              }
+            });
+          });
+        }
+      });
+    });
   }
 
-
-  getUsersFromCouncil(councilId) {
-
+  // Council Discussions Update Trigger ------------------------
+  discussionsUpdateTrigger() {
+    this.rootRef.child('discussions').on('child_changed', function (snapshot) {
+      if (snapshot.val()['isNotificationReq'] === true) {
+        var description = snapshot.val()['topic'];
+        var userName = snapshot.val()['lastMsgSentUser'];
+        var msg = snapshot.val()['lastMsg'];
+        var userKeys = [];
+        var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
+        councilUsersRef.once('value').then(function (usrsSnapshot) {
+          usrsSnapshot.forEach(usrObj => {
+            var id = usrObj.val()['userid'];
+            userKeys.push(id);
+            if (userKeys.indexOf(id) === userKeys.lastIndexOf(id)) {
+              var usrRef = firebase.database().ref().child('users/' + id);
+              usrRef.once('value').then(function (usrSnapshot) {
+                if (usrSnapshot.val()['isactive'] === true) {
+                  var email = usrSnapshot.val()['email'];
+                  var notification = {
+                    "emails": email,
+                    "profile": "ldspro",
+                    "notification": {
+                      "title": "LDS Councils",
+                      "message": 'Council Discussion - ' + description + ' -  @' + userName + ':  ' + msg,
+                      "android": {
+                        "title": "LDS Councils",
+                        "message": 'Council Discussion - ' + description + ' -  @' + userName + ':  ' + msg,
+                      },
+                      "ios": {
+                        "title": "LDS Councils",
+                        "message": 'Council Discussion - ' + description + ' -  @' + userName + ':  ' + msg,
+                      }
+                    }
+                  };
+                  var req = https.request(options, function (res) {
+                    console.log('STATUS: ' + res.statusCode);
+                    console.log('HEADERS: ' + JSON.stringify(res.headers));
+                    res.setEncoding('utf8');
+                    res.on('data', function (chunk) {
+                      console.log('BODY: ' + chunk);
+                    });
+                  });
+                  req.on('error', function (e) {
+                    console.log('problem with request: ' + e.message);
+                  });
+                  req.write(JSON.stringify(notification));
+                  req.end();
+                }
+              });
+            }
+          });
+        });
+      }
+    });
   }
 
-  //   assignmentTrigger() {
-  //      this.rootRef.child('assignments').endAt().limitToLast(1).on('child_added',function(snapshot){
-  //         return snapshot.getKey();
-  //       });
-  //   }
+  // Private Discussions Trigger ------------------------
+  privateDiscussionsTrigger() {
+    this.rootRef.child('privatediscussions').endAt().limitToLast(1).on('child_added', function (snapshot) {
+      var privateDiscussionId = snapshot.getKey();
+      var description = snapshot.val()['createdUserName'];
+      var createdBy = snapshot.val()['createdUserId'];
+      var userId = snapshot.val()['otherUserId'];
+      var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(privateDiscussionId);
+      notificationRef.once("value", function (snap) {
+        if (!snap.exists()) {
+          var email = snapshot.val()['otherUserEmail'];
 
-  //   councilsDiscussionTrigger() {
-  // this.rootRef.child('councilsdiscussions').endAt().limitToLast(1).on('child_added',function(snapshot){
-  //         return snapshot.getKey();
-  //       });
-  //   }
+          firebase.database().ref().child('notifications').push({
+            userid: userId,
+            nodeid: privateDiscussionId,
+            nodename: 'privatediscussions',
+            description: description,
+            action: 'create',
+            text: description + ' created private discussion with you',
+            createddate: new Date().toDateString(),
+            createdtime: new Date().toTimeString(),
+            createdby: createdBy,
+            isread: false
+          }).catch(err => { throw err });
 
-  //   privateDiscussionTrigger() {
-  // this.rootRef.child('privatediscussions').endAt().limitToLast(1).on('child_added',function(snapshot){
-  //         return snapshot.getKey();
-  //       });
-  //   }
+          var notification = {
+            "emails": email,
+            "profile": "ldspro",
+            "notification": {
+              "title": "LDS Councils",
+              "message": 'New Private Discussion - ' + description + ' created private discussion with you',
+              "android": {
+                "title": "LDS Councils",
+                "message": 'New Private Discussion - ' + description + ' created private discussion with you'
+              },
+              "ios": {
+                "title": "LDS Councils",
+                "message": 'New Private Discussion - ' + description + ' created private discussion with you'
+              }
+            }
+          };
+          var req = https.request(options, function (res) {
+            console.log('STATUS: ' + res.statusCode);
+            console.log('HEADERS: ' + JSON.stringify(res.headers));
+            res.setEncoding('utf8');
+            res.on('data', function (chunk) {
+              console.log('BODY: ' + chunk);
+            });
+          });
+          req.on('error', function (e) {
+            console.log('problem with request: ' + e.message);
+          });
+          req.write(JSON.stringify(notification));
+          req.end();
+        }
+      });
+    });
+  }
 
-  //   sendNotification(emails:string[]) {
-
-
-  //   }
-
-  //   getAgendaEmails(agendaId:string) {
-
-  //   }
+  // Private Discussions Update Trigger ------------------------
+  privateDiscussionsUpdateTrigger() {
+    this.rootRef.child('privatediscussions').on('child_changed', function (snapshot) {
+      if (snapshot.val()['isNotificationReq'] === true) {
+        var description = snapshot.val()['lastMsg']['text'];
+        var email = '';
+        var name = '';
+        if (snapshot.val()['lastMsg']['userId'] !== snapshot.val()['createdUserId']) {
+          email = snapshot.val()['createdUserEmail'];
+          name = snapshot.val()['otherUserName'];
+        }
+        else if (snapshot.val()['lastMsg']['userId'] !== snapshot.val()['otherUserId']) {
+          email = snapshot.val()['otherUserEmail'];
+          name = snapshot.val()['createdUserName'];
+        }
+        var notification = {
+          "emails": email,
+          "profile": "ldspro",
+          "notification": {
+            "title": "LDS Councils",
+            "message": 'Private Discussion - ' + ' @' + name + ': ' + description,
+            "android": {
+              "title": "LDS Councils",
+              "message": 'Private Discussion - ' + ' @' + name + ': ' + description,
+            },
+            "ios": {
+              "title": "LDS Councils",
+              "message": 'Private Discussion - ' + ' @' + name + ': ' + description,
+            }
+          }
+        };
+        var req = https.request(options, function (res) {
+          console.log('STATUS: ' + res.statusCode);
+          console.log('HEADERS: ' + JSON.stringify(res.headers));
+          res.setEncoding('utf8');
+          res.on('data', function (chunk) {
+            console.log('BODY: ' + chunk);
+          });
+        });
+        req.on('error', function (e) {
+          console.log('problem with request: ' + e.message);
+        });
+        req.write(JSON.stringify(notification));
+        req.end();
+      }
+    });
+  }
 
   getUserEmails(key: string, entity: string) {
 
@@ -516,8 +564,6 @@ export class AfDataService {
     }
   }
 
-
-
   // createUser() {
   //     firebase.database().ref().child('user').push(
   //                   {
@@ -531,9 +577,7 @@ export class AfDataService {
   // }
 
   getUserByKey(key: any) {
-
     return this.af.database.object('user/' + key);
-
   }
 
 }

@@ -18,11 +18,12 @@ export class AppComponent {
   registerPushTriggers() {
     this.af.agendasTrigger();
     this.af.assignmentsTrigger();
-    this.af.discussionsTrigger();
-    this.af.privateDiscussionsTrigger();
-    // this.af.privateDiscussionsUpdateTrigger();
     this.af.assignmentsUpdateTrigger();
     this.af.assignmentsDeleteTrigger();
+    this.af.discussionsTrigger();
+    this.af.discussionsUpdateTrigger();
+    this.af.privateDiscussionsTrigger();
+    this.af.privateDiscussionsUpdateTrigger();
   }
 
   registerEmailTriggers() {
