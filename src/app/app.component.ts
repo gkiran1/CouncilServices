@@ -25,6 +25,7 @@ export class AppComponent {
     this.af.privateDiscussionsTrigger();
     this.af.privateDiscussionsUpdateTrigger();
     this.af.userUpdateTrigger();
+    this.af.filesTrigger();
   }
 
   registerEmailTriggers() {

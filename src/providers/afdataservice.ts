@@ -596,6 +596,82 @@ export class AfDataService {
     });
   }
 
+  // Files Trigger ------------------------
+  filesTrigger() {
+    this.rootRef.child('files').endAt().limitToLast(1).on('child_added', function (snapshot) {
+      var fileId = snapshot.getKey();
+      var description = snapshot.val()['councilname'];
+      var createdBy = snapshot.val()['createdBy'];
+      var createdUser = snapshot.val()['createdUser'];
+      var name = snapshot.val()['name'];
+      var userKeys = [];
+      var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(fileId);
+      notificationRef.once("value", function (snap) {
+        if (!snap.exists()) {
+          var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
+          councilUsersRef.once('value').then(function (usrsSnapshot) {
+            usrsSnapshot.forEach(usrObj => {
+              var id = usrObj.val()['userid'];
+              userKeys.push(id);
+              if (userKeys.indexOf(id) === userKeys.lastIndexOf(id)) {
+                var usrRef = firebase.database().ref().child('users/' + id);
+                usrRef.once('value').then(function (usrSnapshot) {
+                  if (usrSnapshot.val()['isactive'] === true) {
+                    var email = usrSnapshot.val()['email'];
+
+                    firebase.database().ref().child('notifications').push({
+                      userid: id,
+                      nodeid: fileId,
+                      nodename: 'files',
+                      description: description,
+                      action: 'create',
+                      text: createdUser + ' sent you a file ' + name,
+                      createddate: new Date().toDateString(),
+                      createdtime: new Date().toTimeString(),
+                      createdby: createdBy,
+                      isread: false
+                    }).catch(err => { throw err });
+
+                    var notification = {
+                      "emails": email,
+                      "profile": "ldspro",
+                      "notification": {
+                        "title": "LDS Councils",
+                        "message": createdUser + ' sent you a file ' + name,
+                        "android": {
+                          "title": "LDS Councils",
+                          "message": createdUser + ' sent you a file ' + name,
+                        },
+                        "ios": {
+                          "title": "LDS Councils",
+                          "message": createdUser + ' sent you a file ' + name,
+                        }
+                      }
+                    };
+
+                    var req = https.request(options, function (res) {
+                      console.log('STATUS: ' + res.statusCode);
+                      console.log('HEADERS: ' + JSON.stringify(res.headers));
+                      res.setEncoding('utf8');
+                      res.on('data', function (chunk) {
+                        console.log('BODY: ' + chunk);
+                      });
+                    });
+                    req.on('error', function (e) {
+                      console.log('problem with request: ' + e.message);
+                    });
+                    req.write(JSON.stringify(notification));
+                    req.end();
+                  }
+                });
+              }
+            });
+          });
+        }
+      });
+    });
+  }
+
   getUserEmails(key: string, entity: string) {
 
   }
