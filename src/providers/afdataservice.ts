@@ -66,7 +66,7 @@ export class AfDataService {
                               description: description,
                               action: 'create',
                               text: 'New Agenda ' + '\"' + description + '\"' + ' is posted',
-                              createddate: new Date().toDateString(),
+                              createddate: new Date().toISOString(),
                               createdtime: new Date().toTimeString(),
                               createdby: createdBy,
                               isread: false
@@ -150,7 +150,7 @@ export class AfDataService {
                               description: description,
                               action: 'create',
                               text: 'New Assignment ' + '\"' + description + '\"' + ' is posted',
-                              createddate: new Date().toDateString(),
+                              createddate: new Date().toISOString(),
                               createdtime: new Date().toTimeString(),
                               createdby: createdBy,
                               isread: false
@@ -235,7 +235,7 @@ export class AfDataService {
                                 description: description,
                                 action: 'update',
                                 text: 'Assignment ' + '\"' + description + '\"' + ' is completed',
-                                createddate: new Date().toDateString(),
+                                createddate: new Date().toISOString(),
                                 createdtime: new Date().toTimeString(),
                                 createdby: createdBy,
                                 isread: false
@@ -385,7 +385,7 @@ export class AfDataService {
                               description: description,
                               action: 'create',
                               text: 'New Council Discussion ' + '\"' + description + '\"' + ' is started',
-                              createddate: new Date().toDateString(),
+                              createddate: new Date().toISOString(),
                               createdtime: new Date().toTimeString(),
                               createdby: createdBy,
                               isread: false
@@ -525,7 +525,7 @@ export class AfDataService {
                     description: description,
                     action: 'create',
                     text: description + ' created private discussion with you',
-                    createddate: new Date().toDateString(),
+                    createddate: new Date().toISOString(),
                     createdtime: new Date().toTimeString(),
                     createdby: createdBy,
                     isread: false
@@ -724,7 +724,7 @@ export class AfDataService {
                               description: description,
                               action: 'create',
                               text: createdUser + ' sent you a file ' + name,
-                              createddate: new Date().toDateString(),
+                              createddate: new Date().toISOString(),
                               createdtime: new Date().toTimeString(),
                               createdby: createdBy,
                               isread: false
