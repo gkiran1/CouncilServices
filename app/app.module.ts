@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent }  from './app.component';
 import { WelcomeComponent } from './home/welcome.component';
+import { AngularFireModule } from 'angularfire2';
 
 /* Feature Modules */
 import { ProductModule } from './products/product.module';
@@ -12,6 +13,7 @@ import { ProductModule } from './products/product.module';
 @NgModule({
   imports: [
     BrowserModule,
+    AngularFireModule.initializeApp(firebaseConfig)
     HttpModule,
     RouterModule.forRoot([
       { path: 'welcome', component: WelcomeComponent },
