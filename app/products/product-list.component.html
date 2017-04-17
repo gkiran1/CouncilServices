@@ -1,12 +1,11 @@
 <div class='panel panel-primary'>
-    <div class='panel-heading'>
+    <!--<div class='panel-heading'>
         {{pageTitle}}
-    </div>
+    </div>-->
 
     <!-- Filter the Products   -->
     <div class='panel-body'>
         <div class='row'>
-            <div class='col-md-2'>Filter by:</div>
             <div class='col-md-4'>
                 <input type='text' [(ngModel)]='listFilter' />
             </div>
@@ -20,31 +19,25 @@
         <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
 
         <div class='table-responsive'>
-            <table class='table'
-                   *ngIf='products && products.length'>
+            <table class='table' *ngIf='products && products.length'>
                 <thead>
                     <tr>
                         <th>
-                            <button class='btn btn-primary'
-                                (click)='toggleImage()'>
+                            <button class='btn btn-primary' (click)='toggleImage()'>
                                 {{showImage ? 'Hide' : 'Show'}} Image
                             </button>
                         </th>
-                        <th>Product</th>
-                        <th>Code</th>
-                        <th>Available</th>
-                        <th>Price</th>
-                        <th>5 Star Rating</th>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Geographic Area</th>
+                        <th>Country</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor='let product of products | productFilter:listFilter'>
                         <td>
-                            <img *ngIf='showImage'
-                                 [src]='product.imageUrl'
-                                 [title]='product.productName | uppercase'
-                                 [style.width.px]='imageWidth' 
-                                 [style.margin.px]='imageMargin'>
+                            <img *ngIf='showImage' [src]='product.imageUrl' [title]='product.productName | uppercase' [style.width.px]='imageWidth' [style.margin.px]='imageMargin'>
                         </td>
                         <td><a [routerLink]="['/product', product.productId]">
                             {{product.productName}}
@@ -54,10 +47,9 @@
                         <td>{{ product.releaseDate }}</td>
                         <td>{{ product.price | currency:'USD':true:'1.2-2' }}</td>
                         <td>
-                            <ai-star [rating]='product.starRating'
-                                    (ratingClicked)='onRatingClicked($event)'>
+                            <ai-star [rating]='product.starRating' (ratingClicked)='onRatingClicked($event)'>
                             </ai-star>
-                       </td>
+                        </td>
                     </tr>
                 </tbody>
             </table>
