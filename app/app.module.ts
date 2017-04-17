@@ -5,8 +5,9 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent }  from './app.component';
 import { WelcomeComponent } from './home/welcome.component';
-import * as firebase from 'firebase';
 import { AngularFireModule } from 'angularfire2';
+import * as firebase from 'firebase';
+
 // import { FirebaseConfig } from './../environments/firebase/firebase-config';
 
 /* Feature Modules */
@@ -23,7 +24,13 @@ export const FirebaseConfig = {
 @NgModule({
   imports: [
     BrowserModule,
-    AngularFireModule.initializeApp(FirebaseConfig),
+     AngularFireModule.initializeApp({
+    apiKey: "AIzaSyDauCRlokcRecT283636ODNP2z4qZe2oPA",
+    authDomain: "lds-councils-8f56b.firebaseapp.com",
+    databaseURL: "https://lds-councils-8f56b.firebaseio.com",
+    storageBucket: "lds-councils-8f56b.appspot.com",
+    messagingSenderId: "619253720821"
+    }),
     HttpModule,
     RouterModule.forRoot([
       { path: 'welcome', component: WelcomeComponent },
