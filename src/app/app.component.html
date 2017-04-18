@@ -1,14 +1,24 @@
 <div class='container'>
     <!--<img style="-webkit-user-select: none;background-position: 0px 0px, 10px 10px;background-size: 20px 20px;background-image:linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%),linear-gradient(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee 100%);cursor: zoom-in;"
         src="http://localhost:4200/web_admin_01.png" width="835" height="638">-->
-    <nav class='navbar navbar-default'>
+    <nav class='navbar'>
         <div class='container-fluid'>
-            <a class='navbar-brand'>{{pageTitle}}</a>
-            <ul class='nav navbar-nav'>
+            <a class='navbar-brand nav-brand'>{{pageTitle}}</a>
+            <ul class='nav navbar-nav navbar-right nav-right'>
                 <li><a>Units</a></li>
                 <li><a>Analytics</a></li>
                 <li><a>About</a></li>
             </ul>
         </div>
     </nav>
+    <form action="" class="navbar-form nav-form">
+        <div class="input-group">
+            <input type="Search" placeholder="Search organization by name or unit number" class="form-control" />
+            <div class="input-group-btn">
+                <button class="btn btn-info">
+           <span class="glyphicon glyphicon-search"></span>
+           </button>
+            </div>
+        </div>
+    </form>
 </div>
