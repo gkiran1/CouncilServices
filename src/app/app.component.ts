@@ -10,7 +10,7 @@ import { Notifications } from 'providers/notifications';
 
 })
 export class AppComponent {
-  title = 'Council App Trigger Serivces Lanuched!';
+   pageTitle: string = 'Councils';
   constructor(public af: AfDataService, public notification: Notifications) {
     this.registerPushTriggers();
   }
