@@ -19,8 +19,19 @@
 
 .nav-form {
     margin-left: 31px;
+    padding: 0px;
+    margin-top: 0px;
 }
 
 a {
     color: black;
+}
+
+.ro-w {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+#navBarSearchForm input[type=Search] {
+    width: 430px !important;
 }
