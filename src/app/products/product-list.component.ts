@@ -21,9 +21,6 @@ export class ProductListComponent implements OnInit {
 
     }
 
-    toggleImage(): void {
-        this.showImage = !this.showImage;
-    }
 
     ngOnInit(): void {
         this.products= this._productService.getData()
@@ -31,7 +28,4 @@ export class ProductListComponent implements OnInit {
               
     }
 
-    onRatingClicked(message: string): void {
-        this.pageTitle = 'Product List: ' + message;
-    }
 }
