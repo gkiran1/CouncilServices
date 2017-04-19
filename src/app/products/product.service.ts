@@ -27,18 +27,20 @@ export class ProductService {
                this.temp["UnitNum"]= Num;
                this.temp["UnitType"]= Type;
                this.arr.push(this.temp);
+               this.temp={};
                if(Array.isArray(parent)){
                   for(var j=0;j<parent.length;j++){ 
-                   var {OrgUnitId: parentId, ParentNum:parentNum,UnitName:parentName,UnitNum:parentNum,UnitType:parentType,Children: children1} = parent[i]; 
+                   var {OrgUnitId: parentId, ParentNum:parentNum,UnitName:parentName,UnitNum:parentNum,UnitType:parentType,Children: children1} = parent[j]; 
                     this.temp2["OrgUnitId"]= parentId;
                     this.temp2["ParentNum"]= parentNum;
                     this.temp2["UnitName"]= parentName;
                     this.temp2["UnitNum"]= parentNum;
                     this.temp2["UnitType"]= parentType;
                     this.arr.push(this.temp2);
+                    this.temp2 = {}
                      if(Array.isArray(children1)){
-                            for(var k=0;k<children1.length;k++){ 
-                                    this.arr.push(children1[i])
+                            for(var k=0;k<children1.length;k++){
+                              this.arr.push(children1[k]);
                             }
                      }
 
