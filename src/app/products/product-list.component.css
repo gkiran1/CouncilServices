@@ -20,3 +20,7 @@ a {
 #navBarSearchForm input[type=Search] {
     width: 430px !important;
 }
+
+.table-responsive1 {
+    min-height: .01%;
+}

@@ -14,42 +14,35 @@
     <div class="col-md-4">
         <button type="button" class="btn btn-primary primary-btn">Add Unit</button>
     </div>
-    <!--<div class='table-responsive'>
+    <div class='table-responsive1'>
         <table class='table' *ngIf='products && products.length'>
             <thead>
                 <tr>
-                    <th>
-                        <button class='btn btn-primary' (click)='toggleImage()'>
-                                {{showImage ? 'Hide' : 'Show'}} Image
-                            </button>
-                    </th>
                     <th>#</th>
                     <th>Name</th>
                     <th>Type</th>
-                    <th>Geographic Area</th>
-                    <th>Country</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor='let product of products | productFilter:listFilter'>
-                    <td>
+                    <!--<td>
                         <img *ngIf='showImage' [src]='product.imageUrl' [title]='product.productName | uppercase' [style.width.px]='imageWidth' [style.margin.px]='imageMargin'>
-                    </td>
+                    </td>-->
                     <td><a [routerLink]="['/product', product.productId]">
-                            {{product.productName}}
+                            {{product.UnitNum}}
                             </a>
                     </td>
-                    <td>{{ product.productCode | lowercase }}</td>
-                    <td>{{ product.releaseDate }}</td>
-                    <td>{{ product.price | currency:'USD':true:'1.2-2' }}</td>
+                    <td>{{ product.UnitName | lowercase }}</td>
+                    <td>{{ product.UnitType }}</td>
+                    <!--<td>{{ product.price | currency:'USD':true:'1.2-2' }}</td>
                     <td>
                         <ai-star [rating]='product.starRating' (ratingClicked)='onRatingClicked($event)'>
                         </ai-star>
-                    </td>
+                    </td>-->
                 </tr>
             </tbody>
         </table>
-    </div>-->
+    </div>
 </div>
 
 
