@@ -696,7 +696,7 @@ export class AfDataService {
       var description = snapshot.val()['councilname'];
       var createdBy = snapshot.val()['createdBy'];
       var createdUser = snapshot.val()['createdUser'];
-      var name = snapshot.val()['name'];
+      var name = snapshot.val()['filename'];
       var userKeys = [];
       var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(fileId);
       notificationRef.once("value", function (snap) {
