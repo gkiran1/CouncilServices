@@ -1,0 +1,108 @@
+<div class="row ro-w">
+    <div class="col-md-8">
+        <form action="" class="navbar-form nav-form" id="navBarSearchForm">
+            <div class="input-group">
+                <input type="Search" placeholder="Search organization by name or unit number" class="form-control" [(ngModel)]='listFilter' [ngModelOptions]="{standalone: true}" />
+                <div class="input-group-btn">
+                    <button class="btn btn-info">
+                          <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <button type="button" class="btn btn-primary primary-btn">Add Unit</button>
+    </div>
+    <!--<div class='table-responsive'>
+        <table class='table' *ngIf='products && products.length'>
+            <thead>
+                <tr>
+                    <th>
+                        <button class='btn btn-primary' (click)='toggleImage()'>
+                                {{showImage ? 'Hide' : 'Show'}} Image
+                            </button>
+                    </th>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Geographic Area</th>
+                    <th>Country</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor='let product of products | productFilter:listFilter'>
+                    <td>
+                        <img *ngIf='showImage' [src]='product.imageUrl' [title]='product.productName | uppercase' [style.width.px]='imageWidth' [style.margin.px]='imageMargin'>
+                    </td>
+                    <td><a [routerLink]="['/product', product.productId]">
+                            {{product.productName}}
+                            </a>
+                    </td>
+                    <td>{{ product.productCode | lowercase }}</td>
+                    <td>{{ product.releaseDate }}</td>
+                    <td>{{ product.price | currency:'USD':true:'1.2-2' }}</td>
+                    <td>
+                        <ai-star [rating]='product.starRating' (ratingClicked)='onRatingClicked($event)'>
+                        </ai-star>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>-->
+</div>
+
+
+<!--<div class='panel panel-primary'>
+    <div class='panel-body'>
+        <div class='row'>
+            <div class='col-md-4'>
+                <input type='text' [(ngModel)]='listFilter' />
+            </div>
+        </div>
+        <div class='row' *ngIf='listFilter'>
+            <div class='col-md-6'>
+                <h3>Filtered by: {{listFilter}} </h3>
+            </div>
+        </div>
+
+        <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
+
+        <div class='table-responsive'>
+            <table class='table' *ngIf='products && products.length'>
+                <thead>
+                    <tr>
+                        <th>
+                            <button class='btn btn-primary' (click)='toggleImage()'>
+                                {{showImage ? 'Hide' : 'Show'}} Image
+                            </button>
+                        </th>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Geographic Area</th>
+                        <th>Country</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let product of products | productFilter:listFilter'>
+                        <td>
+                            <img *ngIf='showImage' [src]='product.imageUrl' [title]='product.productName | uppercase' [style.width.px]='imageWidth' [style.margin.px]='imageMargin'>
+                        </td>
+                        <td><a [routerLink]="['/product', product.productId]">
+                            {{product.productName}}
+                            </a>
+                        </td>
+                        <td>{{ product.productCode | lowercase }}</td>
+                        <td>{{ product.releaseDate }}</td>
+                        <td>{{ product.price | currency:'USD':true:'1.2-2' }}</td>
+                        <td>
+                            <ai-star [rating]='product.starRating' (ratingClicked)='onRatingClicked($event)'>
+                            </ai-star>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>-->
