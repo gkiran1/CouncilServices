@@ -10,7 +10,7 @@ import { Notifications } from 'providers/notifications';
 
 })
 export class AppComponent {
-   pageTitle: string = 'Councils';
+  pageTitle: string = 'Councils';
   constructor(public af: AfDataService, public notification: Notifications) {
     this.registerPushTriggers();
   }
@@ -19,7 +19,7 @@ export class AppComponent {
     this.af.agendasTrigger();
     this.af.assignmentsTrigger();
     this.af.assignmentsUpdateTrigger();
-    this.af.assignmentsDeleteTrigger();
+    //this.af.assignmentsDeleteTrigger();
     this.af.discussionsTrigger();
     this.af.discussionsUpdateTrigger();
     this.af.privateDiscussionsTrigger();

@@ -200,7 +200,7 @@ export class AfDataService {
     });
   }
 
-  // Assignments Update Trigger ------------------------
+  // Assignments Update & Delete Trigger ------------------------
   assignmentsUpdateTrigger() {
     this.rootRef.child('assignments').on('child_changed', function (snapshot) {
       var assignmentId = snapshot.getKey();
@@ -208,10 +208,22 @@ export class AfDataService {
       var createdBy = snapshot.val()['createdby'];
       var userKeys = [];
 
-      if (snapshot.val()['isCompleted'] === true) {
+      var action = '';
+      var txt = '';
+
+      if (snapshot.val()['isactive'] === false) {  // condition check order should not change 
+        action = 'deleted';
+        txt = 'delete';
+      }
+      else if (snapshot.val()['isCompleted'] === true) {
+        action = 'completed';
+        txt = 'update';
+      }
+
+      if (action === 'deleted' || action === 'completed') {
         var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(assignmentId);
         notificationRef.once("value", function (snap) {
-          if (!snap.exists()) {
+          if ((snap.exists() && action === 'completed') || (snap.exists() && action === 'deleted')) {
             var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
             councilUsersRef.once('value').then(function (usrsSnapshot) {
               usrsSnapshot.forEach(usrObj => {
@@ -233,8 +245,8 @@ export class AfDataService {
                                 nodeid: assignmentId,
                                 nodename: 'assignments',
                                 description: description,
-                                action: 'update',
-                                text: 'Assignment ' + '\"' + description + '\"' + ' is completed',
+                                action: txt,
+                                text: 'Assignment ' + '\"' + description + '\"' + ' is ' + action,
                                 createddate: new Date().toISOString(),
                                 createdtime: new Date().toTimeString(),
                                 createdby: createdBy,
@@ -287,70 +299,70 @@ export class AfDataService {
   }
 
   // Assignments Delete Trigger ------------------------
-  assignmentsDeleteTrigger() {
-    this.rootRef.child('assignments').on('child_removed', function (snapshot) {
-      var assignmentId = snapshot.getKey();
-      var description = snapshot.val()['description'];
-      var createdBy = snapshot.val()['createdby'];
-      var userKeys = [];
+  // assignmentsDeleteTrigger() {
+  //   this.rootRef.child('assignments').on('child_removed', function (snapshot) {
+  //     var assignmentId = snapshot.getKey();
+  //     var description = snapshot.val()['description'];
+  //     var createdBy = snapshot.val()['createdby'];
+  //     var userKeys = [];
 
-      var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
-      councilUsersRef.once('value').then(function (usrsSnapshot) {
-        usrsSnapshot.forEach(usrObj => {
-          var id = usrObj.val()['userid'];
-          userKeys.push(id);
-          if (userKeys.indexOf(id) === userKeys.lastIndexOf(id)) {
-            var notSettingsRef = firebase.database().ref().child('notificationsettings').orderByChild('userid').equalTo(id);
-            notSettingsRef.once('value', function (notSnap) {
-              if (notSnap.exists()) {
-                notSnap.forEach(notSetting => {
-                  if (notSetting.val()['allactivity'] === true || notSetting.val()['closingassignment'] === true) {
-                    var usrRef = firebase.database().ref().child('users/' + id);
-                    usrRef.once('value').then(function (usrSnapshot) {
-                      if (usrSnapshot.val()['isactive'] === true) {
-                        var email = usrSnapshot.val()['email'];
+  //     var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
+  //     councilUsersRef.once('value').then(function (usrsSnapshot) {
+  //       usrsSnapshot.forEach(usrObj => {
+  //         var id = usrObj.val()['userid'];
+  //         userKeys.push(id);
+  //         if (userKeys.indexOf(id) === userKeys.lastIndexOf(id)) {
+  //           var notSettingsRef = firebase.database().ref().child('notificationsettings').orderByChild('userid').equalTo(id);
+  //           notSettingsRef.once('value', function (notSnap) {
+  //             if (notSnap.exists()) {
+  //               notSnap.forEach(notSetting => {
+  //                 if (notSetting.val()['allactivity'] === true || notSetting.val()['closingassignment'] === true) {
+  //                   var usrRef = firebase.database().ref().child('users/' + id);
+  //                   usrRef.once('value').then(function (usrSnapshot) {
+  //                     if (usrSnapshot.val()['isactive'] === true) {
+  //                       var email = usrSnapshot.val()['email'];
 
-                        var notification = {
-                          "emails": email,
-                          "profile": "ldspro",
-                          "notification": {
-                            "title": "LDS Councils",
-                            "message": 'Assignment Deleted - ' + description,
-                            "android": {
-                              "title": "LDS Councils",
-                              "message": 'Assignment Deleted - ' + description,
-                            },
-                            "ios": {
-                              "title": "LDS Councils",
-                              "message": 'Assignment Deleted - ' + description,
-                            }
-                          }
-                        };
-                        var req = https.request(options, function (res) {
-                          console.log('STATUS: ' + res.statusCode);
-                          console.log('HEADERS: ' + JSON.stringify(res.headers));
-                          res.setEncoding('utf8');
-                          res.on('data', function (chunk) {
-                            console.log('BODY: ' + chunk);
-                          });
-                        });
-                        req.on('error', function (e) {
-                          console.log('problem with request: ' + e.message);
-                        });
-                        req.write(JSON.stringify(notification));
-                        req.end();
-                      }
-                    });
-                    return true; // to stop the loop.
-                  }
-                });
-              }
-            });
-          }
-        });
-      });
-    });
-  }
+  //                       var notification = {
+  //                         "emails": email,
+  //                         "profile": "ldspro",
+  //                         "notification": {
+  //                           "title": "LDS Councils",
+  //                           "message": 'Assignment Deleted - ' + description,
+  //                           "android": {
+  //                             "title": "LDS Councils",
+  //                             "message": 'Assignment Deleted - ' + description,
+  //                           },
+  //                           "ios": {
+  //                             "title": "LDS Councils",
+  //                             "message": 'Assignment Deleted - ' + description,
+  //                           }
+  //                         }
+  //                       };
+  //                       var req = https.request(options, function (res) {
+  //                         console.log('STATUS: ' + res.statusCode);
+  //                         console.log('HEADERS: ' + JSON.stringify(res.headers));
+  //                         res.setEncoding('utf8');
+  //                         res.on('data', function (chunk) {
+  //                           console.log('BODY: ' + chunk);
+  //                         });
+  //                       });
+  //                       req.on('error', function (e) {
+  //                         console.log('problem with request: ' + e.message);
+  //                       });
+  //                       req.write(JSON.stringify(notification));
+  //                       req.end();
+  //                     }
+  //                   });
+  //                   return true; // to stop the loop.
+  //                 }
+  //               });
+  //             }
+  //           });
+  //         }
+  //       });
+  //     });
+  //   });
+  // }
 
   //Council Discussions Trigger ------------------------
   discussionsTrigger() {
