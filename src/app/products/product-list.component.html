@@ -19,6 +19,7 @@
             <thead>
                 <tr>
                     <th>#</th>
+                    <th>Parent</th>
                     <th>Name</th>
                     <th>Type</th>
                 </tr>
@@ -32,8 +33,10 @@
                             {{product.UnitNum}}
                             </a>
                     </td>
+                    <td>{{product.ParentNum}}</td>
                     <td>{{ product.UnitName | lowercase }}</td>
                     <td>{{ product.UnitType }}</td>
+
                     <!--<td>{{ product.price | currency:'USD':true:'1.2-2' }}</td>
                     <td>
                         <ai-star [rating]='product.starRating' (ratingClicked)='onRatingClicked($event)'>
