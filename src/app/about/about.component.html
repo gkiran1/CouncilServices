@@ -1,0 +1,46 @@
+<table class="container">
+  <form (ngSubmit)="Save(about)">
+    <div class="title">
+      About Us
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="input-field col s12">
+          <label>Software Version:</label>&nbsp;&nbsp;&nbsp;<input [(ngModel)]="about.softwareversion" type="text" id="txtSoftwareversion"
+            name="softwareversion" required>
+        </div>
+      </div>
+      <div class="row">
+        <label> Terms of Use </label>
+        <div class="input-field col s12">
+          <textarea [(ngModel)]="about.termsofuse" id="txttermsofuse" name="termsofuse" required></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <label>Privacy Policy</label>
+        <div class="input-field col s12">
+          <textarea [(ngModel)]="about.privacypolicy" id="txtprivacypolicy" name="privacypolicy" required></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <label> Contact</label>
+        <div class="input-field col s12">
+          <label>Email:</label> <input [(ngModel)]="about.email" type="email" id="txtemail" name="email" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <label>Web:</label>&nbsp;&nbsp;&nbsp;<input [(ngModel)]="about.web" type="text" id="txtweb" name="web" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <label>Phone:</label><input type="text" [(ngModel)]="about.phone" id="txtphone" name="phone" required>
+        </div>
+      </div>
+      <div class="row login">
+        <button class="submit" type="submit">Submit</button>
+      </div>
+    </div>
+  </form>
+</table>

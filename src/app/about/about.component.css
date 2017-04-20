@@ -1,0 +1,83 @@
+@font-face {
+  font-family: "Gotham";
+  src: url("../assets/fonts/Gotham.ttf");
+}
+
+@font-face {
+  font-family: "Bernina";
+  src: url("../assets/fonts/Bernina.ttf");
+}
+
+.container {
+  width: 24%;
+  height: 100%;
+  margin: 0 auto;
+  margin-top: 8%;
+}
+
+.row {
+  margin-top: 20px;
+  font-family: Bernina-Regular;
+  color: #3CB18A;
+}
+
+.title {
+  margin-left: 15px;
+  font-family: Gotham-Medium;
+  font-size: 16pt;
+  color: #35373a;
+  text-align: center;
+}
+
+.clr {
+  -webkit-text-fill-color: green;
+}
+
+label {
+  color: #3CB18A;
+  font-family: Bernina-SemiBold;
+  font-size: 10pt;
+}
+
+input[type=text],
+input[type=email],
+input[type=password] {
+  background: transparent;
+  border-right: transparent;
+  border-left: transparent;
+  border-top: transparent;
+}
+
+*:focus {
+  outline: none;
+}
+
+.login {
+  text-align: center;
+  font-size: 17pt;
+  font-family: Bernina-Regular;
+  color: #3CB18A;
+  cursor: pointer;
+  margin-top: 26px;
+}
+
+input#btnsubmit {
+  -webkit-appearance: none;
+  color: #3CB18A;
+}
+
+textarea {
+  width: 100%;
+}
+
+button {
+  border: none;
+  padding: 0;
+  background: none;
+}
+
+.submit {
+  color: #3CB18A;
+  font-family: Bernina-Regular;
+  font-size: 28px;
+}
