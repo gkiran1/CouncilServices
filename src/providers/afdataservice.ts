@@ -729,13 +729,22 @@ export class AfDataService {
                           if (usrSnapshot.val()['isactive'] === true) {
                             var email = usrSnapshot.val()['email'];
 
+                            var txt = '';
+
+                            if (createdBy === id) {
+                              txt = 'you have shared a file ' + name;
+                            }
+                            else {
+                              txt = createdUser + ' sent you a file ' + name;
+                            }
+
                             firebase.database().ref().child('notifications').push({
                               userid: id,
                               nodeid: fileId,
                               nodename: 'files',
                               description: description,
                               action: 'create',
-                              text: createdUser + ' sent you a file ' + name,
+                              text: txt,
                               createddate: new Date().toISOString(),
                               createdtime: new Date().toTimeString(),
                               createdby: createdBy,
