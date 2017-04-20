@@ -1,12 +1,12 @@
-@font-face {
-  font-family: "Gotham";
-  src: url("../assets/fonts/Gotham.ttf");
+/*@font-face {
+  font-family: "Gotham"; 
+  src: url("./assets/fonts/Gotham.ttf");
 }
 
 @font-face {
   font-family: "Bernina";
-  src: url("../assets/fonts/Bernina.ttf");
-}
+  src: url("./assets/fonts/Bernina.ttf");
+}*/
 
 .container {
   width: 24%;

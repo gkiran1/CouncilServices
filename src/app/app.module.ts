@@ -9,19 +9,22 @@ import { FirebaseConfig } from './../environments/firebase/firebase-config';
 import { ProductModule } from './products/product.module';
 import { RouterModule, Routes } from '@angular/router';
 //import { WelcomeComponent } from './home/welcome.component';
+import { AboutusComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AboutusComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     AngularFireModule.initializeApp(FirebaseConfig),
-     RouterModule.forRoot([
+    RouterModule.forRoot([
       { path: '', redirectTo: 'welcome', pathMatch: 'full' },
-      { path: '**', redirectTo: 'welcome', pathMatch: 'full' }
+      { path: '**', redirectTo: 'welcome', pathMatch: 'full' },
+      { path: 'about', component: AboutusComponent },
     ]),
     ProductModule
   ],
