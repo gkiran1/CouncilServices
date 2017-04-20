@@ -13,60 +13,24 @@ import { AngularFire } from 'angularfire2';
 @Injectable()
 export class ProductService {
     private _productUrl = 'api/products/products.json';
-    public arr=[];
-    public temp={};
-    public temp2 = {};
+  //  public arr=[];
+   // public temp={};
+   // public temp2 = {};
 
     constructor(public af: AngularFire,private _http: Http) { 
-           this.af.database.object('ldsunits').subscribe(u=>{
-           for(var i=0;i< u.length; u++){
-               var {OrgUnitId: Id, ParentNum:Num,UnitName:Name,UnitNum:Num,UnitType:Type,Children: parent} = u[i];
-               this.temp["OrgUnitId"]= Id;
-               this.temp["ParentNum"]= Num;
-               this.temp["UnitName"]= Name;
-               this.temp["UnitNum"]= Num;
-               this.temp["UnitType"]= Type;
-               this.arr.push(this.temp);
-               this.temp={};
-               if(Array.isArray(parent)){
-                  for(var j=0;j<parent.length;j++){ 
-                   var {OrgUnitId: parentId, ParentNum:parentNum,UnitName:parentName,UnitNum:parentNum,UnitType:parentType,Children: children1} = parent[j]; 
-                    this.temp2["OrgUnitId"]= parentId;
-                    this.temp2["ParentNum"]= parentNum;
-                    this.temp2["UnitName"]= parentName;
-                    this.temp2["UnitNum"]= parentNum;
-                    this.temp2["UnitType"]= parentType;
-                    this.arr.push(this.temp2);
-                    this.temp2 = {}
-                     if(Array.isArray(children1)){
-                            for(var k=0;k<children1.length;k++){
-                              this.arr.push(children1[k]);
-                            }
-                     }
-
-               }
-
-               }
-             
-           } 
-           console.log(this.arr);
-        });
-       
+          
     }
-    getData(){
-        return this.arr;
+    // getData(){
+    //     return this.arr;
+    // }
+
+    getProducts() {
+        return this.af.database.object('ldsunits');
     }
 
-    getProducts(): Observable<IProduct[]> {
-        return this._http.get(this._productUrl)
-            .map((response: Response) => <IProduct[]> response.json())
-            .do(data => console.log('All: ' +  JSON.stringify(data)))
-            .catch(this.handleError);
-    }
-
-    getProduct(id: number): Observable<IProduct> {
+    getProduct(id: number) {
         return this.getProducts()
-            .map((products: IProduct[]) => products.find(p => p.UnitNum === id));
+            .map((products) => products.find(p => p.UnitNum === id));
     }
 
     // objectWithoutKey(object, key) { 

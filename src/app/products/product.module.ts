@@ -13,6 +13,8 @@ import * as firebase from 'firebase';
 import { AngularFireModule } from 'angularfire2';
 import { FirebaseConfig } from './../../environments/firebase/firebase-config';
 
+import { PagerService } from './pager.service';
+
 @NgModule({
   imports: [
     SharedModule,
@@ -32,7 +34,8 @@ import { FirebaseConfig } from './../../environments/firebase/firebase-config';
   ],
   providers: [
     ProductService,
-    ProductDetailGuard
+    ProductDetailGuard,
+    PagerService
   ]
 })
 export class ProductModule {}

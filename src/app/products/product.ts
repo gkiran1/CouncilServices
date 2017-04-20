@@ -5,5 +5,6 @@ export interface IProduct {
     UnitName: string;
     UnitNum: number;
     UnitType: string;
+    Children:any;
 }
 

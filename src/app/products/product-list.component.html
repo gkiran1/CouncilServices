@@ -15,7 +15,7 @@
         <button type="button" class="btn btn-primary primary-btn">Add Unit</button>
     </div>
     <div class='table-responsive1'>
-        <table class='table' *ngIf='products && products.length'>
+        <table class='table' *ngIf='pagedItems && pagedItems.length'>
             <thead>
                 <tr>
                     <th>#</th>
@@ -24,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor='let product of products | productFilter:listFilter'>
+                <tr *ngFor='let product of pagedItems | productFilter:listFilter'>
                     <!--<td>
                         <img *ngIf='showImage' [src]='product.imageUrl' [title]='product.productName | uppercase' [style.width.px]='imageWidth' [style.margin.px]='imageMargin'>
                     </td>-->
@@ -42,6 +42,32 @@
                 </tr>
             </tbody>
         </table>
+        <div class="container">
+            <div class="text-center">
+
+                <!-- items being paged -->
+                <div *ngFor="let item of pagedItems">{{item.name}}</div>
+
+                <!-- pager -->
+                <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                    <li [ngClass]="{disabled:pager.currentPage === 1}">
+                        <a (click)="setPage(1)">First</a>
+                    </li>
+                    <li [ngClass]="{disabled:pager.currentPage === 1}">
+                        <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+                    </li>
+                    <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                        <a (click)="setPage(page)">{{page}}</a>
+                    </li>
+                    <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                        <a (click)="setPage(pager.currentPage + 1)">Next</a>
+                    </li>
+                    <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                        <a (click)="setPage(pager.totalPages)">Last</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 
