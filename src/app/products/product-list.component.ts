@@ -66,6 +66,9 @@ export class ProductListComponent implements OnInit {
              
            } 
            console.log(this.products);
+           this.products.sort(function(a, b){
+              return a.UnitNum-b.UnitNum
+           })
                this.setPage(1);     
                 },
                            error => this.errorMessage = <any>error);
