@@ -10,16 +10,23 @@ import { ProductModule } from './products/product.module';
 import { RouterModule, Routes } from '@angular/router';
 //import { WelcomeComponent } from './home/welcome.component';
 import { AboutusComponent } from './about/about.component';
+import { FroalaComponent } from "./about/froala.component";
+
+import { FroalaEditorModule } from './../editor/index';
+import { FroalaViewModule } from './../view/index';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AboutusComponent
+    AboutusComponent,
+    FroalaComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
+    FroalaEditorModule,
+    FroalaViewModule,
     AngularFireModule.initializeApp(FirebaseConfig),
     RouterModule.forRoot([
       { path: '', redirectTo: 'welcome', pathMatch: 'full' },
