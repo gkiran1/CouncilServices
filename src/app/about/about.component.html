@@ -13,7 +13,8 @@
       <div class="row">
         <label> Terms of Use </label>
         <div class="input-field col s12">
-          <textarea [(ngModel)]="about.termsofuse" id="txttermsofuse" name="termsofuse" required></textarea>
+          <div [froalaEditor] [(froalaModel)]="about.termsofuse"></div>
+          <!--<textarea [(ngModel)]="about.termsofuse" id="txttermsofuse" name="termsofuse" required></textarea>-->
         </div>
       </div>
       <div class="row">
