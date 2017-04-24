@@ -536,7 +536,7 @@ export class AfDataService {
                     nodename: 'privatediscussions',
                     description: description,
                     action: 'create',
-                    text: description + ' created private discussion with you',
+                    text: "<h3>" + "<span class='nottxt-lbl'>" + description + "</span>" + " created private discussion with you" + "</h3>",
                     createddate: new Date().toISOString(),
                     createdtime: new Date().toTimeString(),
                     createdby: createdBy,
@@ -732,10 +732,10 @@ export class AfDataService {
                             var txt = '';
 
                             if (createdBy === id) {
-                              txt = 'you have shared a file ' + name;
+                              txt = "<h3>" + "<span class='nottxt-lbl'>" + "You" + "</span>" + " shared a file " + name + "</h3>";
                             }
                             else {
-                              txt = createdUser + ' sent you a file ' + name;
+                              txt = "<h3>" + "<span class='nottxt-lbl'>" + createdUser + "</span>" + " sent you a file " + name + "</h3>";
                             }
 
                             firebase.database().ref().child('notifications').push({
