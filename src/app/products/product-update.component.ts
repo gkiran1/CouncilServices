@@ -7,10 +7,11 @@ import { IProduct } from './product';
 import { ProductService } from './product.service';
 
 @Component({
-    templateUrl: './product-detail.component.html',
-    styleUrls: ['./product-detail.component.css']
+    templateUrl: './product-update.component.html',
+    styleUrls: ['./product-update.component.css']
 })
-export class ProductDetailComponent implements OnInit, OnDestroy {
+
+export class ProductUpdateComponent implements OnInit, OnDestroy {
     pageTitle: string = 'Product Detail';
     product: IProduct;
     errorMessage: string;
@@ -21,6 +22,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     constructor(private _route: ActivatedRoute,
         private _router: Router,
         private _productService: ProductService) {
+
+
     }
 
     ngOnInit(): void {
@@ -48,6 +51,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                                 this.unitsbelow = unitObj.Children;
                             }
                         }
+
+                        
 
                         // else {
                         //     this.unitsbelow.push(unitObj);

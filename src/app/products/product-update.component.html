@@ -1,10 +1,13 @@
 <div class="row ro-w">
+
   <div class="col-md-8">
     <h4 ng-if="product">Unit {{product.UnitNum}}</h4>
   </div>
 
   <div class="col-md-4">
-    <h4 class="lbledit" [routerLink]="['/productupdate', product.UnitNum,product.ParentNum]">Edit</h4>
+    <h4 class="lbldelete" [routerLink]="['/productupdate', product.UnitNum,product.ParentNum]">Delete</h4>
+    <h4 class="lblcancel" [routerLink]="['/productupdate', product.UnitNum,product.ParentNum]">Cancel</h4>
+    <h4 class="lblsave" [routerLink]="['/productupdate', product.UnitNum,product.ParentNum]">SAVE</h4>
   </div>
 
   <table class='table'>
@@ -20,12 +23,20 @@
       <tr *ngIf="product" class="trbgcolor">
         <td> {{product.UnitNum}} </td>
         <td>{{product.ParentNum}}</td>
-        <td>{{ product.UnitName }}</td>
-        <td>{{ product.UnitType }}</td>
+        <td> <input type="text" [(ngModel)]='product.UnitName' class="txtunitname" /></td>
+        <td>
+          <select class="txtunitname" [(ngModel)]='product.UnitType' ng-init="product.UnitType">        
+            <option value="Area">Area</option>
+            <option value="Stake">Stake</option>
+            <option value="Ward">Ward</option>          
+         </select>
+        </td>
       </tr>
     </tbody>
   </table>
+
   <br>
+
   <h5><b>Units Above This Unit</b></h5>
 
   <table class='table'>
@@ -51,6 +62,7 @@
   </table>
 
   <br>
+
   <h5><b>Units Below This Unit</b></h5>
 
   <table class='table'>
@@ -66,8 +78,16 @@
       <tr *ngFor="let unt of unitsbelow">
         <td>{{unt.UnitNum}}</td>
         <td>{{unt.ParentNum}}</td>
-        <td>{{unt.UnitName}}</td>
-        <td>{{unt.UnitType}}</td>
+        <td> <input type="text" [(ngModel)]='unt.UnitName' class="txtunitname" /></td>
+        <td>
+          <select class="txtunitname" [(ngModel)]='unt.UnitType' ng-init="unt.UnitType">        
+            <option value="Area">Area</option>
+            <option value="Stake">Stake</option>
+            <option value="Ward">Ward</option>
+            <option value="Ward">Branch</option>  
+            <option value="Ward">District</option>        
+         </select>
+        </td>
         <td>
           <button><span class="icon-angle-right" ></span></button>
         </td>

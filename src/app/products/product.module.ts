@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule} from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 import { ProductListComponent } from './product-list.component';
 import { ProductDetailComponent } from './product-detail.component';
@@ -15,21 +15,30 @@ import { FirebaseConfig } from './../../environments/firebase/firebase-config';
 
 import { PagerService } from './pager.service';
 
+import { ProductUpdateComponent } from './product-update.component';
+
 @NgModule({
   imports: [
     SharedModule,
     AngularFireModule.initializeApp(FirebaseConfig),
     RouterModule.forChild([
       { path: 'products', component: ProductListComponent },
-      { path: 'product/:id',
-        canActivate: [ ProductDetailGuard],
+      {
+        path: 'product/:id/:parentnum',
+        // canActivate: [ProductDetailGuard],
         component: ProductDetailComponent
+      },
+      {
+        path: 'productupdate/:id/:parentnum',
+        // canActivate: [ProductDetailGuard],
+        component: ProductUpdateComponent
       }
     ])
   ],
   declarations: [
     ProductListComponent,
     ProductDetailComponent,
+    ProductUpdateComponent,
     ProductFilterPipe
   ],
   providers: [
@@ -38,4 +47,4 @@ import { PagerService } from './pager.service';
     PagerService
   ]
 })
-export class ProductModule {}
+export class ProductModule { }
