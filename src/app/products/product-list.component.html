@@ -30,14 +30,13 @@
           <!--<td>
                         <img *ngIf='showImage' [src]='product.imageUrl' [title]='product.productName | uppercase' [style.width.px]='imageWidth' [style.margin.px]='imageMargin'>
                     </td>-->
-          <td><a [routerLink]="['/product', product.UnitNum,product.ParentNum]">
-                            {{product.UnitNum | lowercase}}
-                            </a>
+          <td>
+            {{product.UnitNum | lowercase}}
           </td>
           <td>{{product.ParentNum }}</td>
           <td>{{ product.UnitName }}</td>
           <td>{{ product.UnitType }}</td>
-          <td><span class="glyphicon glyphicon-menu-right"></span></td>
+          <td [routerLink]="['/product', product.UnitNum,product.ParentNum]"><span class="glyphicon glyphicon-menu-right"></span></td>
 
           <!--<td>{{ product.price | currency:'USD':true:'1.2-2' }}</td>
                     <td>
@@ -54,24 +53,26 @@
 
       <!-- pager -->
       <div class="concil-pagination-block">
-      <div class="concil-pagination-label"><p>Page:</p></div>
-      <ul *ngIf="pager.pages && pager.pages.length" class="pagination concil-pagination">
-        <li [ngClass]="{disabled:pager.currentPage === 1}">
-          <a (click)="setPage(1)">First</a>
-        </li>
-        <li [ngClass]="{disabled:pager.currentPage === 1}">
-          <a (click)="setPage(pager.currentPage - 1)">Previous</a>
-        </li>
-        <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
-          <a (click)="setPage(page)">{{page}}</a>
-        </li>
-        <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-          <a (click)="setPage(pager.currentPage + 1)">Next</a>
-        </li>
-        <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-          <a (click)="setPage(pager.totalPages)">Last</a>
-        </li>
-      </ul>
+        <div class="concil-pagination-label">
+          <p>Page:</p>
+        </div>
+        <ul *ngIf="pager.pages && pager.pages.length" class="pagination concil-pagination">
+          <li [ngClass]="{disabled:pager.currentPage === 1}">
+            <a (click)="setPage(1)">First</a>
+          </li>
+          <li [ngClass]="{disabled:pager.currentPage === 1}">
+            <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+          </li>
+          <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+            <a (click)="setPage(page)">{{page}}</a>
+          </li>
+          <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+            <a (click)="setPage(pager.currentPage + 1)">Next</a>
+          </li>
+          <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+            <a (click)="setPage(pager.totalPages)">Last</a>
+          </li>
+        </ul>
       </div>
     </div>
 
