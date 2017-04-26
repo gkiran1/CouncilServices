@@ -1,3 +1,25 @@
+@font-face {
+  font-family: 'BerninaSans-Regular';
+  src: url('./assets/fonts/BerninaSans-Regular.eot'); /* IE9 Compat Modes */
+  src: url('./assets/fonts/BerninaSans-Regular.woff') format('woff'), /* Pretty Modern Browsers */
+       url('./assets/fonts/BerninaSans-Regular.ttf')  format('truetype'), /* Safari, Android, iOS */
+       url('./assets/fonts/BerninaSans-Regular.svg') format('svg'); /* Legacy iOS */ /*webfont.svg#svgFontName'*/
+}
+@font-face {
+  font-family: 'BerninaSans-Semibold';
+  src: url('./assets/fonts/BerninaSans-Semibold.eot'); /* IE9 Compat Modes */
+  src: url('./assets/fonts/BerninaSans-Semibold.woff') format('woff'), /* Pretty Modern Browsers */
+       url('./assets/fonts/BerninaSans-Semibold.ttf')  format('truetype'), /* Safari, Android, iOS */
+       url('./assets/fonts/BerninaSans-Semibold.svg') format('svg'); /* Legacy iOS */ /*webfont.svg#svgFontName'*/
+}
+
+
+*{
+    font-family: "BerninaSans-Regular", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    color: #35373A;
+}
+
 .container {
     /*background-image: url(../assets/web_admin_01.png);*/
     /*background-repeat: no-repeat;*/
@@ -13,12 +35,11 @@
 }*/
 
 .nav-brand {
-    padding: 24px 41px;
+    padding: 24px 0;
     font-size: 27px;
 }
 
 .nav-right {
-    margin-right: 14px;
     font-size: 17px;
     margin-top: 12px;
 }
@@ -30,7 +51,7 @@
 }
 
 a {
-    color: black;
+    color: #35373A;
 }
 
 .ro-w {
@@ -59,3 +80,15 @@ a {
 .navbar-right {
     float: right!important;
 }*/
+
+
+
+.concil-nav{}
+
+.concil-nav .navbar-brand{margin-left: -16px; font-weight: bold;font-size: 28px}
+
+.concil-nav .navbar-nav{}
+.concil-nav .navbar-nav > li > a{padding-top:10px; padding-bottom:10px;}
+.concil-nav .navbar-nav li a{border-bottom:3px solid #fff;color:#cbd1cf;font-size: 22px;}
+.concil-nav .navbar-nav li a.active{border-bottom:3px solid #3CB18A;color:#35373A;background-color:#fff;font-family: "BerninaSans-Semibold";}
+.concil-nav .navbar-nav li a:hover{background-color: #fff ;}
