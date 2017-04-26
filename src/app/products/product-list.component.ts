@@ -22,7 +22,7 @@ export class ProductListComponent implements OnInit {
     public products = [];
 
     constructor(private _productService: ProductService, private pagerService: PagerService) {
-
+       
     }
 
     // pager object
@@ -33,7 +33,7 @@ export class ProductListComponent implements OnInit {
 
 
     ngOnInit(): void {
-        this._productService.getProducts()
+        this._productService.getLdsUnits()
             .subscribe(u => {
                 for (var i = 0; i < u.length; i++) {
                     var {OrgUnitId: Id, ParentNum: Num, UnitName: Name, UnitNum: Num, UnitType: Type, Children: parent} = u[i];
@@ -44,23 +44,23 @@ export class ProductListComponent implements OnInit {
                     this.temp["UnitType"] = Type;
                     this.products.push(this.temp);
                     this.temp = {};
-                    if (Array.isArray(parent)) {
-                        for (var j = 0; j < parent.length; j++) {
-                            var {OrgUnitId: parentId, ParentNum: parentNum, UnitName: parentName, UnitNum: parentNum, UnitType: parentType, Children: children1} = parent[j];
-                            this.temp2["OrgUnitId"] = parentId;
-                            this.temp2["ParentNum"] = parentNum;
-                            this.temp2["UnitName"] = parentName;
-                            this.temp2["UnitNum"] = parentNum;
-                            this.temp2["UnitType"] = parentType;
-                            this.products.push(this.temp2);
-                            this.temp2 = {}
-                            if (Array.isArray(children1)) {
-                                for (var k = 0; k < children1.length; k++) {
-                                    this.products.push(children1[k]);
-                                }
-                            }
-                        }
-                    }
+                    // if (Array.isArray(parent)) {
+                    //     for (var j = 0; j < parent.length; j++) {
+                    //         var {OrgUnitId: parentId, ParentNum: parentNum, UnitName: parentName, UnitNum: parentNum, UnitType: parentType, Children: children1} = parent[j];
+                    //         this.temp2["OrgUnitId"] = parentId;
+                    //         this.temp2["ParentNum"] = parentNum;
+                    //         this.temp2["UnitName"] = parentName;
+                    //         this.temp2["UnitNum"] = parentNum;
+                    //         this.temp2["UnitType"] = parentType;
+                    //         this.products.push(this.temp2);
+                    //         this.temp2 = {}
+                    //         if (Array.isArray(children1)) {
+                    //             for (var k = 0; k < children1.length; k++) {
+                    //                 this.products.push(children1[k]);
+                    //             }
+                    //         }
+                    //     }
+                    // }
                 }
                 console.log(this.products);
                 this.products.sort(function (a, b) {

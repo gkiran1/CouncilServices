@@ -5,9 +5,9 @@
   </div>
 
   <div class="col-md-4">
-    <h4 class="lbldelete" [routerLink]="['/productupdate', product.UnitNum,product.ParentNum]">Delete</h4>
-    <h4 class="lblcancel" [routerLink]="['/productupdate', product.UnitNum,product.ParentNum]">Cancel</h4>
-    <h4 class="lblsave" [routerLink]="['/productupdate', product.UnitNum,product.ParentNum]">SAVE</h4>
+    <h4 class="lbldelete" (click)="deleteUnit()">Delete</h4>
+    <h4 class="lblcancel" (click)="cancel()">Cancel</h4>
+    <h4 class="lblsave" (click)="saveUnit()">SAVE</h4>
   </div>
 
   <table class='table'>

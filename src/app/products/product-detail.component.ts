@@ -23,35 +23,40 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         private _productService: ProductService) {
     }
 
+    untKey;
+
     ngOnInit(): void {
         this.sub = this._route.params.subscribe(
             params => {
                 let id = +params['id'];
                 let parentNum = params['parentnum'];
 
-                //alert('hi ' + parentNum);
-                //  this.getProduct(id);
-                this._productService.getProducts().subscribe(unitsObj => {
+
+                this._productService.getLdsUnits().subscribe(unitsObj => {
                     unitsObj.filter(unitObj => {
-                        // if (Number(unitObj.UnitNum) < id) {
-                        //     return unitObj;
-                        // }
+
+                        this.unitsabove = [];
 
                         if (unitObj.UnitNum === parentNum) {
                             this.unitsabove.push(unitObj);
                         }
 
                         if (Number(unitObj.UnitNum) === id) {
+
+                            this.untKey = unitObj.$key;
+
+                            console.log('unitObj.UnitNum' + unitObj.$key);
                             this.product = unitObj;
 
                             if (unitObj.Children) {
-                                this.unitsbelow = unitObj.Children;
+
+                                this._productService.getChildUnits(this.untKey).subscribe(childs => {
+                                    this.unitsbelow = childs;
+                                })
+
+                                // this.unitsbelow = unitObj.Children;
                             }
                         }
-
-                        // else {
-                        //     this.unitsbelow.push(unitObj);
-                        // }
                     });
                 });
             });
@@ -60,9 +65,15 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         //     return a.UnitNum - b.UnitNum
         // });
 
-        this.unitsbelow.sort(function (a, b) {
-            return a.UnitNum - b.UnitNum
-        });
+        // this.unitsbelow.sort(function (a, b) {
+        //     return a.UnitNum - b.UnitNum
+        // });
+    }
+
+    isDetail = true;
+
+    edit() {
+        this.isDetail = false;
     }
 
     ngOnDestroy() {
@@ -73,6 +84,22 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         this._productService.getProduct(id).subscribe(
             product => this.product = product,
             error => this.errorMessage = <any>error);
+    }
+
+    deleteUnit(product) {
+        this._productService.deleteUnit(product.$key);
+    }
+
+    cancel() {
+        this.isDetail = true;
+    }
+
+    saveUnit() {
+        this._productService.updateUnit(this.untKey, this.product, this.unitsbelow);
+    }
+
+    deletechildUnit(ky) {
+        this._productService.deleteChildUnit(this.untKey, ky);
     }
 
     public temp = {};

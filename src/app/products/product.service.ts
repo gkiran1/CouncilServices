@@ -16,12 +16,20 @@ export class ProductService {
 
     }
     getProducts() {
-        return this.af.database.object('ldsunits');
+        return this.af.database.object('ldsunitstest');
+    }
+
+    getLdsUnits() {
+        return this.af.database.list('ldsunitstest');
     }
 
     getProduct(id: number) {
         return this.getProducts()
             .map((products) => products.find(p => p.UnitNum === id.toString()));
+    }
+
+    getChildUnits(key) {
+        return this.af.database.list(`ldsunitstest/${key}/Children`);
     }
 
     getAboveUnits(id: number) {
@@ -33,8 +41,46 @@ export class ProductService {
             }));
     }
 
+    deleteUnit(unitKey: number) {
+        // this.af.database.object(`ldsunitstest/${key}`).remove();
+    }
+
+    deleteChildUnit(key, childKey) {
+        this.af.database.object(`ldsunitstest/${key}/Children/${childKey}`).remove();
+    }
+
+    updateUnit(unitKey: number, product, unitsBelow) {
+
+        var ch = [];
+
+        this.af.database.object(`ldsunitstest/${unitKey}`).update({
+            UnitName: product.UnitName,
+            UnitType: product.UnitType
+        });
+
+        if (product.Children) {
+
+            ch = unitsBelow;
+
+            ch.forEach(c => {
+
+                this.af.database.object(`ldsunitstest/${unitKey}/Children/${c.$key}`).update({
+                    UnitName: c.UnitName,
+                    UnitType: c.UnitType
+                });
+
+            });
+        }
+    }
+
     private handleError(error: Response) {
         console.error(error);
         return Observable.throw(error.json().error || 'Server error');
     }
+
+    // test(){
+    //     this.af.database.list('ldsunitstest').push({
+    //         name:'test'
+    //     });
+    // }
 }

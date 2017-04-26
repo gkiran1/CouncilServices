@@ -1,78 +1,185 @@
-<div class="row ro-w">
-  <div class="col-md-8">
-    <h4 ng-if="product">Unit {{product.UnitNum}}</h4>
-  </div>
+<div>
 
-  <div class="col-md-4">
-    <h4 class="lbledit" [routerLink]="['/productupdate', product.UnitNum,product.ParentNum]">Edit</h4>
-  </div>
+	<ng-container *ngIf=isDetail>
 
-  <table class='table'>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Parent</th>
-        <th>Name</th>
-        <th>Type</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngIf="product" class="trbgcolor">
-        <td> {{product.UnitNum}} </td>
-        <td>{{product.ParentNum}}</td>
-        <td>{{ product.UnitName }}</td>
-        <td>{{ product.UnitType }}</td>
-      </tr>
-    </tbody>
-  </table>
-  <br>
-  <h5><b>Units Above This Unit</b></h5>
+		<div class="divunitnum">
+			<h4 ng-if="product">Unit {{product.UnitNum}}</h4>
+			<h5 class="lbledit" (click)="edit()">Edit</h5>
+		</div>
 
-  <table class='table'>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Parent</th>
-        <th>Name</th>
-        <th>Type</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let unit of unitsabove">
-        <td>{{unit.UnitNum}}</td>
-        <td>{{unit.ParentNum}}</td>
-        <td>{{unit.UnitName}}</td>
-        <td>{{unit.UnitType}}</td>
-        <td>
-          <button><span class="icon-angle-right" ></span></button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+		<table class='table'>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Parent</th>
+					<th>Name</th>
+					<th>Type</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngIf="product" class="trbgcolor">
+					<td> {{product.UnitNum}} </td>
+					<td>{{product.ParentNum}}</td>
+					<td>{{ product.UnitName | lowercase }}</td>
+					<td>{{ product.UnitType }}</td>
+				</tr>
+			</tbody>
+		</table>
 
-  <br>
-  <h5><b>Units Below This Unit</b></h5>
+		<h5>Units Above This Unit</h5>
 
-  <table class='table'>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Parent</th>
-        <th>Name</th>
-        <th>Type</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let unt of unitsbelow">
-        <td>{{unt.UnitNum}}</td>
-        <td>{{unt.ParentNum}}</td>
-        <td>{{unt.UnitName}}</td>
-        <td>{{unt.UnitType}}</td>
-        <td>
-          <button><span class="icon-angle-right" ></span></button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+		<table class='table'>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Parent</th>
+					<th>Name</th>
+					<th>Type</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let unit of unitsabove">
+					<td>{{unit.UnitNum}}</td>
+					<td>{{unit.ParentNum}}</td>
+					<td>{{unit.UnitName}}</td>
+					<td>{{unit.UnitType}}</td>
+					<td>
+						<button><span class="icon-angle-right" ></span></button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<h5>Units Below This Unit</h5>
+
+		<table class='table'>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Parent</th>
+					<th>Name</th>
+					<th>Type</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let unt of unitsbelow">
+					<td>{{unt.UnitNum}}</td>
+					<td>{{unt.ParentNum}}</td>
+					<td>{{unt.UnitName}}</td>
+					<td>{{unt.UnitType}}</td>
+					<td>
+						<button><span class="icon-angle-right" ></span></button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</ng-container>
+
+
+
+	<ng-container *ngIf=!isDetail>
+
+		<div class="col-md-8">
+			<h4 ng-if="product">Unit {{product.UnitNum}}</h4>
+		</div>
+
+		<div class="col-md-4">
+			<h4 class="lbldelete" (click)="deleteUnit(product)">Delete</h4>
+			<h4 class="lblcancel" (click)="cancel()">Cancel</h4>
+			<h4 class="lblsave" (click)="saveUnit()">SAVE</h4>
+		</div>
+
+		<table class='table'>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Parent</th>
+					<th>Name</th>
+					<th>Type</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngIf="product" class="trbgcolor">
+					<td> {{product.UnitNum}} </td>
+					<td>{{product.ParentNum}}</td>
+					<td> <input type="text" [(ngModel)]='product.UnitName' class="txtunitname" /></td>
+					<td>
+						<select class="txtunitname" [(ngModel)]='product.UnitType' ng-init="product.UnitType">        
+            <option value="Area">Area</option>
+            <option value="Stake">Stake</option>
+            <option value="Ward">Ward</option>          
+         </select>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<br>
+
+		<h5><b>Units Above This Unit</b></h5>
+
+		<table class='table'>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Parent</th>
+					<th>Name</th>
+					<th>Type</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let unit of unitsabove">
+					<td>{{unit.UnitNum}}</td>
+					<td>{{unit.ParentNum}}</td>
+					<td>{{unit.UnitName}}</td>
+					<td>{{unit.UnitType}}</td>
+					<td>
+						<button><span class="icon-angle-right" ></span></button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<br>
+
+		<h5><b>Units Below This Unit</b></h5>
+
+		<table class='table'>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Parent</th>
+					<th>Name</th>
+					<th>Type</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let unt of unitsbelow">
+					<td>{{unt.UnitNum}}</td>
+					<td>{{unt.ParentNum}}</td>
+					<td> <input type="text" [(ngModel)]='unt.UnitName' class="txtunitname" /></td>
+					<td>
+						<select class="txtunitname" [(ngModel)]='unt.UnitType' ng-init="unt.UnitType">        
+            <option value="Area">Area</option>
+            <option value="Stake">Stake</option>
+            <option value="Ward">Ward</option>
+            <option value="Ward">Branch</option>  
+            <option value="Ward">District</option>        
+         </select>
+					</td>
+					<td>
+						<button (click)="deletechildUnit(unt.$key)">test</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+
+
+
+
+	</ng-container>
+
 
 </div>

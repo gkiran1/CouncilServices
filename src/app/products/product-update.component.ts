@@ -52,7 +52,7 @@ export class ProductUpdateComponent implements OnInit, OnDestroy {
                             }
                         }
 
-                        
+
 
                         // else {
                         //     this.unitsbelow.push(unitObj);
@@ -78,6 +78,18 @@ export class ProductUpdateComponent implements OnInit, OnDestroy {
         this._productService.getProduct(id).subscribe(
             product => this.product = product,
             error => this.errorMessage = <any>error);
+    }
+
+    deleteUnit() {
+
+    }
+
+    cancel() {
+
+    }
+
+    saveUnit() {
+
     }
 
     public temp = {};

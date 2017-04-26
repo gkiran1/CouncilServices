@@ -7,3 +7,25 @@
   color: green;
   float: right;
 }
+
+.lbldelete {
+  color: red;
+  display: inline;
+}
+
+.trbgcolor {
+  background-color: black;
+  color: white
+}
+
+.lblcancel {
+  display: inline;
+}
+
+.lblsave {
+  display: inline;
+}
+
+.txtunitname {
+  color: black;
+}
