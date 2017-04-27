@@ -25,7 +25,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     untKey;
-
     actUnit: IProduct;
     actunitsbelow = [];
 
@@ -47,7 +46,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 if (unitObj.UnitNum === parentNum) {
                     this.unitsabove.push(unitObj);
                 }
-                if (Number(unitObj.UnitNum) === id) {
+                else if (Number(unitObj.UnitNum) === id) {
                     this.untKey = unitObj.$key;
                     this.product = unitObj;
                     //  this.product.ActUnitName = unitObj['UnitName'];
@@ -68,13 +67,24 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     getUnitsById(id, parentNum, unit) {
-        this.getUnits(id, parentNum);
+        //  this.getUnits(id, parentNum);
+
         this.product = unit;
+
+        this._productService.getLdsUnits().subscribe(unitsObj => {
+            unitsObj.forEach(unitObj => {
+                if (this.product.ParentNum === unitObj.UnitNum) {
+                    this.unitsabove.push(unitObj);
+                }
+            });
+        });
+
         if (this.product.Children) {
             this._productService.getChildUnits(this.untKey).subscribe(childs => {
                 this.unitsbelow = childs;
             });
         }
+
     }
 
     isDetail = true;

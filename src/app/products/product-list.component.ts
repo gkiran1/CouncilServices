@@ -21,6 +21,8 @@ export class ProductListComponent implements OnInit {
 
     public products = [];
 
+    showLoading = true;
+
     constructor(private _productService: ProductService, private pagerService: PagerService) {
 
     }
@@ -62,11 +64,14 @@ export class ProductListComponent implements OnInit {
                     //     }
                     // }
                 }
-                console.log(this.products);
+
                 this.products.sort(function (a, b) {
                     return a.UnitNum - b.UnitNum
-                })
+                });
+
                 this.setPage(1);
+
+                this.showLoading = false;
             },
             error => this.errorMessage = <any>error);
     }
