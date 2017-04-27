@@ -2,70 +2,80 @@
 
   <ng-container *ngIf=isDetail>
 
-    <div class="divunitnum">
-      <h4 ng-if="product">Unit {{product.UnitNum}}</h4>
-      <h5 class="lbledit" (click)="edit()">Edit</h5>
+    <div class="divunitnum concil-PD-header">
+      <h4 ng-if="product" class="concil-PD-header-title">Unit {{product.UnitNum}}</h4>
+      <h5 class="lbledit concil-PD-header-edit" (click)="edit()">Edit</h5>
     </div>
 
-    <table class='table'>
+    <table class='table table-striped concil-table concil-table-striped-black'>
       <thead>
         <tr>
           <th>#</th>
           <th>Parent</th>
           <th>Name</th>
           <th>Type</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngIf="product" class="trbgcolor">
-          <td> {{product.UnitNum}} </td>
-          <td>{{product.ParentNum}}</td>
-          <td>{{ product.UnitName }}</td>
-          <td>{{ product.UnitType }}</td>
+          <td class="col-md-1"> {{product.UnitNum}} </td>
+          <td class="col-md-1">{{product.ParentNum}}</td>
+          <td class="col-md-8">{{ product.UnitName }}</td>
+          <td class="col-md-1">{{ product.UnitType }}</td>
+          <td class="col-md-1"><span class="glyphicon glyphicon-menu-right" style="visibility:hidden"></span></td>
         </tr>
       </tbody>
     </table>
 
-    <h5>Units Above This Unit</h5>
+    <div class="concil-PD-sub-header">
+       <h5 class="concil-PD-sub-header-title">Units Above This Unit</h5>
+    </div>
+    
 
-    <table class='table'>
+    <table class='table table-striped concil-table'>
       <thead>
         <tr>
           <th>#</th>
           <th>Parent</th>
           <th>Name</th>
           <th>Type</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let unit of unitsabove">
-          <td>{{unit.UnitNum}}</td>
-          <td>{{unit.ParentNum}}</td>
-          <td>{{unit.UnitName}}</td>
-          <td>{{unit.UnitType}}</td>
-          <td (click)="getUnitsById(unit.UnitNum,unit.ParentNum,unit)"><span class="glyphicon glyphicon-menu-right"></span></td>
+          <td class="col-md-1">{{unit.UnitNum}}</td>
+          <td class="col-md-1">{{unit.ParentNum}}</td>
+          <td class="col-md-8">{{unit.UnitName}}</td>
+          <td class="col-md-1">{{unit.UnitType}}</td>
+          <td class="col-md-1" (click)="getUnitsById(unit.UnitNum,unit.ParentNum,unit)"><span class="glyphicon glyphicon-menu-right"></span></td>
         </tr>
       </tbody>
     </table>
 
-    <h5>Units Below This Unit</h5>
+  <div class="concil-PD-sub-header">
+       <h5 class="concil-PD-sub-header-title">Units Below This Unit</h5>
+    </div>
+    
 
-    <table class='table'>
+    <table class='table table-striped concil-table'>
       <thead>
         <tr>
           <th>#</th>
           <th>Parent</th>
           <th>Name</th>
           <th>Type</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let unt of unitsbelow">
-          <td>{{unt.UnitNum}}</td>
-          <td>{{unt.ParentNum}}</td>
-          <td>{{unt.UnitName}}</td>
-          <td>{{unt.UnitType}}</td>
-          <td (click)="getUnitsById(unt.UnitNum,unt.ParentNum,unt)"><span class="glyphicon glyphicon-menu-right"></span></td>
+          <td class="col-md-1">{{unt.UnitNum}}</td>
+          <td class="col-md-1">{{unt.ParentNum}}</td>
+          <td class="col-md-8">{{unt.UnitName}}</td>
+          <td class="col-md-1">{{unt.UnitType}}</td>
+          <td class="col-md-1" (click)="getUnitsById(unt.UnitNum,unt.ParentNum,unt)"><span class="glyphicon glyphicon-menu-right"></span></td>
         </tr>
       </tbody>
     </table>
@@ -75,7 +85,7 @@
 
   <ng-container *ngIf=!isDetail>
 
-    <div class="col-md-8">
+    <!--<div class="col-md-8">
       <h4 ng-if="product">Unit {{product.UnitNum}}</h4>
     </div>
 
@@ -83,75 +93,93 @@
       <h4 class="lbldelete" (click)="deleteUnit(product)">Delete</h4>
       <h4 class="lblcancel" (click)="cancel()">Cancel</h4>
       <h4 class="lblsave" (click)="saveUnit()">SAVE</h4>
+    </div>-->
+
+    <div class="concil-PD-header">
+        <h4 ng-if="product" class="concil-PD-header-title">Unit {{product.UnitNum}}</h4>
+        <div class="concil-PD-header-button">
+          <h4 class="lbldelete" (click)="deleteUnit(product)">Delete</h4>
+          <h4 class="lblcancel" (click)="cancel()">Cancel</h4>
+          <h4 class="lblsave" (click)="saveUnit()">SAVE</h4>
+        </div>
     </div>
 
-    <table class='table'>
+    <table class='table table-striped concil-table concil-table-striped-black'>
       <thead>
         <tr>
           <th>#</th>
           <th>Parent</th>
           <th>Name</th>
           <th>Type</th>
+          <th>&nbsp;&nbsp;&nbsp;</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngIf="product" class="trbgcolor">
-          <td> {{product.UnitNum}} </td>
-          <td>{{product.ParentNum}}</td>
-          <td> <input type="text" [(ngModel)]='product.UnitName' class="txtunitname" /></td>
-          <td>
+          <td class="col-md-1"> {{product.UnitNum}} </td>
+          <td class="col-md-1">{{product.ParentNum}}</td>
+          <td class="col-md-7"> <input type="text" [(ngModel)]='product.UnitName' class="txtunitname" /></td>
+          <td class="col-md-2">
             <select class="txtunitname" [(ngModel)]='product.UnitType' ng-init="product.UnitType">        
             <option value="Area">Area</option>
             <option value="Stake">Stake</option>
             <option value="Ward">Ward</option>          
          </select>
           </td>
+          <td class="col-md-1">&nbsp;</td>
         </tr>
       </tbody>
     </table>
 
     <br>
+    <div class="concil-PD-sub-header">
+       <h5 class="concil-PD-sub-header-title">Units Above This Unit</h5>
+    </div>
+    
 
-    <h5><b>Units Above This Unit</b></h5>
-
-    <table class='table'>
+    <table class='table table-striped concil-table'>
       <thead>
         <tr>
           <th>#</th>
           <th>Parent</th>
           <th>Name</th>
           <th>Type</th>
+          <th>&nbsp;&nbsp;&nbsp;</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let unit of unitsabove">
-          <td>{{unit.UnitNum}}</td>
-          <td>{{unit.ParentNum}}</td>
-          <td>{{unit.UnitName}}</td>
-          <td>{{unit.UnitType}}</td>
+          <td class="col-md-1">{{unit.UnitNum}}</td>
+          <td class="col-md-1">{{unit.ParentNum}}</td>
+          <td class="col-md-7">{{unit.UnitName}}</td>
+          <td class="col-md-2">{{unit.UnitType}}</td>
+          <td class="col-md-1">&nbsp;</td>
         </tr>
       </tbody>
     </table>
 
     <br>
+    <div class="concil-PD-sub-header">
+       <h5 class="concil-PD-sub-header-title">Units Below This Unit</h5>
+    </div>
+    
 
-    <h5><b>Units Below This Unit</b></h5>
-
-    <table class='table'>
+    <table class='table table-striped concil-table'>
       <thead>
         <tr>
           <th>#</th>
           <th>Parent</th>
           <th>Name</th>
           <th>Type</th>
+          <th>&nbsp;&nbsp;&nbsp;</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let unt of unitsbelow">
-          <td>{{unt.UnitNum}}</td>
-          <td>{{unt.ParentNum}}</td>
-          <td> <input type="text" [(ngModel)]='unt.UnitName' class="txtunitname" /></td>
-          <td>
+          <td class="col-md-1">{{unt.UnitNum}}</td>
+          <td class="col-md-1">{{unt.ParentNum}}</td>
+          <td class="col-md-7"> <input type="text" [(ngModel)]='unt.UnitName' class="txtunitname" /></td>
+          <td class="col-md-2">
             <select class="txtunitname" [(ngModel)]='unt.UnitType' ng-init="unt.UnitType">        
             <option value="Area">Area</option>
             <option value="Stake">Stake</option>
@@ -160,8 +188,9 @@
             <option value="Ward">District</option>        
          </select>
           </td>
-          <td>
-            <button (click)="deletechildUnit(unt.$key)">Delete</button>
+          <td class="col-md-1">
+            <!--<button >Delete</button>-->
+            <span class="glyphicon glyphicon-remove-sign" (click)="deletechildUnit(unt.$key)"></span>
           </td>
         </tr>
       </tbody>
@@ -174,4 +203,7 @@
   </ng-container>
 
 
+</div>
+<div class="concil-footer">
+    <p>©Councils Foundation 501(c)(3)</p>
 </div>

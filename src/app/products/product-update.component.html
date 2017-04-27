@@ -1,16 +1,15 @@
 <div class="row ro-w">
 
-  <div class="col-md-8">
-    <h4 ng-if="product">Unit {{product.UnitNum}}</h4>
+  <div class="concil-PD-header">
+    <h4 ng-if="product" class="concil-PD-header-title">Unit {{product.UnitNum}}</h4>
+    <div class="concil-PD-header-button">
+      <h4 class="lbldelete" (click)="deleteUnit()">Delete</h4>
+      <h4 class="lblcancel" (click)="cancel()">Cancel</h4>
+      <h4 class="lblsave" (click)="saveUnit()">SAVE</h4>
+    </div>
   </div>
 
-  <div class="col-md-4">
-    <h4 class="lbldelete" (click)="deleteUnit()">Delete</h4>
-    <h4 class="lblcancel" (click)="cancel()">Cancel</h4>
-    <h4 class="lblsave" (click)="saveUnit()">SAVE</h4>
-  </div>
-
-  <table class='table'>
+  <table class='table table-striped concil-table'>
     <thead>
       <tr>
         <th>#</th>
@@ -36,10 +35,12 @@
   </table>
 
   <br>
+    <div class="concil-PD-sub-header">
+       <h5 class="concil-PD-sub-header-title">Units Above This Unit</h5>
+    </div>
+  
 
-  <h5><b>Units Above This Unit</b></h5>
-
-  <table class='table'>
+  <table class='table table-striped concil-table'>
     <thead>
       <tr>
         <th>#</th>
@@ -62,10 +63,11 @@
   </table>
 
   <br>
-
-  <h5><b>Units Below This Unit</b></h5>
-
-  <table class='table'>
+  <div class="concil-PD-sub-header">
+       <h5 class="concil-PD-sub-header-title">Units Below This Unit</h5>
+    </div>
+  
+  <table class='table table-striped concil-table'>
     <thead>
       <tr>
         <th>#</th>

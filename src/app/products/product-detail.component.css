@@ -29,3 +29,40 @@
 .txtunitname {
   color: black;
 }
+
+.concil-footer{width: 61%; float: left; position: fixed; bottom: 10px;background-color: #fff;}
+.concil-footer p{margin: 0; text-align: center; color: #cbd1cf; font-size: 14px;}
+
+.concil-PD-header{width:100%; float: left;}
+.concil-PD-header-title{width: 70%; float: left; font-size: 20px; font-weight: bold;}
+.concil-PD-header-edit{width: 30%; float: right; text-align: right; color: #3CB18A;font-weight: bold; cursor: pointer;}
+.concil-PD-header-button{width: auto; float: right;}
+.concil-PD-header-button > * {margin-left: 10px;cursor: pointer;}
+.concil-PD-header-button .lbldelete{color: #f13822}
+.concil-PD-header-button .lblcancel{color: #3CB18A}
+.concil-PD-header-button .lblsave{color: #3CB18A; font-weight: bold; }
+
+.concil-PD-sub-header{width: 100%; float: left;margin-top: 10px;}
+.concil-PD-sub-header-title{width:80%; float: left; font-size: 17px; font-weight: bold;}
+
+
+.concil-table.table{margin-top: 20px;}
+.concil-table.table > thead > tr > th, 
+.concil-table.table > tbody > tr > th, 
+.concil-table.table > tfoot > tr > th, 
+.concil-table.table > thead > tr > td, 
+.concil-table.table > tbody > tr > td, 
+.concil-table.table > tfoot > tr > td{border-top: none; vertical-align: middle;}
+.concil-table.table > thead > tr > th{border-bottom: none;color: #cbd1cf; font-weight: normal; }
+
+.concil-table .glyphicon{color: #cbd1cf;font-size: 12px;cursor: pointer;}
+.concil-table .glyphicon-menu-right{margin-top: 4px;}
+.concil-table .glyphicon-remove-sign{font-size: 14px; color: #f13822;}
+
+.concil-table-striped-black.table-striped > tbody > tr:nth-of-type(odd){
+  background-color: #525459;
+}
+.concil-table td input,
+.concil-table td select{border:1px solid #ccc; border-radius: 5px; padding: 3px 8px; height: 38px;}
+.concil-table-striped-black td input,
+.concil-table-striped-black td select{border:1px solid #525459; border-radius: 5px; padding: 3px 8px; height: 38px;}

@@ -23,13 +23,14 @@
     <h5 (click)="records(30)" class="headerres">30</h5>
   </div>
   <div class='table-responsive1'>
-    <table class='table concil-table' *ngIf='pagedItems && pagedItems.length'>
+    <table class='table table-striped concil-table' *ngIf='pagedItems && pagedItems.length'>
       <thead>
         <tr>
           <th>#</th>
           <th>Parent</th>
           <th>Name</th>
           <th>Type</th>
+          <th>&nbsp;</th>
         </tr>
       </thead>
       <tbody>
@@ -37,13 +38,13 @@
           <!--<td>
                         <img *ngIf='showImage' [src]='product.imageUrl' [title]='product.productName | uppercase' [style.width.px]='imageWidth' [style.margin.px]='imageMargin'>
                     </td>-->
-          <td>
+          <td class="col-md-1">
             {{product.UnitNum}}
           </td>
-          <td>{{product.ParentNum }}</td>
-          <td>{{ product.UnitName }}</td>
-          <td>{{ product.UnitType }}</td>
-          <td [routerLink]="['/product', product.UnitNum,product.ParentNum]"><span class="glyphicon glyphicon-menu-right"></span></td>
+          <td class="col-md-1">{{product.ParentNum }}</td>
+          <td class="col-md-8">{{ product.UnitName }}</td>
+          <td class="col-md-1">{{ product.UnitType }}</td>
+          <td class="col-md-1" [routerLink]="['/product', product.UnitNum,product.ParentNum]"><span class="glyphicon glyphicon-menu-right"></span></td>
 
           <!--<td>{{ product.price | currency:'USD':true:'1.2-2' }}</td>
                     <td>
@@ -143,3 +144,7 @@
         </div>
     </div>
 </div>-->
+
+<div class="concil-footer">
+    <p>©Councils Foundation 501(c)(3)</p>
+</div>
