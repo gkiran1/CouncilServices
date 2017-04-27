@@ -33,6 +33,7 @@ export class ProductListComponent implements OnInit {
     // paged items
     pagedItems: any[];
 
+    untsLen;
 
     ngOnInit(): void {
         this._productService.getLdsUnits()
@@ -69,6 +70,8 @@ export class ProductListComponent implements OnInit {
                     return a.UnitNum - b.UnitNum
                 });
 
+                this.untsLen = this.products.length
+
                 this.setPage(1);
 
                 this.showLoading = false;
@@ -81,7 +84,7 @@ export class ProductListComponent implements OnInit {
         }
 
         // get pager object from service
-        this.pager = this.pagerService.getPager(this.products.length, page);
+        this.pager = this.pagerService.getPager(this.products.length, page, 20);
 
         // get current page of items
         this.pagedItems = this.products.slice(this.pager.startIndex, this.pager.endIndex + 1);
