@@ -77,7 +77,6 @@
 	</ng-container>
 
 
-
 	<ng-container *ngIf=!isDetail>
 
 		<div class="col-md-8">
@@ -133,10 +132,7 @@
 					<td>{{unit.UnitNum}}</td>
 					<td>{{unit.ParentNum}}</td>
 					<td>{{unit.UnitName}}</td>
-					<td>{{unit.UnitType}}</td>
-					<td>
-						<button><span class="icon-angle-right" ></span></button>
-					</td>
+					<td>{{unit.UnitType}}</td>					
 				</tr>
 			</tbody>
 		</table>
@@ -169,7 +165,7 @@
          </select>
 					</td>
 					<td>
-						<button (click)="deletechildUnit(unt.$key)">test</button>
+						<button (click)="deletechildUnit(unt.$key)">Delete</button>
 					</td>
 				</tr>
 			</tbody>

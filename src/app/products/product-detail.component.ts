@@ -31,7 +31,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 let id = +params['id'];
                 let parentNum = params['parentnum'];
 
-
                 this._productService.getLdsUnits().subscribe(unitsObj => {
                     unitsObj.filter(unitObj => {
 
@@ -45,29 +44,21 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
                             this.untKey = unitObj.$key;
 
-                            console.log('unitObj.UnitNum' + unitObj.$key);
                             this.product = unitObj;
 
                             if (unitObj.Children) {
-
                                 this._productService.getChildUnits(this.untKey).subscribe(childs => {
                                     this.unitsbelow = childs;
-                                })
-
-                                // this.unitsbelow = unitObj.Children;
+                                });
                             }
                         }
                     });
                 });
             });
 
-        // this.unitsabove.sort(function (a, b) {
-        //     return a.UnitNum - b.UnitNum
-        // });
-
-        // this.unitsbelow.sort(function (a, b) {
-        //     return a.UnitNum - b.UnitNum
-        // });
+        this.unitsbelow.sort(function (a, b) {
+            return a.UnitNum - b.UnitNum
+        });
     }
 
     isDetail = true;
