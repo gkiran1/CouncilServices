@@ -17,6 +17,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     private sub: Subscription;
     public unitsabove = [];
     public unitsbelow = [];
+    private unitsSub: Subscription;
 
     constructor(private _route: ActivatedRoute,
         private _router: Router,
@@ -25,45 +26,63 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     untKey;
 
+    actUnit: IProduct;
+    actunitsbelow = [];
+
     ngOnInit(): void {
         this.sub = this._route.params.subscribe(
             params => {
                 let id = +params['id'];
                 let parentNum = params['parentnum'];
-
-                this._productService.getLdsUnits().subscribe(unitsObj => {
-                    unitsObj.forEach(unitObj => {
-
-                        this.unitsabove = [];
-
-                        if (unitObj.UnitNum === parentNum) {
-                            this.unitsabove.push(unitObj);
-                        }
-
-                        if (Number(unitObj.UnitNum) === id) {
-
-                            this.untKey = unitObj.$key;
-
-                            this.product = unitObj;
-
-                            if (unitObj.Children) {
-                                this._productService.getChildUnits(this.untKey).subscribe(childs => {
-                                    this.unitsbelow = childs;
-                                });
-                            }
-                        }
-                    });
-                });
+                this.getUnits(id, parentNum);
             });
+    }
+
+    getUnits(id, parentNum) {
+        this.unitsabove = [];
+        this.unitsbelow = [];
+
+        this.unitsSub = this._productService.getLdsUnits().subscribe(unitsObj => {
+            unitsObj.forEach(unitObj => {
+                if (unitObj.UnitNum === parentNum) {
+                    this.unitsabove.push(unitObj);
+                }
+                if (Number(unitObj.UnitNum) === id) {
+                    this.untKey = unitObj.$key;
+                    this.product = unitObj;
+                    //  this.product.ActUnitName = unitObj['UnitName'];
+                    // this.product.ActUnitType = unitObj['UnitType'];
+                    if (unitObj.Children) {
+                        this._productService.getChildUnits(this.untKey).subscribe(childs => {
+                            this.unitsbelow = childs;
+                        });
+                    }
+                }
+            });
+        });
 
         this.unitsbelow.sort(function (a, b) {
             return a.UnitNum - b.UnitNum
         });
+
+    }
+
+    getUnitsById(id, parentNum, unit) {
+        this.getUnits(id, parentNum);
+        this.product = unit;
+        if (this.product.Children) {
+            this._productService.getChildUnits(this.untKey).subscribe(childs => {
+                this.unitsbelow = childs;
+            });
+        }
     }
 
     isDetail = true;
 
     edit() {
+        this.actUnit = this.product;
+        this.actunitsbelow = this.unitsbelow;
+        this.unitsSub.unsubscribe();
         this.isDetail = false;
     }
 
@@ -83,17 +102,17 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     cancel() {
         this.isDetail = true;
+        this.product = this.actUnit;
+        this.unitsbelow = this.actunitsbelow;
     }
 
     saveUnit() {
         this._productService.updateUnit(this.untKey, this.product, this.unitsbelow);
+        this.isDetail = true;
     }
 
     deletechildUnit(ky) {
         this._productService.deleteChildUnit(this.untKey, ky);
     }
-
-    public temp = {};
-    public temp2 = {};
 
 }

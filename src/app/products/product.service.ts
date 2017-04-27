@@ -16,11 +16,13 @@ export class ProductService {
 
     }
     getProducts() {
-        return this.af.database.object('ldsunitstest');
+        //  return this.af.database.object('ldsunitstest');
+        return this.af.database.object('ldsunits');
     }
 
     getLdsUnits() {
-        return this.af.database.list('ldsunitstest');
+        //return this.af.database.list('ldsunitstest');
+        return this.af.database.list('ldsunits');
     }
 
     getProduct(id: number) {
@@ -29,7 +31,8 @@ export class ProductService {
     }
 
     getChildUnits(key) {
-        return this.af.database.list(`ldsunitstest/${key}/Children`);
+        // return this.af.database.list(`ldsunitstest/${key}/Children`);
+        return this.af.database.list(`ldsunits/${key}/Children`);
     }
 
     getAboveUnits(id: number) {
@@ -42,18 +45,44 @@ export class ProductService {
     }
 
     deleteUnit(unitKey: number) {
-        // this.af.database.object(`ldsunitstest/${key}`).remove();
+        // this.af.database.object(`ldsunitstest/${unitKey}`).remove();
+        this.af.database.object(`ldsunits/${unitKey}`).remove();
     }
 
     deleteChildUnit(key, childKey) {
-        this.af.database.object(`ldsunitstest/${key}/Children/${childKey}`).remove();
+        // this.af.database.object(`ldsunitstest/${key}/Children/${childKey}`).remove();
+        this.af.database.object(`ldsunits/${key}/Children/${childKey}`).remove();
     }
 
     updateUnit(unitKey: number, product, unitsBelow) {
 
+        // var ch = [];
+
+        // this.af.database.object(`ldsunitstest/${unitKey}`).update({
+        //     UnitName: product.UnitName,
+        //     UnitType: product.UnitType
+        // });
+
+        // if (product.Children) {
+
+        //     ch = unitsBelow;
+
+        //     ch.forEach(c => {
+
+        //         this.af.database.object(`ldsunitstest/${unitKey}/Children/${c.$key}`).update({
+        //             UnitName: c.UnitName,
+        //             UnitType: c.UnitType
+        //         });
+
+        //     });
+        // }
+
+        /////////////////////////////////
+
+
         var ch = [];
 
-        this.af.database.object(`ldsunitstest/${unitKey}`).update({
+        this.af.database.object(`ldsunits/${unitKey}`).update({
             UnitName: product.UnitName,
             UnitType: product.UnitType
         });
@@ -64,13 +93,14 @@ export class ProductService {
 
             ch.forEach(c => {
 
-                this.af.database.object(`ldsunitstest/${unitKey}/Children/${c.$key}`).update({
+                this.af.database.object(`ldsunits/${unitKey}/Children/${c.$key}`).update({
                     UnitName: c.UnitName,
                     UnitType: c.UnitType
                 });
 
             });
         }
+
     }
 
     private handleError(error: Response) {
