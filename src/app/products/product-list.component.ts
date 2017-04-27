@@ -22,7 +22,7 @@ export class ProductListComponent implements OnInit {
     public products = [];
 
     constructor(private _productService: ProductService, private pagerService: PagerService) {
-       
+
     }
 
     // pager object
@@ -36,11 +36,11 @@ export class ProductListComponent implements OnInit {
         this._productService.getLdsUnits()
             .subscribe(u => {
                 for (var i = 0; i < u.length; i++) {
-                    var {OrgUnitId: Id, ParentNum: Num, UnitName: Name, UnitNum: Num, UnitType: Type, Children: parent} = u[i];
+                    var {OrgUnitId: Id, ParentNum: Num, UnitName: Name, UnitNum: UntNum, UnitType: Type, Children: parent} = u[i];
                     this.temp["OrgUnitId"] = Id;
                     this.temp["ParentNum"] = Num;
                     this.temp["UnitName"] = Name;
-                    this.temp["UnitNum"] = Num;
+                    this.temp["UnitNum"] = UntNum;
                     this.temp["UnitType"] = Type;
                     this.products.push(this.temp);
                     this.temp = {};

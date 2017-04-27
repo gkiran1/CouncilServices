@@ -32,7 +32,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 let parentNum = params['parentnum'];
 
                 this._productService.getLdsUnits().subscribe(unitsObj => {
-                    unitsObj.filter(unitObj => {
+                    unitsObj.forEach(unitObj => {
 
                         this.unitsabove = [];
 
