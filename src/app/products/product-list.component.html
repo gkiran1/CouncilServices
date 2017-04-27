@@ -16,11 +16,11 @@
     <button type="button" class="btn btn-primary primary-btn concil-primary-btn concil-margin-right-15">Add Unit</button>
   </div>
   <div>
-    <h4 ng-if="product" class="headerres">{{untsLen}} Units</h4>
+    <h4 ng-if="product" class="headerreslen">{{untsLen}} Units</h4>
     <h5 class="headerres">Results per page:</h5>
-    <h5 class="headerres">10</h5>
-    <h5 class="headerres">20</h5>
-    <h5 class="headerres">30</h5>
+    <h5 (click)="records(10)" class="headerres">10</h5>
+    <h5 (click)="records(20)" class="headerres">20</h5>
+    <h5 (click)="records(30)" class="headerres">30</h5>
   </div>
   <div class='table-responsive1'>
     <table class='table concil-table' *ngIf='pagedItems && pagedItems.length'>

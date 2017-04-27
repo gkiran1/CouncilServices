@@ -83,13 +83,25 @@ export class ProductListComponent implements OnInit {
             return;
         }
 
+        this.pageNum = page;
+
         // get pager object from service
-        this.pager = this.pagerService.getPager(this.products.length, page, 20);
+        this.pager = this.pagerService.getPager(this.products.length, page, this.pageLength);
 
         // get current page of items
         this.pagedItems = this.products.slice(this.pager.startIndex, this.pager.endIndex + 1);
     }
+    pageNum;
+    pageLength = 10;
 
+    records(val) {
+        this.pageLength = val;
 
+        // get pager object from service
+        this.pager = this.pagerService.getPager(this.products.length, this.pageNum, this.pageLength);
+
+        // get current page of items
+        this.pagedItems = this.products.slice(this.pager.startIndex, this.pager.endIndex + 1);
+    }
 
 }
