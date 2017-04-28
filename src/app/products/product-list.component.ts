@@ -94,8 +94,12 @@ export class ProductListComponent implements OnInit {
     pageNum;
     pageLength = 10;
 
+    clicked = 10;
+
     records(val) {
         this.pageLength = val;
+
+        this.clicked = val;
 
         // get pager object from service
         this.pager = this.pagerService.getPager(this.products.length, this.pageNum, this.pageLength);
