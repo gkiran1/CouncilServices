@@ -16,47 +16,42 @@
     <button type="button" class="btn btn-primary primary-btn concil-primary-btn concil-margin-right-15">Add Unit</button>
   </div>
 
-<div class="concil-pagination-list-size">
-  <div class="concil-pagination-list-size-units">
-    <h5 class="concil-pagination-list-size-units">{{untsLen}} Units</h5>
+  <div class="concil-pagination-list-size">
+    <div class="concil-pagination-list-size-units">
+      <h5 class="concil-pagination-list-size-units">{{untsLen}} Units</h5>
+    </div>
+    <div class="concil-pagination-list-size-number">
+      <h5>Results per page:</h5>
+      <h5 (click)="records(10)" [ngClass]="{active:clicked === 10}">10</h5>
+      <h5 (click)="records(20)" [ngClass]="{active:clicked === 20}">20</h5>
+      <h5 (click)="records(30)" [ngClass]="{active:clicked === 30}">30</h5>
+    </div>
   </div>
-  <div class="concil-pagination-list-size-number">
-    <h5>Results per page:</h5>
-    <h5 (click)="records(10)" [ngClass]="{active:clicked === 10}">10</h5>
-    <h5 (click)="records(20)" [ngClass]="{active:clicked === 20}">20</h5>
-    <h5 (click)="records(30)" [ngClass]="{active:clicked === 30}">30</h5>
-  </div>
-</div>
-  
+
   <div class='table-responsive1'>
     <table class='table table-striped concil-table' *ngIf='pagedItems && pagedItems.length'>
       <thead>
         <tr>
           <th>#</th>
-          <th>Parent</th>
+          <!--<th>Parent</th>-->
           <th>Name</th>
           <th>Type</th>
+          <th>Geographic Area</th>
+          <th>Country</th>
           <th>&nbsp;</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor='let product of pagedItems | productFilter:listFilter'>
-          <!--<td>
-                        <img *ngIf='showImage' [src]='product.imageUrl' [title]='product.productName | uppercase' [style.width.px]='imageWidth' [style.margin.px]='imageMargin'>
-                    </td>-->
           <td class="col-md-1">
             {{product.UnitNum}}
           </td>
-          <td class="col-md-1">{{product.ParentNum }}</td>
-          <td class="col-md-8">{{ product.UnitName }}</td>
-          <td class="col-md-1">{{ product.UnitType }}</td>
-          <td class="col-md-1" [routerLink]="['/product', product.UnitNum,product.ParentNum]"><span class="glyphicon glyphicon-menu-right"></span></td>
-
-          <!--<td>{{ product.price | currency:'USD':true:'1.2-2' }}</td>
-                    <td>
-                        <ai-star [rating]='product.starRating' (ratingClicked)='onRatingClicked($event)'>
-                        </ai-star>
-                    </td>-->
+          <!--<td class="col-md-1">{{product.ParentNum }}</td>-->
+          <td class="col-md-4">{{ product.UnitName }}</td>
+          <td class="col-md-2">{{ product.UnitType }}</td>
+          <td class="col-md-4"> </td>
+          <td class="col-md-2"> </td>
+          <td class="col-md-1" [routerLink]="['/product', product.UnitNum,product.ParentNum]" (click)="showLoading=true"><span class="glyphicon glyphicon-menu-right"></span></td>
         </tr>
       </tbody>
     </table>
@@ -95,61 +90,6 @@
     <img src="/assets/images/loader.gif" class="concil-loader-gif">
   </div>
 </div>
-
-
-<!--<div class='panel panel-primary'>
-    <div class='panel-body'>
-        <div class='row'>
-            <div class='col-md-4'>
-                <input type='text' [(ngModel)]='listFilter' />
-            </div>
-        </div>
-        <div class='row' *ngIf='listFilter'>
-            <div class='col-md-6'>
-                <h3>Filtered by: {{listFilter}} </h3>
-            </div>
-        </div>
-
-        <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
-
-        <div class='table-responsive'>
-            <table class='table' *ngIf='products && products.length'>
-                <thead>
-                    <tr>
-                        <th>
-                            <button class='btn btn-primary' (click)='toggleImage()'>
-                                {{showImage ? 'Hide' : 'Show'}} Image
-                            </button>
-                        </th>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Geographic Area</th>
-                        <th>Country</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor='let product of products | productFilter:listFilter'>
-                        <td>
-                            <img *ngIf='showImage' [src]='product.imageUrl' [title]='product.productName | uppercase' [style.width.px]='imageWidth' [style.margin.px]='imageMargin'>
-                        </td>
-                        <td><a [routerLink]="['/product', product.productId]">
-                            {{product.productName}}
-                            </a>
-                        </td>
-                        <td>{{ product.productCode | lowercase }}</td>
-                        <td>{{ product.releaseDate }}</td>
-                        <td>{{ product.price | currency:'USD':true:'1.2-2' }}</td>
-                        <td>
-                            <ai-star [rating]='product.starRating' (ratingClicked)='onRatingClicked($event)'>
-                            </ai-star>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>-->
 
 <div class="concil-footer">
   <p>©Councils Foundation 501(c)(3)</p>

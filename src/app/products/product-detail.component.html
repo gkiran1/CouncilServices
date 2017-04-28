@@ -14,6 +14,8 @@
           <th>Parent</th>
           <th>Name</th>
           <th>Type</th>
+          <th>Geographic Area</th>
+          <th>Country</th>
           <th></th>
         </tr>
       </thead>
@@ -21,9 +23,10 @@
         <tr *ngIf="product" class="trbgcolor">
           <td class="col-md-1"> {{product.UnitNum}} </td>
           <td class="col-md-1">{{product.ParentNum}}</td>
-          <td class="col-md-8">{{ product.ActUnitName }}</td>
-          <td class="col-md-1">{{ product.ActUnitType }}</td>
-          <td class="col-md-1"><span class="glyphicon glyphicon-menu-right" style="visibility:hidden"></span></td>
+          <td class="col-md-4">{{ product.ActUnitName }}</td>
+          <td class="col-md-2">{{ product.ActUnitType }}</td>
+          <td class="col-md-4"> </td>
+          <td class="col-md-1"> </td>
         </tr>
       </tbody>
     </table>
@@ -40,6 +43,8 @@
           <th>Parent</th>
           <th>Name</th>
           <th>Type</th>
+          <th>Geographic Area</th>
+          <th>Country</th>
           <th></th>
         </tr>
       </thead>
@@ -47,8 +52,10 @@
         <tr *ngFor="let unit of unitsabove">
           <td class="col-md-1">{{unit.UnitNum}}</td>
           <td class="col-md-1">{{unit.ParentNum}}</td>
-          <td class="col-md-8">{{unit.UnitName}}</td>
-          <td class="col-md-1">{{unit.UnitType}}</td>
+          <td class="col-md-4">{{unit.UnitName}}</td>
+          <td class="col-md-2">{{unit.UnitType}}</td>
+          <td class="col-md-4"> </td>
+          <td class="col-md-1"> </td>
           <td class="col-md-1" (click)="getUnitsById(unit.UnitNum,unit.ParentNum,unit)"><span class="glyphicon glyphicon-menu-right"></span></td>
         </tr>
       </tbody>
@@ -66,6 +73,8 @@
           <th>Parent</th>
           <th>Name</th>
           <th>Type</th>
+          <th>Geographic Area</th>
+          <th>Country</th>
           <th></th>
         </tr>
       </thead>
@@ -73,8 +82,10 @@
         <tr *ngFor="let unt of unitsbelow">
           <td class="col-md-1">{{unt.UnitNum}}</td>
           <td class="col-md-1">{{unt.ParentNum}}</td>
-          <td class="col-md-8">{{unt.ActUnitName}}</td>
-          <td class="col-md-1">{{unt.ActUnitType}}</td>
+          <td class="col-md-4">{{unt.ActUnitName}}</td>
+          <td class="col-md-2">{{unt.ActUnitType}}</td>
+          <td class="col-md-4"> </td>
+          <td class="col-md-1"> </td>
           <td class="col-md-1" (click)="getUnitsById(unt.UnitNum,unt.ParentNum,unt)"><span class="glyphicon glyphicon-menu-right"></span></td>
         </tr>
       </tbody>
@@ -102,6 +113,8 @@
           <th>Parent</th>
           <th>Name</th>
           <th>Type</th>
+          <th>Geographic Area</th>
+          <th>Country</th>
           <th>&nbsp;&nbsp;&nbsp;</th>
         </tr>
       </thead>
@@ -109,7 +122,7 @@
         <tr *ngIf="product" class="trbgcolor">
           <td class="col-md-1"> {{product.UnitNum}} </td>
           <td class="col-md-1">{{product.ParentNum}}</td>
-          <td class="col-md-7"> <input type="text" [(ngModel)]='product.UnitName' class="txtunitname" /></td>
+          <td class="col-md-4"> <input type="text" [(ngModel)]='product.UnitName' class="txtunitname" /></td>
           <td class="col-md-2">
             <select class="txtunitname" [(ngModel)]='product.UnitType' ng-init="product.UnitType">        
             <option value="Area">Area</option>
@@ -117,6 +130,8 @@
             <option value="Ward">Ward</option>          
          </select>
           </td>
+          <td class="col-md-4"> </td>
+          <td class="col-md-1"> </td>
           <td class="col-md-1">&nbsp;</td>
         </tr>
       </tbody>
@@ -135,6 +150,8 @@
           <th>Parent</th>
           <th>Name</th>
           <th>Type</th>
+          <th>Geographic Area</th>
+          <th>Country</th>
           <th>&nbsp;&nbsp;&nbsp;</th>
         </tr>
       </thead>
@@ -142,8 +159,10 @@
         <tr *ngFor="let unit of unitsabove">
           <td class="col-md-1">{{unit.UnitNum}}</td>
           <td class="col-md-1">{{unit.ParentNum}}</td>
-          <td class="col-md-7">{{unit.UnitName}}</td>
+          <td class="col-md-4">{{unit.UnitName}}</td>
           <td class="col-md-2">{{unit.UnitType}}</td>
+          <td class="col-md-4"> </td>
+          <td class="col-md-1"> </td>
           <td class="col-md-1">&nbsp;</td>
         </tr>
       </tbody>
@@ -162,6 +181,8 @@
           <th>Parent</th>
           <th>Name</th>
           <th>Type</th>
+          <th>Geographic Area</th>
+          <th>Country</th>
           <th>&nbsp;&nbsp;&nbsp;</th>
         </tr>
       </thead>
@@ -169,7 +190,7 @@
         <tr *ngFor="let unt of unitsbelow">
           <td class="col-md-1">{{unt.UnitNum}}</td>
           <td class="col-md-1">{{unt.ParentNum}}</td>
-          <td class="col-md-7"> <input type="text" [(ngModel)]='unt.UnitName' class="txtunitname" /></td>
+          <td class="col-md-4"> <input type="text" [(ngModel)]='unt.UnitName' class="txtunitname" /></td>
           <td class="col-md-2">
             <select class="txtunitname" [(ngModel)]='unt.UnitType' ng-init="unt.UnitType">        
             <option value="Area">Area</option>
@@ -179,6 +200,8 @@
             <option value="Ward">District</option>        
          </select>
           </td>
+          <td class="col-md-4"> </td>
+          <td class="col-md-1"> </td>
           <td class="col-md-1">
             <span class="glyphicon glyphicon-remove-sign" (click)="deletechildUnit(unt.$key)"></span>
           </td>

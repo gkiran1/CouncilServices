@@ -10,6 +10,7 @@ import { ProductService } from './product.service';
     templateUrl: './product-detail.component.html',
     styleUrls: ['./product-detail.component.css']
 })
+
 export class ProductDetailComponent implements OnInit, OnDestroy {
     pageTitle: string = 'Product Detail';
     product: IProduct;
