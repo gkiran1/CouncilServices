@@ -15,8 +15,7 @@
   <div class="col-md-4 text-right">
     <button type="button" class="btn btn-primary primary-btn concil-primary-btn concil-margin-right-15">Add Unit</button>
   </div>
-  <div>
-    <h4 ng-if="product" class="headerreslen">{{untsLen}} Units</h4>
+  <div class="concil-pagination-list-size-number">
     <h5 class="headerres">Results per page:</h5>
     <h5 (click)="records(10)" class="headerres">10</h5>
     <h5 (click)="records(20)" class="headerres">20</h5>
@@ -85,8 +84,8 @@
     </div>
 
   </div>
-  <div *ngIf=showLoading>
-    <img src="/assets/images/loader.gif" style="text-center">
+  <div class="concil-loader" *ngIf=showLoading>
+    <img src="/assets/images/loader.gif" class="concil-loader-gif">
   </div>
 </div>
 
@@ -146,5 +145,5 @@
 </div>-->
 
 <div class="concil-footer">
-    <p>©Councils Foundation 501(c)(3)</p>
+  <p>©Councils Foundation 501(c)(3)</p>
 </div>
