@@ -21,17 +21,17 @@
         <tr *ngIf="product" class="trbgcolor">
           <td class="col-md-1"> {{product.UnitNum}} </td>
           <td class="col-md-1">{{product.ParentNum}}</td>
-          <td class="col-md-8">{{ product.UnitName }}</td>
-          <td class="col-md-1">{{ product.UnitType }}</td>
+          <td class="col-md-8">{{ product.ActUnitName }}</td>
+          <td class="col-md-1">{{ product.ActUnitType }}</td>
           <td class="col-md-1"><span class="glyphicon glyphicon-menu-right" style="visibility:hidden"></span></td>
         </tr>
       </tbody>
     </table>
 
     <div class="concil-PD-sub-header">
-       <h5 class="concil-PD-sub-header-title">Units Above This Unit</h5>
+      <h5 class="concil-PD-sub-header-title">Units Above This Unit</h5>
     </div>
-    
+
 
     <table class='table table-striped concil-table'>
       <thead>
@@ -54,10 +54,10 @@
       </tbody>
     </table>
 
-  <div class="concil-PD-sub-header">
-       <h5 class="concil-PD-sub-header-title">Units Below This Unit</h5>
+    <div class="concil-PD-sub-header">
+      <h5 class="concil-PD-sub-header-title">Units Below This Unit</h5>
     </div>
-    
+
 
     <table class='table table-striped concil-table'>
       <thead>
@@ -73,8 +73,8 @@
         <tr *ngFor="let unt of unitsbelow">
           <td class="col-md-1">{{unt.UnitNum}}</td>
           <td class="col-md-1">{{unt.ParentNum}}</td>
-          <td class="col-md-8">{{unt.UnitName}}</td>
-          <td class="col-md-1">{{unt.UnitType}}</td>
+          <td class="col-md-8">{{unt.ActUnitName}}</td>
+          <td class="col-md-1">{{unt.ActUnitType}}</td>
           <td class="col-md-1" (click)="getUnitsById(unt.UnitNum,unt.ParentNum,unt)"><span class="glyphicon glyphicon-menu-right"></span></td>
         </tr>
       </tbody>
@@ -83,25 +83,16 @@
   </ng-container>
 
 
+
   <ng-container *ngIf=!isDetail>
 
-    <!--<div class="col-md-8">
-      <h4 ng-if="product">Unit {{product.UnitNum}}</h4>
-    </div>
-
-    <div class="col-md-4">
-      <h4 class="lbldelete" (click)="deleteUnit(product)">Delete</h4>
-      <h4 class="lblcancel" (click)="cancel()">Cancel</h4>
-      <h4 class="lblsave" (click)="saveUnit()">SAVE</h4>
-    </div>-->
-
     <div class="concil-PD-header">
-        <h4 ng-if="product" class="concil-PD-header-title">Unit {{product.UnitNum}}</h4>
-        <div class="concil-PD-header-button">
-          <h4 class="lbldelete" (click)="deleteUnit(product)">Delete</h4>
-          <h4 class="lblcancel" (click)="cancel()">Cancel</h4>
-          <h4 class="lblsave" (click)="saveUnit()">SAVE</h4>
-        </div>
+      <h4 ng-if="product" class="concil-PD-header-title">Unit {{product.UnitNum}}</h4>
+      <div class="concil-PD-header-button">
+        <h4 class="lbldelete" (click)="deleteUnit(product)">Delete</h4>
+        <h4 class="lblcancel" (click)="cancel()">Cancel</h4>
+        <h4 class="lblsave" (click)="saveUnit()">SAVE</h4>
+      </div>
     </div>
 
     <table class='table table-striped concil-table concil-table-striped-black'>
@@ -133,9 +124,9 @@
 
     <br>
     <div class="concil-PD-sub-header">
-       <h5 class="concil-PD-sub-header-title">Units Above This Unit</h5>
+      <h5 class="concil-PD-sub-header-title">Units Above This Unit</h5>
     </div>
-    
+
 
     <table class='table table-striped concil-table'>
       <thead>
@@ -160,9 +151,9 @@
 
     <br>
     <div class="concil-PD-sub-header">
-       <h5 class="concil-PD-sub-header-title">Units Below This Unit</h5>
+      <h5 class="concil-PD-sub-header-title">Units Below This Unit</h5>
     </div>
-    
+
 
     <table class='table table-striped concil-table'>
       <thead>
@@ -189,21 +180,15 @@
          </select>
           </td>
           <td class="col-md-1">
-            <!--<button >Delete</button>-->
             <span class="glyphicon glyphicon-remove-sign" (click)="deletechildUnit(unt.$key)"></span>
           </td>
         </tr>
       </tbody>
     </table>
 
-
-
-
-
   </ng-container>
-
 
 </div>
 <div class="concil-footer">
-    <p>©Councils Foundation 501(c)(3)</p>
+  <p>©Councils Foundation 501(c)(3)</p>
 </div>

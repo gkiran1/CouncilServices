@@ -2,10 +2,10 @@
 export interface IProduct {
     OrgUnitId: number;
     ParentNum: number;
-   // ActUnitName: string;
+    ActUnitName: string;
     UnitName: string;
     UnitNum: number;
-   // ActUnitType: string;
+    ActUnitType: string;
     UnitType: string;
     Children: any;
 }

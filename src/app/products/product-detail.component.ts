@@ -25,8 +25,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     untKey;
-    actUnit: IProduct;
-    actunitsbelow = [];
 
     ngOnInit(): void {
         this.sub = this._route.params.subscribe(
@@ -49,10 +47,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 else if (Number(unitObj.UnitNum) === id) {
                     this.untKey = unitObj.$key;
                     this.product = unitObj;
-                    //  this.product.ActUnitName = unitObj['UnitName'];
-                    // this.product.ActUnitType = unitObj['UnitType'];
+                    this.product.ActUnitName = unitObj['UnitName'];
+                    this.product.ActUnitType = unitObj['UnitType'];
                     if (unitObj.Children) {
                         this._productService.getChildUnits(this.untKey).subscribe(childs => {
+                            childs.forEach(child => {
+                                child['ActUnitName'] = child['UnitName'];
+                                child['ActUnitType'] = child['UnitType'];
+                            });
                             this.unitsbelow = childs;
                         });
                     }
@@ -91,9 +93,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     isDetail = true;
 
     edit() {
-        this.actUnit = this.product;
-        this.actunitsbelow = this.unitsbelow;
-        this.unitsSub.unsubscribe();
         this.isDetail = false;
     }
 
@@ -113,12 +112,26 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     cancel() {
         this.isDetail = true;
-        this.product = this.actUnit;
-        this.unitsbelow = this.actunitsbelow;
+        this.product.UnitName = this.product.ActUnitName;
+        this.product.UnitType = this.product.ActUnitType;
+
+        this.unitsbelow.forEach(unt => {
+            unt.UnitName = unt.ActUnitName;
+            unt.UnitType = unt.ActUnitType;
+        })
     }
 
     saveUnit() {
         this._productService.updateUnit(this.untKey, this.product, this.unitsbelow);
+
+        this.product.ActUnitName = this.product.UnitName;
+        this.product.ActUnitType = this.product.UnitType;
+
+        this.unitsbelow.forEach(unt => {
+            unt.ActUnitName = unt.UnitName;
+            unt.ActUnitType = unt.UnitType;
+        });
+
         this.isDetail = true;
     }
 
