@@ -10,6 +10,7 @@ import { Notifications } from 'providers/notifications';
 
 })
 export class AppComponent {
+  clicked: string = 'units';
   pageTitle: string = 'Councils';
   constructor(public af: AfDataService, public notification: Notifications) {
     this.registerPushTriggers();
@@ -34,5 +35,7 @@ export class AppComponent {
     //   this.notification.sendMail(email, "Councils App - Invitiation", "You are invited from Councils App. Click Android/Apple to download the app");
     // });
   }
+
+ 
 
 }
