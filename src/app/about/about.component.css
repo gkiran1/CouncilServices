@@ -13,6 +13,7 @@
  width:100%;
   height: 100%;
   margin: 0 auto;
+  margin-bottom: 50px;
   /*margin-top: 8%;*/
 }
 
@@ -86,3 +87,19 @@ button {
 
 a{color: #3CB18A;}
 .concil-about-sub-title{font-size: 20px; font-weight: bold;}
+
+
+.concil-footer {
+  width: 61%;
+  float: left;
+  position: fixed;
+  bottom: 0;
+  background-color: #fff;
+}
+
+.concil-footer p {
+  margin: 10px 0 10px 0;
+  text-align: center;
+  color: #cbd1cf;
+  font-size: 14px;
+}

@@ -26,6 +26,7 @@ a {
   min-height: .01%;
   width: 100%;
   float: left;
+  margin-bottom: 50px;
 }
 
 
@@ -59,12 +60,12 @@ input[type="color"]:focus,
   width: 61%;
   float: left;
   position: fixed;
-  bottom: 10px;
+  bottom: 0;
   background-color: #fff;
 }
 
 .concil-footer p {
-  margin: 0;
+  margin: 10px 0 10px 0;
   text-align: center;
   color: #cbd1cf;
   font-size: 14px;
@@ -283,6 +284,7 @@ input[type="color"]:focus,
   background-color: #fff;
   cursor: default;
   font-weight: bold;
+  z-index: 0;
 }
 
 .concil-pagination.pagination>li>a:hover,
@@ -303,6 +305,7 @@ input[type="color"]:focus,
 
 .concil-pagination-list-size-units * {
   font-weight: bold;
+  font-size: 17px;
 }
 
 .concil-pagination-list-size-number {
@@ -313,11 +316,13 @@ input[type="color"]:focus,
 .concil-pagination-list-size-number>h5 {
   margin: 6px;
   float: left;
-  color: #3cb18a
-}
-
-.concil-pagination-list-size-number>h5.active {
+  color: #3cb18a;
+  font-size: 17px;
   cursor: pointer;
+}
+.concil-pagination-list-size-number>h5:first-child{color: #35373A; cursor: default;}
+.concil-pagination-list-size-number>h5.active {
+  cursor: default;
   font-weight: normal;
   font-weight: bold;
   color: black;

@@ -16,14 +16,18 @@
     <button type="button" class="btn btn-primary primary-btn concil-primary-btn concil-margin-right-15">Add Unit</button>
   </div>
 
-
-  <div class="concil-pagination-list-size-number">
+<div class="concil-pagination-list-size">
+  <div class="concil-pagination-list-size-units">
     <h5 class="concil-pagination-list-size-units">{{untsLen}} Units</h5>
+  </div>
+  <div class="concil-pagination-list-size-number">
     <h5>Results per page:</h5>
     <h5 (click)="records(10)" [ngClass]="{active:clicked === 10}">10</h5>
     <h5 (click)="records(20)" [ngClass]="{active:clicked === 20}">20</h5>
     <h5 (click)="records(30)" [ngClass]="{active:clicked === 30}">30</h5>
   </div>
+</div>
+  
   <div class='table-responsive1'>
     <table class='table table-striped concil-table' *ngIf='pagedItems && pagedItems.length'>
       <thead>

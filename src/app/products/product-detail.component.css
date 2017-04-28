@@ -30,8 +30,20 @@
   color: black;
 }
 
-.concil-footer{width: 61%; float: left; position: fixed; bottom: 10px;background-color: #fff;}
-.concil-footer p{margin: 0; text-align: center; color: #cbd1cf; font-size: 14px;}
+.concil-footer {
+  width: 61%;
+  float: left;
+  position: fixed;
+  bottom: 0;
+  background-color: #fff;
+}
+
+.concil-footer p {
+  margin: 10px 0 10px 0;
+  text-align: center;
+  color: #cbd1cf;
+  font-size: 14px;
+}
 
 .concil-PD-header{width:100%; float: left;}
 .concil-PD-header-title{width: 70%; float: left; font-size: 20px; font-weight: bold;}

@@ -89,6 +89,6 @@ a {
 
 .concil-nav .navbar-nav{}
 .concil-nav .navbar-nav > li > a{padding-top:10px; padding-bottom:10px;}
-.concil-nav .navbar-nav li a{border-bottom:3px solid #fff;color:#cbd1cf;font-size: 22px;}
-.concil-nav .navbar-nav li a.active{border-bottom:3px solid #3CB18A;color:#35373A;background-color:#fff;font-family: "BerninaSans-Semibold";}
+.concil-nav .navbar-nav li a{border-bottom:3px solid #fff;color: #6c6d71; font-size: 22px;font-family: "BerninaSans-Semibold";}
+.concil-nav .navbar-nav li a.active{border-bottom:3px solid #3CB18A;color:#35373A;background-color:#fff;}
 .concil-nav .navbar-nav li a:hover{background-color: #fff ;}
