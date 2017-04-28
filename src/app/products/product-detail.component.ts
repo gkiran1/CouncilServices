@@ -68,7 +68,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     getUnitsById(id, parentNum, unit) {
         //  this.getUnits(id, parentNum);
-
+        this.unitsabove = [];
+        this.unitsbelow = [];
         this.product = unit;
 
         this._productService.getLdsUnits().subscribe(unitsObj => {
