@@ -253,7 +253,7 @@ export class AfDataService {
                               nodename: 'assignments',
                               description: description,
                               action: 'create',
-                              text: 'Assignment ' + description + ' accepted by ' + assignedUser,
+                              text: description + ' accepted by ' + assignedUser,
                               createddate: new Date().toISOString(),
                               createdtime: new Date().toTimeString(),
                               createdby: createdBy,
@@ -265,14 +265,14 @@ export class AfDataService {
                               "profile": "ldspro",
                               "notification": {
                                 "title": "LDS Councils",
-                                "message": 'Assignment ' + description + ' accepted by ' + assignedUser,
+                                "message": description + ' accepted by ' + assignedUser,
                                 "android": {
                                   "title": "LDS Councils",
-                                  "message": 'Assignment ' + description + ' accepted by ' + assignedUser,
+                                  "message": description + ' accepted by ' + assignedUser,
                                 },
                                 "ios": {
                                   "title": "LDS Councils",
-                                  "message": 'Assignment ' + description + ' accepted by ' + assignedUser,
+                                  "message": description + ' accepted by ' + assignedUser,
                                 }
                               }
                             };
@@ -320,17 +320,17 @@ export class AfDataService {
       if (snapshot.val()['isactive'] === false) {  // condition check order should not change 
         action = 'deleted';
         txt = 'delete';
-        text = 'Assignment ' + description + ' deleted';
+        text = description + ' deleted';
       }
       else if (snapshot.val()['isCompleted'] === true) {
         action = 'completed';
         txt = 'update';
-        text = completedBy + ' completed ' + 'assignment ' + description;
+        text = completedBy + ' completed ' + description;
       }
       else if (snapshot.val()['isCompleted'] === false) {
         action = 'edited';
         txt = 'edit';
-        text = 'Assignment ' + description + ' edited';
+        text = description + ' edited';
       }
 
       if (action === 'deleted' || action === 'completed' || action === 'edited') {
@@ -510,7 +510,7 @@ export class AfDataService {
                               nodename: 'discussions',
                               description: description,
                               action: 'create',
-                              text: 'Discussion ' + description + ' created in ' + councilName,
+                              text: description + ' created in ' + councilName,
                               createddate: new Date().toISOString(),
                               createdtime: new Date().toTimeString(),
                               createdby: createdBy,
@@ -522,14 +522,14 @@ export class AfDataService {
                               "profile": "ldspro",
                               "notification": {
                                 "title": "LDS Councils",
-                                "message": 'Discussion ' + description + ' created in ' + councilName,
+                                "message": description + ' created in ' + councilName,
                                 "android": {
                                   "title": "LDS Councils",
-                                  "message": 'Discussion ' + description + ' created in ' + councilName,
+                                  "message": description + ' created in ' + councilName,
                                 },
                                 "ios": {
                                   "title": "LDS Councils",
-                                  "message": 'Discussion ' + description + ' created in ' + councilName,
+                                  "message": description + ' created in ' + councilName,
                                 }
                               }
                             };
