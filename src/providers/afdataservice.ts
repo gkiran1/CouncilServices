@@ -65,7 +65,7 @@ export class AfDataService {
                               nodename: 'agendas',
                               description: description,
                               action: 'create',
-                              text: 'New Agenda ' + '\"' + description + '\"' + ' is posted',
+                              text: 'New ' + description + ' agenda posted',
                               createddate: new Date().toISOString(),
                               createdtime: new Date().toTimeString(),
                               createdby: createdBy,
@@ -77,14 +77,14 @@ export class AfDataService {
                               "profile": "ldspro",
                               "notification": {
                                 "title": "LDS Councils",
-                                "message": 'New Agenda - ' + description,
+                                "message": 'New ' + description + ' agenda posted',
                                 "android": {
                                   "title": "LDS Councils",
-                                  "message": 'New Agenda - ' + description
+                                  "message": 'New ' + description + ' agenda posted',
                                 },
                                 "ios": {
                                   "title": "LDS Councils",
-                                  "message": 'New Agenda - ' + description
+                                  "message": 'New ' + description + ' agenda posted',
                                 }
                               }
                             };
@@ -122,6 +122,7 @@ export class AfDataService {
     this.rootRef.child('assignments').endAt().limitToLast(1).on('child_added', function (snapshot) {
       var assignmentId = snapshot.getKey();
       var description = snapshot.val()['description'];
+      var assignedUser = snapshot.val()['assigneduser'];
       var createdBy = snapshot.val()['createdby'];
       var userKeys = [];
       var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(assignmentId);
@@ -149,7 +150,7 @@ export class AfDataService {
                               nodename: 'assignments',
                               description: description,
                               action: 'create',
-                              text: 'New Assignment ' + '\"' + description + '\"' + ' is posted',
+                              text: 'Assignment ' + description + ' accepted by ' + assignedUser,
                               createddate: new Date().toISOString(),
                               createdtime: new Date().toTimeString(),
                               createdby: createdBy,
@@ -161,14 +162,14 @@ export class AfDataService {
                               "profile": "ldspro",
                               "notification": {
                                 "title": "LDS Councils",
-                                "message": 'New Assignment - ' + description,
+                                "message": 'Assignment ' + description + ' accepted by ' + assignedUser,
                                 "android": {
                                   "title": "LDS Councils",
-                                  "message": 'New Assignment - ' + description
+                                  "message": 'Assignment ' + description + ' accepted by ' + assignedUser,
                                 },
                                 "ios": {
                                   "title": "LDS Councils",
-                                  "message": 'New Assignment - ' + description
+                                  "message": 'Assignment ' + description + ' accepted by ' + assignedUser,
                                 }
                               }
                             };
@@ -206,24 +207,33 @@ export class AfDataService {
       var assignmentId = snapshot.getKey();
       var description = snapshot.val()['description'];
       var createdBy = snapshot.val()['createdby'];
+      var completedBy = snapshot.val()['completedby'];
       var userKeys = [];
 
       var action = '';
       var txt = '';
+      var text = '';
 
       if (snapshot.val()['isactive'] === false) {  // condition check order should not change 
         action = 'deleted';
         txt = 'delete';
+        text = 'Assignment ' + description + ' deleted';
       }
       else if (snapshot.val()['isCompleted'] === true) {
         action = 'completed';
         txt = 'update';
+        text = completedBy + ' completed ' + 'assignment ' + description;
+      }
+      else if (snapshot.val()['isCompleted'] === false) {
+        action = 'edited';
+        txt = 'edit';
+        text = 'Assignment ' + description + ' edited';
       }
 
-      if (action === 'deleted' || action === 'completed') {
+      if (action === 'deleted' || action === 'completed' || action === 'edited') {
         var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(assignmentId);
         notificationRef.once("value", function (snap) {
-          if ((snap.exists() && action === 'completed') || (snap.exists() && action === 'deleted')) {
+          if ((snap.exists() && action === 'completed') || (snap.exists() && action === 'deleted') || (snap.exists() && action === 'edited')) {
             var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
             councilUsersRef.once('value').then(function (usrsSnapshot) {
               usrsSnapshot.forEach(usrObj => {
@@ -246,7 +256,7 @@ export class AfDataService {
                                 nodename: 'assignments',
                                 description: description,
                                 action: txt,
-                                text: 'Assignment ' + '\"' + description + '\"' + ' is ' + action,
+                                text: text,
                                 createddate: new Date().toISOString(),
                                 createdtime: new Date().toTimeString(),
                                 createdby: createdBy,
@@ -258,14 +268,14 @@ export class AfDataService {
                                 "profile": "ldspro",
                                 "notification": {
                                   "title": "LDS Councils",
-                                  "message": 'Assignment Completed - ' + description,
+                                  "message": text,
                                   "android": {
                                     "title": "LDS Councils",
-                                    "message": 'Assignment Completed - ' + description,
+                                    "message": text,
                                   },
                                   "ios": {
                                     "title": "LDS Councils",
-                                    "message": 'Assignment Completed - ' + description,
+                                    "message": text,
                                   }
                                 }
                               };
