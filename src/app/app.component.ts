@@ -18,6 +18,7 @@ export class AppComponent {
 
   registerPushTriggers() {
     this.af.agendasTrigger();
+    this.af.agendasUpdateTrigger();
     this.af.assignmentsTrigger();
     this.af.assignmentsUpdateTrigger();
     //this.af.assignmentsDeleteTrigger();
@@ -36,6 +37,6 @@ export class AppComponent {
     // });
   }
 
- 
+
 
 }

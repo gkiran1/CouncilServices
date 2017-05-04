@@ -117,6 +117,109 @@ export class AfDataService {
     });
   }
 
+  // Assignments Update & Delete Trigger ------------------------
+  agendasUpdateTrigger() {
+    this.rootRef.child('agendas').on('child_changed', function (snapshot) {
+
+      var agendaId = snapshot.getKey();
+      var description = snapshot.val()['agendacouncil'];
+      var createdBy = snapshot.val()['createdby'];
+      var editedBy = snapshot.val()['editedby'];
+      var userKeys = [];
+
+      var action = '';
+      var txt = '';
+      var text = '';
+
+      if (snapshot.val()['isactive'] === false) {  // condition check order should not change 
+        action = 'deleted';
+        txt = 'delete';
+        text = description + ' agenda ' + 'deleted';
+      }
+      else if (snapshot.val()['isactive'] === true) {
+        action = 'edited';
+        txt = 'edit';
+        text = editedBy + ' edited ' + description + ' agenda';
+      }
+
+      if (action === 'deleted' || action === 'edited') {
+        var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(agendaId);
+        notificationRef.once("value", function (snap) {
+          if ((snap.exists() && action === 'completed') || (snap.exists() && action === 'deleted') || (snap.exists() && action === 'edited')) {
+            var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
+            councilUsersRef.once('value').then(function (usrsSnapshot) {
+              usrsSnapshot.forEach(usrObj => {
+                var id = usrObj.val()['userid'];
+                userKeys.push(id);
+                if (userKeys.indexOf(id) === userKeys.lastIndexOf(id)) {
+                  var notSettingsRef = firebase.database().ref().child('notificationsettings').orderByChild('userid').equalTo(id);
+                  notSettingsRef.once('value', function (notSnap) {
+                    if (notSnap.exists()) {
+                      notSnap.forEach(notSetting => {
+                        if (notSetting.val()['allactivity'] === true || notSetting.val()['agendas'] === true) {
+                          var usrRef = firebase.database().ref().child('users/' + id);
+                          usrRef.once('value').then(function (usrSnapshot) {
+                            if (usrSnapshot.val()['isactive'] === true) {
+                              var email = usrSnapshot.val()['email'];
+
+                              firebase.database().ref().child('notifications').push({
+                                userid: id,
+                                nodeid: agendaId,
+                                nodename: 'agendas',
+                                description: description,
+                                action: txt,
+                                text: text,
+                                createddate: new Date().toISOString(),
+                                createdtime: new Date().toTimeString(),
+                                createdby: createdBy,
+                                isread: false
+                              }).catch(err => { throw err });
+
+                              var notification = {
+                                "emails": email,
+                                "profile": "ldspro",
+                                "notification": {
+                                  "title": "LDS Councils",
+                                  "message": text,
+                                  "android": {
+                                    "title": "LDS Councils",
+                                    "message": text,
+                                  },
+                                  "ios": {
+                                    "title": "LDS Councils",
+                                    "message": text,
+                                  }
+                                }
+                              };
+                              var req = https.request(options, function (res) {
+                                console.log('STATUS: ' + res.statusCode);
+                                console.log('HEADERS: ' + JSON.stringify(res.headers));
+                                res.setEncoding('utf8');
+                                res.on('data', function (chunk) {
+                                  console.log('BODY: ' + chunk);
+                                });
+                              });
+                              req.on('error', function (e) {
+                                console.log('problem with request: ' + e.message);
+                              });
+                              req.write(JSON.stringify(notification));
+                              req.end();
+                            }
+                          });
+                          return true; // to stop the loop.
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            });
+          }
+        });
+      }
+    });
+  }
+
   // Assignments Trigger ------------------------
   assignmentsTrigger() {
     this.rootRef.child('assignments').endAt().limitToLast(1).on('child_added', function (snapshot) {
@@ -380,6 +483,7 @@ export class AfDataService {
       var discussionId = snapshot.getKey();
       var description = snapshot.val()['topic'];
       var createdBy = snapshot.val()['createdBy'];
+      var councilName = snapshot.val()['councilname'];
       var userKeys = [];
       var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(discussionId);
       notificationRef.once("value", function (snap) {
@@ -406,7 +510,7 @@ export class AfDataService {
                               nodename: 'discussions',
                               description: description,
                               action: 'create',
-                              text: 'New Council Discussion ' + '\"' + description + '\"' + ' is started',
+                              text: 'Discussion ' + description + ' created in ' + councilName,
                               createddate: new Date().toISOString(),
                               createdtime: new Date().toTimeString(),
                               createdby: createdBy,
@@ -418,14 +522,14 @@ export class AfDataService {
                               "profile": "ldspro",
                               "notification": {
                                 "title": "LDS Councils",
-                                "message": 'New Council Discussion - ' + description,
+                                "message": 'Discussion ' + description + ' created in ' + councilName,
                                 "android": {
                                   "title": "LDS Councils",
-                                  "message": 'New Council Discussion - ' + description
+                                  "message": 'Discussion ' + description + ' created in ' + councilName,
                                 },
                                 "ios": {
                                   "title": "LDS Councils",
-                                  "message": 'New Council Discussion - ' + description
+                                  "message": 'Discussion ' + description + ' created in ' + councilName,
                                 }
                               }
                             };
@@ -546,7 +650,7 @@ export class AfDataService {
                     nodename: 'privatediscussions',
                     description: description,
                     action: 'create',
-                    text: "<h3>" + "<span class='nottxt-lbl'>" + description + "</span>" + " created private discussion with you" + "</h3>",
+                    text: "<h3>" + "<span class='nottxt-lbl'>" + description + "</span>" + " private discussion invite" + "</h3>",
                     createddate: new Date().toISOString(),
                     createdtime: new Date().toTimeString(),
                     createdby: createdBy,
@@ -558,14 +662,14 @@ export class AfDataService {
                     "profile": "ldspro",
                     "notification": {
                       "title": "LDS Councils",
-                      "message": 'New Private Discussion - ' + description + ' created private discussion with you',
+                      "message": description + ' private discussion invite',
                       "android": {
                         "title": "LDS Councils",
-                        "message": 'New Private Discussion - ' + description + ' created private discussion with you'
+                        "message": description + ' private discussion invite',
                       },
                       "ios": {
                         "title": "LDS Councils",
-                        "message": 'New Private Discussion - ' + description + ' created private discussion with you'
+                        "message": description + ' private discussion invite',
                       }
                     }
                   };
