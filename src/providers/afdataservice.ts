@@ -846,10 +846,12 @@ export class AfDataService {
                             var txt = '';
 
                             if (createdBy === id) {
-                              txt = "<h3>" + "<span class='nottxt-lbl'>" + "You" + "</span>" + " shared a file " + name + "</h3>";
+                              txt = 'New ' + name + ' file uploaded';
+                              // txt = "<h3>" + "<span class='nottxt-lbl'>" + "You" + "</span>" + " shared a file " + name + "</h3>";
                             }
                             else {
-                              txt = "<h3>" + "<span class='nottxt-lbl'>" + createdUser + "</span>" + " sent you a file " + name + "</h3>";
+                              txt = 'New ' + name + ' file uploaded';
+                              // txt = "<h3>" + "<span class='nottxt-lbl'>" + createdUser + "</span>" + " sent you a file " + name + "</h3>";
                             }
 
                             firebase.database().ref().child('notifications').push({
