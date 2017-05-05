@@ -12,16 +12,16 @@ import { AngularFire } from 'angularfire2';
 
 @Injectable()
 export class ProductService {
+
     constructor(public af: AngularFire, private _http: Http) {
 
     }
+
     getProducts() {
-        //  return this.af.database.object('ldsunitstest');
         return this.af.database.object('ldsunits');
     }
 
     getLdsUnits() {
-        //return this.af.database.list('ldsunitstest');
         return this.af.database.list('ldsunits');
     }
 
@@ -31,7 +31,6 @@ export class ProductService {
     }
 
     getChildUnits(key) {
-        // return this.af.database.list(`ldsunitstest/${key}/Children`);
         return this.af.database.list(`ldsunits/${key}/Children`);
     }
 
@@ -44,60 +43,37 @@ export class ProductService {
             }));
     }
 
-    deleteUnit(unitKey: number) {
-        // this.af.database.object(`ldsunitstest/${unitKey}`).remove();
-        this.af.database.object(`ldsunits/${unitKey}`).remove();
-    }
+    deleteUnit(product, unitsBelow) {
 
-    deleteChildUnit(key, childKey) {
-        // this.af.database.object(`ldsunitstest/${key}/Children/${childKey}`).remove();
-        this.af.database.object(`ldsunits/${key}/Children/${childKey}`).remove();
-    }
+        this.af.database.object(`ldsunits/${product.$key}`).remove();
 
-    updateUnit(unitKey: number, product, unitsBelow) {
-
-        // var ch = [];
-
-        // this.af.database.object(`ldsunitstest/${unitKey}`).update({
-        //     UnitName: product.UnitName,
-        //     UnitType: product.UnitType
-        // });
-
-        // if (product.Children) {
-
-        //     ch = unitsBelow;
-
-        //     ch.forEach(c => {
-
-        //         this.af.database.object(`ldsunitstest/${unitKey}/Children/${c.$key}`).update({
-        //             UnitName: c.UnitName,
-        //             UnitType: c.UnitType
-        //         });
-
-        //     });
-        // }
-
-        /////////////////////////////////
-
-
-        var ch = [];
-
-        this.af.database.object(`ldsunits/${unitKey}`).update({
-            UnitName: product.UnitName,
-            UnitType: product.UnitType
+        unitsBelow.forEach(unt => {
+            this.af.database.object(`ldsunits/${unt.$key}`).remove();
         });
 
-        if (product.Children) {
+    }
 
-            ch = unitsBelow;
+    deleteChildUnit(key) {
+        this.af.database.object(`ldsunits/${key}`).remove();
+    }
 
-            ch.forEach(c => {
+    updateUnit(product, unitsBelow) {
 
-                this.af.database.object(`ldsunits/${unitKey}/Children/${c.$key}`).update({
+        this.af.database.object(`ldsunits/${product.$key}`).update({
+            UnitName: product.UnitName,
+            UnitType: product.UnitType,
+            City: product.City,
+            Country: product.Country
+        });
+
+        if (unitsBelow) {
+            unitsBelow.forEach(c => {
+                this.af.database.object(`ldsunits/${c.$key}`).update({
                     UnitName: c.UnitName,
-                    UnitType: c.UnitType
+                    UnitType: c.UnitType,
+                    City: c.City,
+                    Country: c.Country
                 });
-
             });
         }
 
@@ -108,9 +84,4 @@ export class ProductService {
         return Observable.throw(error.json().error || 'Server error');
     }
 
-    // test(){
-    //     this.af.database.list('ldsunitstest').push({
-    //         name:'test'
-    //     });
-    // }
 }

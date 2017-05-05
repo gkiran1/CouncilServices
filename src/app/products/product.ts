@@ -8,5 +8,9 @@ export interface IProduct {
     ActUnitType: string;
     UnitType: string;
     Children: any;
+    City: string;
+    ActCity: string;
+    Country: string;
+    ActCountry: string;
 }
 
