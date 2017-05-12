@@ -15,7 +15,7 @@ import { FirebaseConfig } from './../../environments/firebase/firebase-config';
 
 import { PagerService } from './pager.service';
 
-import { ProductUpdateComponent } from './product-update.component';
+
 
 @NgModule({
   imports: [
@@ -27,18 +27,12 @@ import { ProductUpdateComponent } from './product-update.component';
         path: 'product/:id/:parentnum',
         // canActivate: [ProductDetailGuard],
         component: ProductDetailComponent
-      },
-      {
-        path: 'productupdate/:id/:parentnum',
-        // canActivate: [ProductDetailGuard],
-        component: ProductUpdateComponent
       }
     ])
   ],
   declarations: [
     ProductListComponent,
     ProductDetailComponent,
-    ProductUpdateComponent,
     ProductFilterPipe
   ],
   providers: [

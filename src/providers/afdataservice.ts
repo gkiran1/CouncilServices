@@ -8,17 +8,28 @@ import { Observable, Subject } from "rxjs/Rx";
 var https = require('https');
 var email = require('emailjs/email');
 
-var credentials = {
-  IonicApplicationID: "15fb1041",
-  IonicApplicationAPItoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMmZkODU1NS02NzkyLTRhN2MtYTVkZS0yYjYxNjM3OTIxOTMifQ.1tvI00lNMfm1VZUjH9t2gzd5fAIefRjasuHOlgBntuk"
-};
+// var credentials = {
+//   IonicApplicationID: "15fb1041",
+//   IonicApplicationAPItoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMmZkODU1NS02NzkyLTRhN2MtYTVkZS0yYjYxNjM3OTIxOTMifQ.1tvI00lNMfm1VZUjH9t2gzd5fAIefRjasuHOlgBntuk"
+// };
+// var options = {
+//   hostname: 'api.ionic.io',
+//   path: '/push/notifications',
+//   method: 'POST',
+//   headers: {
+//     "Content-Type": "application/json",
+//     "Authorization": "Bearer " + credentials.IonicApplicationAPItoken
+//   }
+// };
+
+
 var options = {
-  hostname: 'api.ionic.io',
-  path: '/push/notifications',
+  hostname: 'gcm-http.googleapis.com',
+  path: '/gcm/send',
   method: 'POST',
   headers: {
     "Content-Type": "application/json",
-    "Authorization": "Bearer " + credentials.IonicApplicationAPItoken
+    "Authorization": "key=" + "AAAASC34Gto:APA91bEXDfky2ZWKDfD3Ct-HZgQ06hqN0SO4XMEVYutJArXcy64sLfjAqY6tong21l7yzHEyaA8CERppvBxkGhrP2D5i1nbTDPw-Bxx3rIOeShkJ-nRoZMAbRej-A-X8LvIM10IYpgiO"
   }
 };
 
@@ -58,6 +69,7 @@ export class AfDataService {
                         usrRef.once('value').then(function (usrSnapshot) {
                           if (usrSnapshot.val()['isactive'] === true) {
                             var email = usrSnapshot.val()['email'];
+                            var pushtkn = usrSnapshot.val()['pushtoken'];
 
                             firebase.database().ref().child('notifications').push({
                               userid: id,
@@ -72,22 +84,34 @@ export class AfDataService {
                               isread: false
                             }).catch(err => { throw err });
 
+
+                            // var notification = {
+                            //   "emails": email,
+                            //   "profile": "ldspro",
+                            //   "notification": {
+                            //     "title": "LDS Councils",
+                            //     "message": 'New ' + description + ' agenda posted',
+                            //     "android": {
+                            //       "title": "LDS Councils",
+                            //       "message": 'New ' + description + ' agenda posted',
+                            //     },
+                            //     "ios": {
+                            //       "title": "LDS Councils",
+                            //       "message": 'New ' + description + ' agenda posted',
+                            //     }
+                            //   }
+                            // };
+
                             var notification = {
-                              "emails": email,
-                              "profile": "ldspro",
+                              "to": pushtkn,
+                              "priority": "normal",
                               "notification": {
+                                "body": 'New ' + description + ' agenda posted',
                                 "title": "LDS Councils",
-                                "message": 'New ' + description + ' agenda posted',
-                                "android": {
-                                  "title": "LDS Councils",
-                                  "message": 'New ' + description + ' agenda posted',
-                                },
-                                "ios": {
-                                  "title": "LDS Councils",
-                                  "message": 'New ' + description + ' agenda posted',
-                                }
+                                "icon": "new",
                               }
                             };
+
                             var req = https.request(options, function (res) {
                               console.log('STATUS: ' + res.statusCode);
                               console.log('HEADERS: ' + JSON.stringify(res.headers));
