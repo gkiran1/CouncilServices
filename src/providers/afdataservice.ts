@@ -8,21 +8,6 @@ import { Observable, Subject } from "rxjs/Rx";
 var https = require('https');
 var email = require('emailjs/email');
 
-// var credentials = {
-//   IonicApplicationID: "15fb1041",
-//   IonicApplicationAPItoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMmZkODU1NS02NzkyLTRhN2MtYTVkZS0yYjYxNjM3OTIxOTMifQ.1tvI00lNMfm1VZUjH9t2gzd5fAIefRjasuHOlgBntuk"
-// };
-// var options = {
-//   hostname: 'api.ionic.io',
-//   path: '/push/notifications',
-//   method: 'POST',
-//   headers: {
-//     "Content-Type": "application/json",
-//     "Authorization": "Bearer " + credentials.IonicApplicationAPItoken
-//   }
-// };
-
-
 var options = {
   hostname: 'gcm-http.googleapis.com',
   path: '/gcm/send',
@@ -68,7 +53,6 @@ export class AfDataService {
                         var usrRef = firebase.database().ref().child('users/' + id);
                         usrRef.once('value').then(function (usrSnapshot) {
                           if (usrSnapshot.val()['isactive'] === true) {
-                            var email = usrSnapshot.val()['email'];
                             var pushtkn = usrSnapshot.val()['pushtoken'];
 
                             firebase.database().ref().child('notifications').push({
@@ -83,24 +67,6 @@ export class AfDataService {
                               createdby: createdBy,
                               isread: false
                             }).catch(err => { throw err });
-
-
-                            // var notification = {
-                            //   "emails": email,
-                            //   "profile": "ldspro",
-                            //   "notification": {
-                            //     "title": "LDS Councils",
-                            //     "message": 'New ' + description + ' agenda posted',
-                            //     "android": {
-                            //       "title": "LDS Councils",
-                            //       "message": 'New ' + description + ' agenda posted',
-                            //     },
-                            //     "ios": {
-                            //       "title": "LDS Councils",
-                            //       "message": 'New ' + description + ' agenda posted',
-                            //     }
-                            //   }
-                            // };
 
                             var notification = {
                               "to": pushtkn,
@@ -125,6 +91,7 @@ export class AfDataService {
                             });
                             req.write(JSON.stringify(notification));
                             req.end();
+
                           }
                         });
 
@@ -184,7 +151,8 @@ export class AfDataService {
                           var usrRef = firebase.database().ref().child('users/' + id);
                           usrRef.once('value').then(function (usrSnapshot) {
                             if (usrSnapshot.val()['isactive'] === true) {
-                              var email = usrSnapshot.val()['email'];
+
+                              var pushtkn = usrSnapshot.val()['pushtoken'];
 
                               firebase.database().ref().child('notifications').push({
                                 userid: id,
@@ -200,21 +168,15 @@ export class AfDataService {
                               }).catch(err => { throw err });
 
                               var notification = {
-                                "emails": email,
-                                "profile": "ldspro",
+                                "to": pushtkn,
+                                "priority": "normal",
                                 "notification": {
+                                  "body": text,
                                   "title": "LDS Councils",
-                                  "message": text,
-                                  "android": {
-                                    "title": "LDS Councils",
-                                    "message": text,
-                                  },
-                                  "ios": {
-                                    "title": "LDS Councils",
-                                    "message": text,
-                                  }
+                                  "icon": "new",
                                 }
                               };
+
                               var req = https.request(options, function (res) {
                                 console.log('STATUS: ' + res.statusCode);
                                 console.log('HEADERS: ' + JSON.stringify(res.headers));
@@ -228,6 +190,7 @@ export class AfDataService {
                               });
                               req.write(JSON.stringify(notification));
                               req.end();
+
                             }
                           });
                           return true; // to stop the loop.
@@ -269,7 +232,8 @@ export class AfDataService {
                         var usrRef = firebase.database().ref().child('users/' + id);
                         usrRef.once('value').then(function (usrSnapshot) {
                           if (usrSnapshot.val()['isactive'] === true) {
-                            var email = usrSnapshot.val()['email'];
+
+                            var pushtkn = usrSnapshot.val()['pushtoken'];
 
                             firebase.database().ref().child('notifications').push({
                               userid: id,
@@ -285,21 +249,15 @@ export class AfDataService {
                             }).catch(err => { throw err });
 
                             var notification = {
-                              "emails": email,
-                              "profile": "ldspro",
+                              "to": pushtkn,
+                              "priority": "normal",
                               "notification": {
+                                "body": description + ' accepted by ' + assignedUser,
                                 "title": "LDS Councils",
-                                "message": description + ' accepted by ' + assignedUser,
-                                "android": {
-                                  "title": "LDS Councils",
-                                  "message": description + ' accepted by ' + assignedUser,
-                                },
-                                "ios": {
-                                  "title": "LDS Councils",
-                                  "message": description + ' accepted by ' + assignedUser,
-                                }
+                                "icon": "new",
                               }
                             };
+
                             var req = https.request(options, function (res) {
                               console.log('STATUS: ' + res.statusCode);
                               console.log('HEADERS: ' + JSON.stringify(res.headers));
@@ -313,6 +271,7 @@ export class AfDataService {
                             });
                             req.write(JSON.stringify(notification));
                             req.end();
+
                           }
                         });
                         return true; // to stop the loop.
@@ -375,7 +334,8 @@ export class AfDataService {
                           var usrRef = firebase.database().ref().child('users/' + id);
                           usrRef.once('value').then(function (usrSnapshot) {
                             if (usrSnapshot.val()['isactive'] === true) {
-                              var email = usrSnapshot.val()['email'];
+
+                              var pushtkn = usrSnapshot.val()['pushtoken'];
 
                               firebase.database().ref().child('notifications').push({
                                 userid: id,
@@ -391,21 +351,15 @@ export class AfDataService {
                               }).catch(err => { throw err });
 
                               var notification = {
-                                "emails": email,
-                                "profile": "ldspro",
+                                "to": pushtkn,
+                                "priority": "normal",
                                 "notification": {
+                                  "body": text,
                                   "title": "LDS Councils",
-                                  "message": text,
-                                  "android": {
-                                    "title": "LDS Councils",
-                                    "message": text,
-                                  },
-                                  "ios": {
-                                    "title": "LDS Councils",
-                                    "message": text,
-                                  }
+                                  "icon": "new",
                                 }
                               };
+
                               var req = https.request(options, function (res) {
                                 console.log('STATUS: ' + res.statusCode);
                                 console.log('HEADERS: ' + JSON.stringify(res.headers));
@@ -419,6 +373,7 @@ export class AfDataService {
                               });
                               req.write(JSON.stringify(notification));
                               req.end();
+
                             }
                           });
                           return true; // to stop the loop.
@@ -434,72 +389,6 @@ export class AfDataService {
       }
     });
   }
-
-  // Assignments Delete Trigger ------------------------
-  // assignmentsDeleteTrigger() {
-  //   this.rootRef.child('assignments').on('child_removed', function (snapshot) {
-  //     var assignmentId = snapshot.getKey();
-  //     var description = snapshot.val()['description'];
-  //     var createdBy = snapshot.val()['createdby'];
-  //     var userKeys = [];
-
-  //     var councilUsersRef = firebase.database().ref().child('usercouncils').orderByChild('councilid').equalTo(snapshot.val()['councilid']);
-  //     councilUsersRef.once('value').then(function (usrsSnapshot) {
-  //       usrsSnapshot.forEach(usrObj => {
-  //         var id = usrObj.val()['userid'];
-  //         userKeys.push(id);
-  //         if (userKeys.indexOf(id) === userKeys.lastIndexOf(id)) {
-  //           var notSettingsRef = firebase.database().ref().child('notificationsettings').orderByChild('userid').equalTo(id);
-  //           notSettingsRef.once('value', function (notSnap) {
-  //             if (notSnap.exists()) {
-  //               notSnap.forEach(notSetting => {
-  //                 if (notSetting.val()['allactivity'] === true || notSetting.val()['closingassignment'] === true) {
-  //                   var usrRef = firebase.database().ref().child('users/' + id);
-  //                   usrRef.once('value').then(function (usrSnapshot) {
-  //                     if (usrSnapshot.val()['isactive'] === true) {
-  //                       var email = usrSnapshot.val()['email'];
-
-  //                       var notification = {
-  //                         "emails": email,
-  //                         "profile": "ldspro",
-  //                         "notification": {
-  //                           "title": "LDS Councils",
-  //                           "message": 'Assignment Deleted - ' + description,
-  //                           "android": {
-  //                             "title": "LDS Councils",
-  //                             "message": 'Assignment Deleted - ' + description,
-  //                           },
-  //                           "ios": {
-  //                             "title": "LDS Councils",
-  //                             "message": 'Assignment Deleted - ' + description,
-  //                           }
-  //                         }
-  //                       };
-  //                       var req = https.request(options, function (res) {
-  //                         console.log('STATUS: ' + res.statusCode);
-  //                         console.log('HEADERS: ' + JSON.stringify(res.headers));
-  //                         res.setEncoding('utf8');
-  //                         res.on('data', function (chunk) {
-  //                           console.log('BODY: ' + chunk);
-  //                         });
-  //                       });
-  //                       req.on('error', function (e) {
-  //                         console.log('problem with request: ' + e.message);
-  //                       });
-  //                       req.write(JSON.stringify(notification));
-  //                       req.end();
-  //                     }
-  //                   });
-  //                   return true; // to stop the loop.
-  //                 }
-  //               });
-  //             }
-  //           });
-  //         }
-  //       });
-  //     });
-  //   });
-  // }
 
   //Council Discussions Trigger ------------------------
   discussionsTrigger() {
@@ -526,7 +415,8 @@ export class AfDataService {
                         var usrRef = firebase.database().ref().child('users/' + id);
                         usrRef.once('value').then(function (usrSnapshot) {
                           if (usrSnapshot.val()['isactive'] === true) {
-                            var email = usrSnapshot.val()['email'];
+
+                            var pushtkn = usrSnapshot.val()['pushtoken'];
 
                             firebase.database().ref().child('notifications').push({
                               userid: id,
@@ -542,21 +432,15 @@ export class AfDataService {
                             }).catch(err => { throw err });
 
                             var notification = {
-                              "emails": email,
-                              "profile": "ldspro",
+                              "to": pushtkn,
+                              "priority": "normal",
                               "notification": {
+                                "body": description + ' created in ' + councilName,
                                 "title": "LDS Councils",
-                                "message": description + ' created in ' + councilName,
-                                "android": {
-                                  "title": "LDS Councils",
-                                  "message": description + ' created in ' + councilName,
-                                },
-                                "ios": {
-                                  "title": "LDS Councils",
-                                  "message": description + ' created in ' + councilName,
-                                }
+                                "icon": "new",
                               }
                             };
+
                             var req = https.request(options, function (res) {
                               console.log('STATUS: ' + res.statusCode);
                               console.log('HEADERS: ' + JSON.stringify(res.headers));
@@ -570,6 +454,7 @@ export class AfDataService {
                             });
                             req.write(JSON.stringify(notification));
                             req.end();
+
                           }
                         });
                         return true; // to stop the loop.
@@ -607,23 +492,19 @@ export class AfDataService {
                       var usrRef = firebase.database().ref().child('users/' + id);
                       usrRef.once('value').then(function (usrSnapshot) {
                         if (usrSnapshot.val()['isactive'] === true) {
-                          var email = usrSnapshot.val()['email'];
+
+                          var pushtkn = usrSnapshot.val()['pushtoken'];
+
                           var notification = {
-                            "emails": email,
-                            "profile": "ldspro",
+                            "to": pushtkn,
+                            "priority": "normal",
                             "notification": {
+                              "body": 'Council Discussion - ' + description + ' -  @' + userName + ':  ' + msg,
                               "title": "LDS Councils",
-                              "message": 'Council Discussion - ' + description + ' -  @' + userName + ':  ' + msg,
-                              "android": {
-                                "title": "LDS Councils",
-                                "message": 'Council Discussion - ' + description + ' -  @' + userName + ':  ' + msg,
-                              },
-                              "ios": {
-                                "title": "LDS Councils",
-                                "message": 'Council Discussion - ' + description + ' -  @' + userName + ':  ' + msg,
-                              }
+                              "icon": "new",
                             }
                           };
+
                           var req = https.request(options, function (res) {
                             console.log('STATUS: ' + res.statusCode);
                             console.log('HEADERS: ' + JSON.stringify(res.headers));
@@ -637,6 +518,8 @@ export class AfDataService {
                           });
                           req.write(JSON.stringify(notification));
                           req.end();
+
+
                         }
                       });
                       return true; // to stop the loop.
@@ -662,6 +545,7 @@ export class AfDataService {
       notificationRef.once("value", function (snap) {
         if (!snap.exists()) {
           var email = snapshot.val()['otherUserEmail'];
+          // var pushtkn = usrSnapshot.val()['pushtoken'];
           var id = snapshot.val()['otherUserId'];
           var notSettingsRef = firebase.database().ref().child('notificationsettings').orderByChild('userid').equalTo(id);
           notSettingsRef.once('value', function (notSnap) {
@@ -792,31 +676,28 @@ export class AfDataService {
           notSnap.forEach(notSetting => {
             if (notSetting.val()['allactivity'] === true || notSetting.val()['actinactaccount'] === true) {
               if (snapshot.val()['isnotificationreq'] === true) {
+
                 var isactive = snapshot.val()['isactive'];
                 var description = '';
-                var email = snapshot.val()['email'];
+                var pushtkn = snapshot.val()['pushtoken'];
+
                 if (isactive === false) {
                   description = 'Your account is deactivated'
                 }
                 else if (isactive === true) {
                   description = 'Your account is activated'
                 }
+
                 var notification = {
-                  "emails": email,
-                  "profile": "ldspro",
+                  "to": pushtkn,
+                  "priority": "normal",
                   "notification": {
+                    "body": description,
                     "title": "LDS Councils",
-                    "message": description,
-                    "android": {
-                      "title": "LDS Councils",
-                      "message": description,
-                    },
-                    "ios": {
-                      "title": "LDS Councils",
-                      "message": description,
-                    }
+                    "icon": "new",
                   }
                 };
+
                 var req = https.request(options, function (res) {
                   console.log('STATUS: ' + res.statusCode);
                   console.log('HEADERS: ' + JSON.stringify(res.headers));
@@ -830,6 +711,7 @@ export class AfDataService {
                 });
                 req.write(JSON.stringify(notification));
                 req.end();
+
               }
               return true; // to stop the loop.
             }
@@ -865,17 +747,15 @@ export class AfDataService {
                         var usrRef = firebase.database().ref().child('users/' + id);
                         usrRef.once('value').then(function (usrSnapshot) {
                           if (usrSnapshot.val()['isactive'] === true) {
-                            var email = usrSnapshot.val()['email'];
 
+                            var pushtkn = usrSnapshot.val()['pushtoken'];
                             var txt = '';
 
                             if (createdBy === id) {
                               txt = 'New ' + name + ' file uploaded';
-                              // txt = "<h3>" + "<span class='nottxt-lbl'>" + "You" + "</span>" + " shared a file " + name + "</h3>";
                             }
                             else {
                               txt = 'New ' + name + ' file uploaded';
-                              // txt = "<h3>" + "<span class='nottxt-lbl'>" + createdUser + "</span>" + " sent you a file " + name + "</h3>";
                             }
 
                             firebase.database().ref().child('notifications').push({
@@ -892,21 +772,15 @@ export class AfDataService {
                             }).catch(err => { throw err });
 
                             var notification = {
-                              "emails": email,
-                              "profile": "ldspro",
+                              "to": pushtkn,
+                              "priority": "normal",
                               "notification": {
+                                "body": createdUser + ' sent you a file ' + name,
                                 "title": "LDS Councils",
-                                "message": createdUser + ' sent you a file ' + name,
-                                "android": {
-                                  "title": "LDS Councils",
-                                  "message": createdUser + ' sent you a file ' + name,
-                                },
-                                "ios": {
-                                  "title": "LDS Councils",
-                                  "message": createdUser + ' sent you a file ' + name,
-                                }
+                                "icon": "new",
                               }
                             };
+
                             var req = https.request(options, function (res) {
                               console.log('STATUS: ' + res.statusCode);
                               console.log('HEADERS: ' + JSON.stringify(res.headers));
@@ -920,6 +794,7 @@ export class AfDataService {
                             });
                             req.write(JSON.stringify(notification));
                             req.end();
+
                           }
                         });
                         return true; // to stop the loop.
@@ -933,36 +808,6 @@ export class AfDataService {
         }
       });
     });
-  }
-
-  getUserEmails(key: string, entity: string) {
-
-  }
-
-  getInviteeMail(key: string): any {
-    var invitee = this.af.database.object('invitees/' + key);
-    if (invitee !== undefined) {
-      return new Promise(invitee["email"]);
-    }
-    else {
-      return new Promise(null);
-    }
-  }
-
-  // createUser() {
-  //     firebase.database().ref().child('user').push(
-  //                   {
-  //                       name: "test1",
-  //                       username: "username1"
-  //                   })
-  //                   .then(() => {
-  //                       return "User is successfully invited..."
-  //                   })
-  //                   .catch(err => { throw err });
-  // }
-
-  getUserByKey(key: any) {
-    return this.af.database.object('user/' + key);
   }
 
 }
