@@ -31,10 +31,11 @@ export class ProductDetailComponent implements OnInit {
     }
 
     getUnits(id, parentNum) {
-        this.unitsabove = [];
-        this.unitsbelow = [];
-
         this._productService.getLdsUnits().subscribe(unitsObj => {
+
+            this.unitsabove = [];
+            this.unitsbelow = [];
+
             unitsObj.forEach(unitObj => {
 
                 if (unitObj.UnitNum === id) {
@@ -73,6 +74,7 @@ export class ProductDetailComponent implements OnInit {
 
     deleteUnit() {
         this._productService.deleteUnit(this.product, this.unitsbelow);
+        this.isDetail = true;
     }
 
     cancel() {
@@ -107,7 +109,7 @@ export class ProductDetailComponent implements OnInit {
 
         this.isDetail = true;
     }
-
+    
     deletechildUnit(untKey) {
         this._productService.deleteChildUnit(untKey);
     }
