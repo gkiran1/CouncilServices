@@ -53,6 +53,7 @@ export class AfDataService {
                         var usrRef = firebase.database().ref().child('users/' + id);
                         usrRef.once('value').then(function (usrSnapshot) {
                           if (usrSnapshot.val()['isactive'] === true) {
+
                             var pushtkn = usrSnapshot.val()['pushtoken'];
 
                             firebase.database().ref().child('notifications').push({
@@ -541,63 +542,64 @@ export class AfDataService {
       var description = snapshot.val()['createdUserName'];
       var createdBy = snapshot.val()['createdUserId'];
       var userId = snapshot.val()['otherUserId'];
+
       var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(privateDiscussionId);
       notificationRef.once("value", function (snap) {
         if (!snap.exists()) {
-          var email = snapshot.val()['otherUserEmail'];
-          // var pushtkn = usrSnapshot.val()['pushtoken'];
-          var id = snapshot.val()['otherUserId'];
-          var notSettingsRef = firebase.database().ref().child('notificationsettings').orderByChild('userid').equalTo(id);
-          notSettingsRef.once('value', function (notSnap) {
-            if (notSnap.exists()) {
-              notSnap.forEach(notSetting => {
-                if (notSetting.val()['allactivity'] === true || notSetting.val()['pvtdiscussions'] === true) {
-                  firebase.database().ref().child('notifications').push({
-                    userid: userId,
-                    nodeid: privateDiscussionId,
-                    nodename: 'privatediscussions',
-                    description: description,
-                    action: 'create',
-                    text: "<h3>" + "<span class='nottxt-lbl'>" + description + "</span>" + " private discussion invite" + "</h3>",
-                    createddate: new Date().toISOString(),
-                    createdtime: new Date().toTimeString(),
-                    createdby: createdBy,
-                    isread: false
-                  }).catch(err => { throw err });
+          var usrRef = firebase.database().ref().child('users/' + userId);
+          usrRef.once('value').then(function (usrSnapshot) {
+            if (usrSnapshot.val()['isactive'] === true) {
 
-                  var notification = {
-                    "emails": email,
-                    "profile": "ldspro",
-                    "notification": {
-                      "title": "LDS Councils",
-                      "message": description + ' private discussion invite',
-                      "android": {
-                        "title": "LDS Councils",
-                        "message": description + ' private discussion invite',
-                      },
-                      "ios": {
-                        "title": "LDS Councils",
-                        "message": description + ' private discussion invite',
-                      }
+              var pushtkn = usrSnapshot.val()['pushtoken'];
+
+              var notSettingsRef = firebase.database().ref().child('notificationsettings').orderByChild('userid').equalTo(userId);
+              notSettingsRef.once('value', function (notSnap) {
+                if (notSnap.exists()) {
+                  notSnap.forEach(notSetting => {
+                    if (notSetting.val()['allactivity'] === true || notSetting.val()['pvtdiscussions'] === true) {
+                      firebase.database().ref().child('notifications').push({
+                        userid: userId,
+                        nodeid: privateDiscussionId,
+                        nodename: 'privatediscussions',
+                        description: description,
+                        action: 'create',
+                        text: "<h3>" + "<span class='nottxt-lbl'>" + description + "</span>" + " private discussion invite" + "</h3>",
+                        createddate: new Date().toISOString(),
+                        createdtime: new Date().toTimeString(),
+                        createdby: createdBy,
+                        isread: false
+                      }).catch(err => { throw err });
+
+                      var notification = {
+                        "to": pushtkn,
+                        "priority": "normal",
+                        "notification": {
+                          "body": description + ' private discussion invite',
+                          "title": "LDS Councils",
+                          "icon": "new",
+                        }
+                      };
+
+                      var req = https.request(options, function (res) {
+                        console.log('STATUS: ' + res.statusCode);
+                        console.log('HEADERS: ' + JSON.stringify(res.headers));
+                        res.setEncoding('utf8');
+                        res.on('data', function (chunk) {
+                          console.log('BODY: ' + chunk);
+                        });
+                      });
+                      req.on('error', function (e) {
+                        console.log('problem with request: ' + e.message);
+                      });
+                      req.write(JSON.stringify(notification));
+                      req.end();
+
+                      return true; // to stop the loop.
                     }
-                  };
-                  var req = https.request(options, function (res) {
-                    console.log('STATUS: ' + res.statusCode);
-                    console.log('HEADERS: ' + JSON.stringify(res.headers));
-                    res.setEncoding('utf8');
-                    res.on('data', function (chunk) {
-                      console.log('BODY: ' + chunk);
-                    });
                   });
-                  req.on('error', function (e) {
-                    console.log('problem with request: ' + e.message);
-                  });
-                  req.write(JSON.stringify(notification));
-                  req.end();
-
-                  return true; // to stop the loop.
                 }
               });
+
             }
           });
         }
@@ -613,6 +615,7 @@ export class AfDataService {
         var email = '';
         var name = '';
         var id = '';
+
         if (snapshot.val()['lastMsg']['userId'] !== snapshot.val()['createdUserId']) {
           email = snapshot.val()['createdUserEmail'];
           name = snapshot.val()['otherUserName'];
@@ -623,41 +626,46 @@ export class AfDataService {
           name = snapshot.val()['createdUserName'];
           id = snapshot.val()['otherUserId'];
         }
-        var notSettingsRef = firebase.database().ref().child('notificationsettings').orderByChild('userid').equalTo(id);
-        notSettingsRef.once('value', function (notSnap) {
-          if (notSnap.exists()) {
-            notSnap.forEach(notSetting => {
-              if (notSetting.val()['allactivity'] === true || notSetting.val()['pvtdiscussions'] === true) {
-                var notification = {
-                  "emails": email,
-                  "profile": "ldspro",
-                  "notification": {
-                    "title": "LDS Councils",
-                    "message": 'Private Discussion - ' + ' @' + name + ': ' + description,
-                    "android": {
-                      "title": "LDS Councils",
-                      "message": 'Private Discussion - ' + ' @' + name + ': ' + description,
-                    },
-                    "ios": {
-                      "title": "LDS Councils",
-                      "message": 'Private Discussion - ' + ' @' + name + ': ' + description,
-                    }
+
+        var usrRef = firebase.database().ref().child('users/' + id);
+        usrRef.once('value').then(function (usrSnapshot) {
+          if (usrSnapshot.val()['isactive'] === true) {
+
+            var pushtkn = usrSnapshot.val()['pushtoken'];
+
+            var notSettingsRef = firebase.database().ref().child('notificationsettings').orderByChild('userid').equalTo(id);
+            notSettingsRef.once('value', function (notSnap) {
+              if (notSnap.exists()) {
+                notSnap.forEach(notSetting => {
+                  if (notSetting.val()['allactivity'] === true || notSetting.val()['pvtdiscussions'] === true) {
+
+                    var notification = {
+                      "to": pushtkn,
+                      "priority": "normal",
+                      "notification": {
+                        "body": 'Private Discussion - ' + ' @' + name + ': ' + description,
+                        "title": "LDS Councils",
+                        "icon": "new",
+                      }
+                    };
+
+                    var req = https.request(options, function (res) {
+                      console.log('STATUS: ' + res.statusCode);
+                      console.log('HEADERS: ' + JSON.stringify(res.headers));
+                      res.setEncoding('utf8');
+                      res.on('data', function (chunk) {
+                        console.log('BODY: ' + chunk);
+                      });
+                    });
+                    req.on('error', function (e) {
+                      console.log('problem with request: ' + e.message);
+                    });
+                    req.write(JSON.stringify(notification));
+                    req.end();
+
+                    return true; // to stop the loop.
                   }
-                };
-                var req = https.request(options, function (res) {
-                  console.log('STATUS: ' + res.statusCode);
-                  console.log('HEADERS: ' + JSON.stringify(res.headers));
-                  res.setEncoding('utf8');
-                  res.on('data', function (chunk) {
-                    console.log('BODY: ' + chunk);
-                  });
                 });
-                req.on('error', function (e) {
-                  console.log('problem with request: ' + e.message);
-                });
-                req.write(JSON.stringify(notification));
-                req.end();
-                return true; // to stop the loop.
               }
             });
           }
@@ -749,14 +757,7 @@ export class AfDataService {
                           if (usrSnapshot.val()['isactive'] === true) {
 
                             var pushtkn = usrSnapshot.val()['pushtoken'];
-                            var txt = '';
-
-                            if (createdBy === id) {
-                              txt = 'New ' + name + ' file uploaded';
-                            }
-                            else {
-                              txt = 'New ' + name + ' file uploaded';
-                            }
+                            var txt = 'New ' + name + ' file uploaded';
 
                             firebase.database().ref().child('notifications').push({
                               userid: id,
