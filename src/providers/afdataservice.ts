@@ -134,6 +134,15 @@ export class AfDataService {
         text = editedBy + ' edited ' + description + ' agenda';
       }
 
+      if (action === 'deleted') {
+        var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(agendaId);
+        notificationRef.once('value').then(function (snapshot) {
+          snapshot.forEach(function (childSnapshot) {
+            firebase.database().ref().child('notifications/' + childSnapshot.key).remove();
+          });
+          return true;
+        });
+      }
       if (action === 'deleted' || action === 'edited') {
         var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(agendaId);
         notificationRef.once("value", function (snap) {
@@ -317,6 +326,15 @@ export class AfDataService {
         text = description + ' edited';
       }
 
+      if (action === 'deleted') {
+        var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(assignmentId);
+        notificationRef.once('value').then(function (snapshot) {
+          snapshot.forEach(function (childSnapshot) {
+            firebase.database().ref().child('notifications/' + childSnapshot.key).remove();
+          });
+          return true;
+        });
+      }
       if (action === 'deleted' || action === 'completed' || action === 'edited') {
         var notificationRef = firebase.database().ref().child('notifications').orderByChild('nodeid').equalTo(assignmentId);
         notificationRef.once("value", function (snap) {
