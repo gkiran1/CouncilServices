@@ -15,7 +15,7 @@ export class AppComponent {
   pageTitle: string = 'Councils';
 
   constructor(public af: AfDataService, public notification: Notifications) {
-    this.registerPushTriggers();
+    //this.registerPushTriggers();
   }
 
   registerPushTriggers() {
