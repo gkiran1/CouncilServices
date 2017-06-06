@@ -1,96 +1,103 @@
 <div class="row ro-w">
-  <div class="col-md-8">
-    <form action="" class="navbar-form nav-form" id="navBarSearchForm">
-      <div class="input-group">
-        <input type="Search" placeholder="Search organization by name or unit number" class="form-control" [(ngModel)]='listFilter'
-          [ngModelOptions]="{standalone: true}" />
-        <div class="input-group-btn">
-          <button class="btn btn-info concil-search-btn-info">
+	<div class="col-md-8">
+		<form action="" class="navbar-form nav-form" id="navBarSearchForm">
+			<div class="input-group">
+				<input type="Search" placeholder="Search organization by name or unit number" class="form-control" [(ngModel)]='listFilter'
+					[ngModelOptions]="{standalone: true}" />
+				<div class="input-group-btn">
+					<button class="btn btn-info concil-search-btn-info">
                           <span class="glyphicon glyphicon-search"></span>
                         </button>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="col-md-4 text-right">
-    <button type="button" class="btn btn-primary primary-btn concil-primary-btn concil-margin-right-15">Add Unit</button>
-  </div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="col-md-4 text-right">
+		<button type="button" class="btn btn-primary primary-btn concil-primary-btn concil-margin-right-15">Add Unit</button>
+	</div>
 
-  <div class="concil-pagination-list-size">
-    <div class="concil-pagination-list-size-units">
-      <h5 class="concil-pagination-list-size-units">{{untsLen}} Units</h5>
-    </div>
-    <div class="concil-pagination-list-size-number">
-      <h5>Results per page:</h5>
-      <h5 (click)="records(10)" [ngClass]="{active:clicked === 10}">10</h5>
-      <h5 (click)="records(20)" [ngClass]="{active:clicked === 20}">20</h5>
-      <h5 (click)="records(30)" [ngClass]="{active:clicked === 30}">30</h5>
-    </div>
-  </div>
+	<div class="concil-pagination-list-size">
+		<div class="concil-pagination-list-size-units">
+			<h5 class="concil-pagination-list-size-units">{{untsLen}} Units</h5>
+		</div>
+		<div class="concil-pagination-list-size-number">
+			<h5>Results per page:</h5>
+			<h5 (click)="records(10)" [ngClass]="{active:clicked === 10}">10</h5>
+			<h5 (click)="records(20)" [ngClass]="{active:clicked === 20}">20</h5>
+			<h5 (click)="records(30)" [ngClass]="{active:clicked === 30}">30</h5>
+		</div>
+	</div>
 
-  <div class='table-responsive1'>
-    <table class='table table-striped concil-table' *ngIf='pagedItems && pagedItems.length'>
-      <thead>
-        <tr>
-          <th>#</th>
-          <!--<th>Parent</th>-->
-          <th>Name</th>
-          <th>Type</th>
-          <th>Geographic Area</th>
-          <th>Country</th>
-          <th>&nbsp;</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor='let product of pagedItems | productFilter:listFilter'>
-          <td class="col-md-1">
-            {{product.UnitNum}}
-          </td>
-          <!--<td class="col-md-1">{{product.ParentNum }}</td>-->
-          <td class="col-md-4">{{ product.UnitName }}</td>
-          <td class="col-md-2">{{ product.UnitType }}</td>
-          <td class="col-md-4">{{ product.City }}</td>
-          <td class="col-md-2">{{ product.Country }}</td>
-          <td class="col-md-1" [routerLink]="['/product', product.UnitNum,product.ParentNum]" (click)="showLoading=true"><span class="glyphicon glyphicon-menu-right"></span></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="text-center">
+	<div class='table-responsive1'>
+		<table class='table table-striped concil-table' *ngIf='pagedItems && pagedItems.length'>
+			<thead>
+				<tr>
+					<th>#</th>
+					<!--<th>Parent</th>-->
+					<th>Name</th>
+					<th>Type</th>
+					<th>Geographic Area</th>
+					<th>Country</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor='let product of pagedItems | productFilter:listFilter'>
+					<td class="col-md-1">
+						{{product.UnitNum}}
+					</td>
+					<!--<td class="col-md-1">{{product.ParentNum }}</td>-->
+					<td class="col-md-4">{{ product.UnitName }}</td>
+					<td class="col-md-2">{{ product.UnitType }}</td>
+					<td class="col-md-4">{{ product.City }}</td>
+					<td class="col-md-2">{{ product.Country }}</td>
+					<td class="col-md-1" [routerLink]="['/product', product.UnitNum,product.ParentNum]" (click)="showLoading=true"><span class="glyphicon glyphicon-menu-right"></span></td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="text-center">
 
-      <!-- items being paged -->
-      <div *ngFor="let item of pagedItems">{{item.name}}</div>
+			<!-- items being paged -->
+			<div *ngFor="let item of pagedItems">{{item.name}}</div>
 
-      <!-- pager -->
-      <div class="concil-pagination-block">
-        <div class="concil-pagination-label">
-          <p>Page:</p>
-        </div>
-        <ul *ngIf="pager.pages && pager.pages.length" class="pagination concil-pagination">
-          <li [ngClass]="{disabled:pager.currentPage === 1}">
-            <a (click)="setPage(1)">First</a>
-          </li>
-          <li [ngClass]="{disabled:pager.currentPage === 1}">
-            <a (click)="setPage(pager.currentPage - 1)">Previous</a>
-          </li>
-          <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
-            <a (click)="setPage(page)">{{page}}</a>
-          </li>
-          <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-            <a (click)="setPage(pager.currentPage + 1)">Next</a>
-          </li>
-          <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-            <a (click)="setPage(pager.totalPages)">Last</a>
-          </li>
-        </ul>
-      </div>
-    </div>
+			<!-- pager -->
+			<div class="concil-pagination-block">
+				<div class="concil-pagination-label">
+					<p>Page:</p>
+				</div>
+				<ul *ngIf="pager.pages && pager.pages.length" class="pagination concil-pagination">
+					<li [ngClass]="{disabled:pager.currentPage === 1}">
+						<a (click)="setPage(1)">First</a>
+					</li>
+					<li [ngClass]="{disabled:pager.currentPage === 1}">
+						<a (click)="setPage(pager.currentPage - 1)">Previous</a>
+					</li>
+					<li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+						<a (click)="setPage(page)">{{page}}</a>
+					</li>
+					<li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+						<a (click)="setPage(pager.currentPage + 1)">Next</a>
+					</li>
+					<li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+						<a (click)="setPage(pager.totalPages)">Last</a>
+					</li>
+				</ul>
+			</div>
+		</div>
 
-  </div>
-  <div class="concil-loader" *ngIf=showLoading>
-    <img src="/assets/images/loader.gif" class="concil-loader-gif">
-  </div>
+	</div>
+
+	<div *ngIf=showLoading class="loader">
+		<div class="circle-container">
+			<div class="circleG_1"></div>
+			<div class="circleG_2"></div>
+			<div class="circleG_3"></div>
+		</div>
+	</div>
+
 </div>
 
+
 <div class="concil-footer">
-  <p>©Councils Foundation 501(c)(3)</p>
+	<p>©Councils Foundation 501(c)(3)</p>
 </div>
