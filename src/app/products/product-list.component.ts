@@ -32,16 +32,17 @@ export class ProductListComponent implements OnInit {
 
     // paged items
     pagedItems: any[];
+    tempPagedItems: any[];
 
     untsLen;
 
     ngOnInit(): void {
         this._productService.getLdsUnits()
             .subscribe(u => {
-                
+
                 this.products = u.sort(function (a, b) {
                     return a.UnitNum - b.UnitNum
-                });             
+                });
 
                 // this.products.sort(function (a, b) {
                 //     return a.UnitNum - b.UnitNum
@@ -67,6 +68,7 @@ export class ProductListComponent implements OnInit {
 
         // get current page of items
         this.pagedItems = this.products.slice(this.pager.startIndex, this.pager.endIndex + 1);
+        this.tempPagedItems = this.pagedItems;
     }
     pageNum;
     pageLength = 10;
@@ -83,6 +85,17 @@ export class ProductListComponent implements OnInit {
 
         // get current page of items
         this.pagedItems = this.products.slice(this.pager.startIndex, this.pager.endIndex + 1);
+        this.tempPagedItems = this.pagedItems;
+    }
+
+    keypresssed($event) {
+        // this.showLoading = true;
+        if ($event.target.value.length > 1) {
+            this.pagedItems = this.products;
+        }
+        else if ($event.target.value === '') {
+            this.pagedItems = this.tempPagedItems;
+        }
     }
 
 }
