@@ -1,4 +1,11 @@
 <div class='container'>
+  <div *ngIf=isLoading class="loader">
+    <div class="circle-container">
+      <div class="circleG_1"></div>
+      <div class="circleG_2"></div>
+      <div class="circleG_3"></div>
+    </div>
+  </div>
   <!--<img style="-webkit-user-select: none;background-position: 0px 0px, 10px 10px;background-size: 20px 20px;background-image:linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%),linear-gradient(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee 100%);cursor: zoom-in;"
         src="http://localhost:4200/web_admin_01.png" width="835" height="638">-->
   <div class='row'>
@@ -15,7 +22,9 @@
       </nav>
     </div>
   </div>
+  
   <div>
     <router-outlet></router-outlet>
   </div>
+
 </div>

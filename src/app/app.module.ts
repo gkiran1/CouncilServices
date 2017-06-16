@@ -15,12 +15,14 @@ import { FroalaComponent } from "./about/froala.component";
 
 import { FroalaEditorModule } from './../editor/index';
 import { FroalaViewModule } from './../view/index';
+import { Logout } from './logout/logout';
 
 @NgModule({
   declarations: [
     AppComponent,
     AboutusComponent,
-    FroalaComponent
+    FroalaComponent,
+    Logout
   ],
   imports: [
     BrowserModule,
@@ -30,9 +32,10 @@ import { FroalaViewModule } from './../view/index';
     FroalaViewModule,
     AngularFireModule.initializeApp(FirebaseConfig),
     RouterModule.forRoot([
-      { path: '', redirectTo: 'products', pathMatch: 'full' },
-      { path: '**', redirectTo: 'products', pathMatch: 'full' },
+      { path: '', redirectTo: '', pathMatch: 'full' },
+      //{ path: '**', redirectTo: 'products', pathMatch: 'full' },
       { path: 'about', component: AboutusComponent },
+      { path: 'logout', component: Logout}
     ]),
     ProductModule
   ],
