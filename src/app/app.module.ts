@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { FirebaseConfig } from './../environments/firebase/firebase-config';
 import { ProductModule } from './products/product.module';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthService } from 'providers/authservice';
 //import { WelcomeComponent } from './home/welcome.component';
 import { AboutusComponent } from './about/about.component';
 import { FroalaComponent } from "./about/froala.component";
@@ -29,13 +30,13 @@ import { FroalaViewModule } from './../view/index';
     FroalaViewModule,
     AngularFireModule.initializeApp(FirebaseConfig),
     RouterModule.forRoot([
-      { path: '', redirectTo: 'welcome', pathMatch: 'full' },
-      { path: '**', redirectTo: 'welcome', pathMatch: 'full' },
+      { path: '', redirectTo: 'products', pathMatch: 'full' },
+      { path: '**', redirectTo: 'products', pathMatch: 'full' },
       { path: 'about', component: AboutusComponent },
     ]),
     ProductModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 
