@@ -23,7 +23,7 @@ export class LoginComponent {
         this.validateUser(this.email, this.password)
             .then(id => {
                 console.log(id);
-                localStorage.setItem('isLoggedIn', 'true');
+                sessionStorage.setItem('uid', id);
                 this.router.navigate(['/home']);
             })
             .catch(err => {

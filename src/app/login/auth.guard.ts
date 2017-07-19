@@ -18,6 +18,6 @@ export class AuthGuard implements CanActivate {
         return this.af.auth
             .take(1)
             .map(auth => !!auth)
-            .do(auth => !auth ? this.router.navigate(['/login']) : true);
+            .do(auth => ((!auth) || (sessionStorage.getItem('uid') === null)) ? this.router.navigate(['/login']) : true);
     }
 }
