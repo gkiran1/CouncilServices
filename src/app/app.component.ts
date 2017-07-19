@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AfDataService } from 'providers/afdataservice';
 import { Notifications } from 'providers/notifications';
-import { AuthService } from 'providers/authservice';
+// import { AuthService } from 'providers/authservice';
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 import * as firebase from 'firebase';
@@ -20,8 +20,7 @@ export class AppComponent {
   isLoading = false;
   constructor(public af: AfDataService, 
               public notification: Notifications, 
-              private router: Router, 
-              private auth: AuthService,
+              private router: Router,
               private activatedRoute: ActivatedRoute) {
 
     //router.events.subscribe((url:any) => console.log(url));
@@ -30,17 +29,17 @@ export class AppComponent {
     let provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('https://www.googleapis.com/auth/admin.datatransfer');
     
-    if (!auth.checkCredentials()) {
-      firebase.auth().signInWithPopup(provider).then((result) => {
-        localStorage.setItem("user", result.user);
-        this.router.navigate(['products']);
-        return true;
-      }).catch(err => {
+    // // if (!auth.checkCredentials()) {
+    //   firebase.auth().signInWithPopup(provider).then((result) => {
+    //     localStorage.setItem("user", result.user);
+    //     this.router.navigate(['products']);
+    //     return true;
+    //   }).catch(err => {
         
-        console.log('Google Authentication failed', err);
-        this.router.navigate(['logout']);
-      })
-    }
+    //     console.log('Google Authentication failed', err);
+    //     this.router.navigate(['logout']);
+    //   })
+    // // }
 
   }
 

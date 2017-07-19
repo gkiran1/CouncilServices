@@ -15,6 +15,8 @@ import { FirebaseConfig } from './../../environments/firebase/firebase-config';
 
 import { PagerService } from './pager.service';
 
+import { AuthGuard } from '../login/auth.guard';
+import { HomeComponent } from '../home/home.component';
 
 
 @NgModule({
@@ -22,12 +24,18 @@ import { PagerService } from './pager.service';
     SharedModule,
     AngularFireModule.initializeApp(FirebaseConfig),
     RouterModule.forChild([
-      { path: 'products', component: ProductListComponent },
+      // { path: 'products', component: ProductListComponent },
       {
-        path: 'product/:id/:parentnum',
-        // canActivate: [ProductDetailGuard],
-        component: ProductDetailComponent
-      }
+        path: 'home', component: HomeComponent,
+        children: [
+          {
+            path: 'product/:id/:parentnum',
+            // canActivate: [ProductDetailGuard],
+            component: ProductDetailComponent
+          }
+        ], canActivate: [AuthGuard]
+      },
+
     ])
   ],
   declarations: [

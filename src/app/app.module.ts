@@ -8,21 +8,26 @@ import { AppComponent } from './app.component';
 import { FirebaseConfig } from './../environments/firebase/firebase-config';
 import { ProductModule } from './products/product.module';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthService } from 'providers/authservice';
+// import { AuthService } from 'providers/authservice';
 //import { WelcomeComponent } from './home/welcome.component';
 import { AboutusComponent } from './about/about.component';
 import { FroalaComponent } from "./about/froala.component";
+import { ProductListComponent } from './products/product-list.component';
 
 import { FroalaEditorModule } from './../editor/index';
 import { FroalaViewModule } from './../view/index';
-import { Logout } from './logout/logout';
+// import { Logout } from './logout/logout';
+import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './login/auth.guard';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AboutusComponent,
     FroalaComponent,
-    Logout
+    LoginComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -32,14 +37,23 @@ import { Logout } from './logout/logout';
     FroalaViewModule,
     AngularFireModule.initializeApp(FirebaseConfig),
     RouterModule.forRoot([
-      { path: '', redirectTo: '', pathMatch: 'full' },
-      //{ path: '**', redirectTo: 'products', pathMatch: 'full' },
-      { path: 'about', component: AboutusComponent },
-      { path: 'logout', component: Logout}
+      { path: '', redirectTo: 'home', pathMatch: 'full', canActivate: [AuthGuard] },
+      // { path: '**', redirectTo: '', pathMatch: 'full' },
+      { path: 'about', component: AboutusComponent, canActivate: [AuthGuard] },
+      { path: 'products', component: ProductListComponent, canActivate: [AuthGuard] },
+      { path: 'login', component: LoginComponent },
+      {
+        path: 'home', component: HomeComponent,
+        children: [
+          { path: '', redirectTo: '', pathMatch: 'full', canActivate: [AuthGuard] },
+          { path: 'products', component: ProductListComponent, canActivate: [AuthGuard] },
+          { path: 'about', component: AboutusComponent, canActivate: [AuthGuard] }
+        ], canActivate: [AuthGuard]
+      }
     ]),
     ProductModule
   ],
-  providers: [AuthService],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 

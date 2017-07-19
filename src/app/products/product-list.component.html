@@ -51,7 +51,7 @@
           <td class="col-md-2">{{ product.UnitType }}</td>
           <td class="col-md-4">{{ product.City }}</td>
           <td class="col-md-2">{{ product.Country }}</td>
-          <td class="col-md-1" [routerLink]="['/product', product.UnitNum,product.ParentNum]" (click)="showLoading=true"><span class="glyphicon glyphicon-menu-right"></span></td>
+          <td class="col-md-1" [routerLink]="['/home/product', product.UnitNum,product.ParentNum]" (click)="showLoading=true"><span class="glyphicon glyphicon-menu-right"></span></td>
         </tr>
       </tbody>
     </table>
