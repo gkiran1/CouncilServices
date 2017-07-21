@@ -40,13 +40,13 @@ import { HomeComponent } from './home/home.component';
       { path: '', redirectTo: 'home', pathMatch: 'full', canActivate: [AuthGuard] },
       // { path: '**', redirectTo: '', pathMatch: 'full' },
       { path: 'about', component: AboutusComponent, canActivate: [AuthGuard] },
-      { path: 'products', component: ProductListComponent, canActivate: [AuthGuard] },
+      { path: 'units', component: ProductListComponent, canActivate: [AuthGuard] },
       { path: 'login', component: LoginComponent },
       {
         path: 'home', component: HomeComponent,
         children: [
           { path: '', redirectTo: '', pathMatch: 'full', canActivate: [AuthGuard] },
-          { path: 'products', component: ProductListComponent, canActivate: [AuthGuard] },
+          { path: 'units', component: ProductListComponent, canActivate: [AuthGuard] },
           { path: 'about', component: AboutusComponent, canActivate: [AuthGuard] }
         ], canActivate: [AuthGuard]
       }

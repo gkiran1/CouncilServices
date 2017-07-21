@@ -14,7 +14,7 @@
         <div class='container-fluid'>
           <a class='navbar-brand nav-brand'>{{pageTitle}}</a>
           <ul class='nav navbar-nav navbar-right nav-right'>
-            <li><a [routerLink]="['/home/products']" (click)="clicked='units'" [ngClass]="{active:clicked === 'units'}">Units</a></li>
+            <li><a [routerLink]="['/home/units']" (click)="clicked='units'" [ngClass]="{active:clicked === 'units'}">Units</a></li>
             <li><a (click)="clicked='analytics'" [ngClass]="{active:clicked === 'analytics'}">Analytics</a></li>
             <li><a [routerLink]="['/home/about']" (click)="clicked='about'" [ngClass]="{active:clicked === 'about'}">About</a></li>
             <!--<li class="signout"><a (click)="signOut()" >SignOut</a></li>-->
