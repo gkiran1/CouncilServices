@@ -6,6 +6,7 @@
   font-family: 'Bernina';
 }
 
+
 /*------------Loader------------------------- */
 
 .loader {
@@ -145,71 +146,67 @@
   -webkit-animation-delay: .75s;
   -moz-animation-delay: .75s;
 }
+
 @keyframes bounce_circleG {
   0% {
     opacity: 0;
   }
-
   50% {
     background-color: rgba(60, 177, 138, .5);
   }
-
   100% {
     background-color: rgba(60, 177, 138, 1);
   }
 }
+
 @-o-keyframes bounce_circleG {
   0% {
     opacity: 0;
   }
-
   50% {
     background-color: rgba(60, 177, 138, .5);
   }
-
   100% {
     background-color: rgba(60, 177, 138, 1);
   }
 }
+
 @-ms-keyframes bounce_circleG {
   0% {
     opacity: 0;
   }
-
   50% {
     background-color: rgba(60, 177, 138, .5);
   }
-
   100% {
     background-color: rgba(60, 177, 138, 1);
   }
 }
+
 @-webkit-keyframes bounce_circleG {
   0% {
     opacity: 0;
   }
-
   50% {
     background-color: rgba(60, 177, 138, .5);
   }
-
   100% {
     background-color: rgba(60, 177, 138, 1);
   }
 }
+
 @-moz-keyframes bounce_circleG {
   0% {
     opacity: 0;
   }
-
   50% {
     background-color: rgba(60, 177, 138, .5);
   }
-
   100% {
     background-color: rgba(60, 177, 138, 1);
   }
 }
+
 
 /*------------Loader------------------------- */
 
@@ -451,6 +448,7 @@ section.reverse {
   transition: -webkit-transform 150ms ease-in-out;
   transition: transform 150ms ease-in-out;
   transition: transform 150ms ease-in-out, -webkit-transform 150ms ease-in-out;
+  font-weight: 400;
 }
 
 .input-has-focus {
@@ -664,7 +662,7 @@ input[type='radio']:checked {
   font-size: 22px;
 }
 
-table > tbody > tr > td:nth-child(2) {
+table>tbody>tr>td:nth-child(2) {
   padding-top: 7px;
 }
 
@@ -746,42 +744,39 @@ a.disabled {
   height: 20px !important;
 }
 
+
 /*-----------media-----*/
+
 @media only screen and (max-width:320px) {
   .form label,
   .rowmix label {
     padding-left: 0;
     font-size: 16px;
   }
-
   .form label {
     font-size: 16px;
   }
-
   .form input[type="email"],
   .form input[type="password"],
   .form input[type="text"] {
     padding: 15px;
   }
-
   .radio span {
     font-size: 16px;
   }
-
   .section-form h3 {
     font-size: 36px;
   }
 }
+
 @media only screen and (max-width:480px) {
   #form input {
     font-size: 22px;
   }
-
   #form button {
     font-size: 24px;
   }
-
-  ::-webkit-input-placeholder {
+   ::-webkit-input-placeholder {
     font-size: 16px;
   }
 }
@@ -793,6 +788,7 @@ a.disabled {
 :-ms-input-placeholder {
   font-size: 16px;
 }
+
 @media only screen and (max-width:640px) {
   .form-wrapper {
     max-width: 476px;
