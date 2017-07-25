@@ -24,7 +24,7 @@ export class LoginComponent {
             .then(id => {
                 console.log(id);
                 sessionStorage.setItem('uid', id);
-                this.router.navigate(['/home']);
+                this.router.navigate(['/home/units']);
             })
             .catch(err => {
                 alert('incorrect email or password!');
