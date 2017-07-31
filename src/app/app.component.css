@@ -13,6 +13,14 @@
        url('./assets/fonts/BerninaSans-Semibold.svg') format('svg'); /* Legacy iOS */ /*webfont.svg#svgFontName'*/
 }
 
+@font-face {
+  font-family: 'Gotham-Medium';
+  src: url('./assets/fonts/GOTHMMED.eot'); /* IE9 Compat Modes */
+  src: url('./assets/fonts/GOTHMMED.woff') format('woff'), /* Pretty Modern Browsers */
+       url('./assets/fonts/GOTHMMED.ttf')  format('truetype'), /* Safari, Android, iOS */
+       url('./assets/fonts/GOTHMMED.svg') format('svg'); /* Legacy iOS */ /*webfont.svg#svgFontName'*/
+}
+
 
 *{
     font-family: "BerninaSans-Regular", Helvetica, Arial, sans-serif;
