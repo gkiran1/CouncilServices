@@ -1,4 +1,4 @@
-<div class="row ro-w">
+<div class="row ro-w" *ngIf=!showLoading>
   <div class="col-md-8">
     <form action="" class="navbar-form nav-form" id="navBarSearchForm">
       <div class="input-group">
@@ -87,16 +87,24 @@
 
   </div>
 
-  <div *ngIf=showLoading class="loader">
+  <!--<div *ngIf=showLoading class="loader">
     <div class="circle-container">
       <div class="circleG_1"></div>
       <div class="circleG_2"></div>
       <div class="circleG_3"></div>
     </div>
-  </div>
+  </div>-->
+
+
 
 </div>
 
+  <div *ngIf=showLoading class="progress">
+    <div class="progress-bar progress-bar-success  active" role="progressbar" [attr.aria-valuenow]="progress" aria-valuemin="0"
+      aria-valuemax="100" [style.width]="(progress/100)*100 + '%'">
+     
+    </div>
+  </div>
 
 <div class="concil-footer">
   <p>Copyright &copy; 2017 Councils. All rights reserverd.</p>

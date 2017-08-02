@@ -561,3 +561,13 @@ input[type="color"]:focus,
 
 
 /*------------Loader------------------------- */
+.progress {
+  position: absolute;
+  width: 600px;
+  left: 30%;
+  top: 50%;
+  height: 5px;
+}
+.progress-bar-success{
+background-color :#3cb18a
+}

@@ -15,6 +15,7 @@ export class ProductListComponent implements OnInit {
     showImage: boolean = false;
     listFilter: string;
     errorMessage: string;
+    progress = 0;
 
     public temp = {};
     public temp2 = {};
@@ -24,7 +25,13 @@ export class ProductListComponent implements OnInit {
     showLoading = true;
 
     constructor(private _productService: ProductService, private pagerService: PagerService) {
-
+        let interval = setInterval(() => {
+            if (this.progress <= 90) {
+                this.progress = this.progress + 10;
+            } else {
+                clearInterval(interval);
+            }
+        }, 500)
     }
 
     // pager object
@@ -39,7 +46,7 @@ export class ProductListComponent implements OnInit {
     ngOnInit(): void {
         this._productService.getLdsUnits()
             .subscribe(u => {
-
+                this.progress = 100;
                 this.products = u.sort(function (a, b) {
                     return a.UnitNum - b.UnitNum
                 });
@@ -51,7 +58,7 @@ export class ProductListComponent implements OnInit {
                 this.untsLen = this.products.length;
 
                 this.setPage(1);
-
+                
                 this.showLoading = false;
             },
             error => this.errorMessage = <any>error);
