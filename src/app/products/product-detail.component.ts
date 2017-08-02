@@ -31,34 +31,35 @@ export class ProductDetailComponent implements OnInit {
     }
 
     getUnits(id, parentNum) {
-        this._productService.getLdsUnits().subscribe(unitsObj => {
+        let unitsObj = this._productService.getLdsUnits();
+        // .subscribe(unitsObj => {
 
-            this.unitsabove = [];
-            this.unitsbelow = [];
+        this.unitsabove = [];
+        this.unitsbelow = [];
 
-            unitsObj.forEach(unitObj => {
+        unitsObj.forEach(unitObj => {
 
-                if (unitObj.UnitNum === id) {
-                    this.product = unitObj;
-                    this.product.ActUnitName = unitObj['UnitName'];
-                    this.product.ActUnitType = unitObj['UnitType'];
-                    this.product.ActCity = unitObj['City'];
-                    this.product.ActCountry = unitObj['Country'];
-                }
-                else if (unitObj.UnitNum === parentNum) {
-                    this.unitsabove.push(unitObj);
-                    console.log('unitsabove', this.unitsabove);
-                }
-                else if (unitObj.ParentNum === id) {
-                    unitObj['ActUnitName'] = unitObj['UnitName'];
-                    unitObj['ActUnitType'] = unitObj['UnitType'];
-                    unitObj['ActCity'] = unitObj['City'];
-                    unitObj['ActCountry'] = unitObj['Country'];
-                    this.unitsbelow.push(unitObj);
-                    console.log('unitsbelow', this.unitsbelow)
-                }
-            });
+            if (unitObj.UnitNum === id) {
+                this.product = unitObj;
+                this.product.ActUnitName = unitObj['UnitName'];
+                this.product.ActUnitType = unitObj['UnitType'];
+                this.product.ActCity = unitObj['City'];
+                this.product.ActCountry = unitObj['Country'];
+            }
+            else if (unitObj.UnitNum === parentNum) {
+                this.unitsabove.push(unitObj);
+                console.log('unitsabove', this.unitsabove);
+            }
+            else if (unitObj.ParentNum === id) {
+                unitObj['ActUnitName'] = unitObj['UnitName'];
+                unitObj['ActUnitType'] = unitObj['UnitType'];
+                unitObj['ActCity'] = unitObj['City'];
+                unitObj['ActCountry'] = unitObj['Country'];
+                this.unitsbelow.push(unitObj);
+                console.log('unitsbelow', this.unitsbelow)
+            }
         });
+        // });
 
         this.unitsbelow.sort(function (a, b) {
             return a.UnitNum - b.UnitNum
@@ -109,7 +110,7 @@ export class ProductDetailComponent implements OnInit {
 
         this.isDetail = true;
     }
-    
+
     deletechildUnit(untKey) {
         this._productService.deleteChildUnit(untKey);
     }

@@ -26,7 +26,7 @@ export class ProductListComponent implements OnInit {
 
     constructor(private _productService: ProductService, private pagerService: PagerService) {
         let interval = setInterval(() => {
-            if (this.progress <= 90) {
+            if (this.progress <= 80) {
                 this.progress = this.progress + 10;
             } else {
                 clearInterval(interval);
@@ -44,8 +44,9 @@ export class ProductListComponent implements OnInit {
     untsLen;
 
     ngOnInit(): void {
-        this._productService.getLdsUnits()
+        this._productService.getLdsUnitsFirst()
             .subscribe(u => {
+                this._productService.setLdsUnits(u);
                 this.progress = 100;
                 this.products = u.sort(function (a, b) {
                     return a.UnitNum - b.UnitNum
@@ -58,7 +59,7 @@ export class ProductListComponent implements OnInit {
                 this.untsLen = this.products.length;
 
                 this.setPage(1);
-                
+
                 this.showLoading = false;
             },
             error => this.errorMessage = <any>error);

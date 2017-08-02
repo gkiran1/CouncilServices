@@ -12,16 +12,25 @@ import { AngularFire } from 'angularfire2';
 
 @Injectable()
 export class ProductService {
-
+    ldsunits;
     constructor(public af: AngularFire, private _http: Http) {
-
+        this.ldsunits = this.af.database.list('ldsunits')
+            .subscribe(units => {
+                this.ldsunits = units;
+            });
     }
 
     getProducts() {
         return this.af.database.object('ldsunits');
     }
+    setLdsUnits(units) {
+        this.ldsunits = units;
+    }
 
     getLdsUnits() {
+        return this.ldsunits;
+    }
+    getLdsUnitsFirst() {
         return this.af.database.list('ldsunits');
     }
 
