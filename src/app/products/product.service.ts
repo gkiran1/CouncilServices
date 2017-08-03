@@ -20,9 +20,9 @@ export class ProductService {
             });
     }
 
-    getProducts() {
-        return this.af.database.object('ldsunits');
-    }
+    // getProducts() {
+    //     return this.af.database.object('ldsunits');
+    // }
     setLdsUnits(units) {
         this.ldsunits = units;
     }
@@ -34,23 +34,23 @@ export class ProductService {
         return this.af.database.list('ldsunits');
     }
 
-    getProduct(id: number) {
-        return this.getProducts()
-            .map((products) => products.find(p => p.UnitNum === id.toString()));
-    }
+    // getProduct(id: number) {
+    //     return this.getProducts()
+    //         .map((products) => products.find(p => p.UnitNum === id.toString()));
+    // }
 
-    getChildUnits(key) {
-        return this.af.database.list(`ldsunits/${key}/Children`);
-    }
+    // getChildUnits(key) {
+    //     return this.af.database.list(`ldsunits/${key}/Children`);
+    // }
 
-    getAboveUnits(id: number) {
-        return this.getProducts()
-            .map((products) => products.filter(p => {
-                if (Number(p.UnitNum) > id) {
-                    return p;
-                }
-            }));
-    }
+    // getAboveUnits(id: number) {
+    //     return this.getProducts()
+    //         .map((products) => products.filter(p => {
+    //             if (Number(p.UnitNum) > id) {
+    //                 return p;
+    //             }
+    //         }));
+    // }
 
     deleteUnit(product, unitsBelow) {
 

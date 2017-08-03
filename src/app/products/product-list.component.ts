@@ -44,25 +44,39 @@ export class ProductListComponent implements OnInit {
     untsLen;
 
     ngOnInit(): void {
-        this._productService.getLdsUnitsFirst()
-            .subscribe(u => {
-                this._productService.setLdsUnits(u);
-                this.progress = 100;
-                this.products = u.sort(function (a, b) {
-                    return a.UnitNum - b.UnitNum
-                });
+        let units = this._productService.getLdsUnits();
+        if (units.length) {
+            this.progress = 100;
+            this.products = units.sort(function (a, b) {
+                return a.UnitNum - b.UnitNum
+            });
+            this.untsLen = this.products.length;
 
-                // this.products.sort(function (a, b) {
-                //     return a.UnitNum - b.UnitNum
-                // });
+            this.setPage(1);
 
-                this.untsLen = this.products.length;
+            this.showLoading = false;
+        } else {
+            this._productService.getLdsUnitsFirst()
+                .subscribe(u => {
+                    this._productService.setLdsUnits(u);
+                    this.progress = 100;
+                    this.products = u.sort(function (a, b) {
+                        return a.UnitNum - b.UnitNum
+                    });
 
-                this.setPage(1);
+                    // this.products.sort(function (a, b) {
+                    //     return a.UnitNum - b.UnitNum
+                    // });
 
-                this.showLoading = false;
-            },
-            error => this.errorMessage = <any>error);
+                    this.untsLen = this.products.length;
+
+                    this.setPage(1);
+
+                    this.showLoading = false;
+                },
+                error => this.errorMessage = <any>error);
+        }
+
     }
     setPage(page: number) {
         if (page < 1 || page > this.pager.totalPages) {
